@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="twinkle">
+    <meta name="format-detection" content="telephone=no">
+    <title>twinkle</title>
+</head>
+
+<body>
+
+    <script src="build/twinkle.min.js"></script>
+    <script>
+    window.addEventListener("load", function() {
+        if (window.require) {
+            var mode = 0;
+            var gui = require("nw.gui");
+            var win = gui.Window.get();
+            if (win) {
+                window.toggleFullscreen = function() {
+                    win.toggleFullscreen();
+                };
+
+                window.exitApplication = function() {
+                    win.hide();
+                    gui.App.quit();
+                };
+
+                window.toNormalSize = function() {
+                    if (!win.isFullscreen) {
+                        if (mode === 1) {
+                            win.x += 360 * 0.5;
+                            win.y += 480 * 0.5;
+                        }
+                        mode = 0;
+                        win.resizeTo(360, 480);
+                    }
+                };
+
+                window.toDoubleSize = function() {
+                    if (!win.isFullscreen) {
+                        if (mode === 0) {
+                            win.x += 360 * -0.5;
+                            win.y += 480 * -0.5;
+                        }
+                        mode = 1;
+                        win.resizeTo(360 * 2, 480 * 2);
+                    }
+                };
+
+                window.addEventListener("keyup", function(e) {
+                    if (e.keyCode === 27) {
+                        window.exitApplication();
+                    } else if (e.keyCode === 113) {
+                        window.toNormalSize();
+                    } else if (e.keyCode === 114) {
+                        window.toDoubleSize();
+                    } else if (e.keyCode === 122) {
+                        window.toggleFullscreen();
+                    }
+                }, false);
+            }
+        }
+    }, false);
+
+    window.toggleFullscreen = function() {};
+    window.exitApplication = function() {};
+    window.toNormalSize = function() {};
+    window.toDoubleSize = function() {};
+    </script>
+
+</body>
+
+</html>
