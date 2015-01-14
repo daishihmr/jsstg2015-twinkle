@@ -108,6 +108,10 @@ module.exports = function(grunt) {
                 openPath: "/main.html",
                 staticPort: "54345",
             },
+            dev: {
+                openPath: "/dev.html",
+                staticPort: "54345",
+            },
         },
         browserify: {
             main: {
@@ -129,7 +133,7 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask("web", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "koko"]);
+    grunt.registerTask("web", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "koko:dev"]);
     grunt.registerTask("default", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "nodewebkit:main"]);
 
 };
