@@ -1,5 +1,5 @@
 var BANNER = ["/*\n",
-    " * <%= pkg.description %> v<%= pkg.version %>\n",
+    " * <%= pkg.name %> v<%= pkg.version %>\n",
     " * http://www.dev7.jp\n",
     " * \n",
     " * The MIT License (MIT)\n",
