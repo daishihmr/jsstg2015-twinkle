@@ -4,7 +4,7 @@ for [jsstg2015](http://jp.wgld.org/jsstg/2015f/)
 
 ## play
 
-[http://daishihmr.github.io/jsstg2015-twinkle/main.html](http://daishihmr.github.io/jsstg2015-twinkle/main.html)
+[http://daishihmr.github.io/jsstg2015-twinkle/](http://daishihmr.github.io/jsstg2015-twinkle/)
 
 ## install
 

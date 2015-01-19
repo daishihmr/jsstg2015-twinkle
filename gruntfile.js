@@ -81,7 +81,7 @@ module.exports = function(grunt) {
                     "fonts/**",
                     "images/**",
                     "sounds/**",
-                    "main.html",
+                    "index.html",
                     "build/twinkle.min.js",
                     "package.json",
                     "README.md",
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
         },
         koko: {
             main: {
-                openPath: "/main.html",
+                openPath: "/index.html",
                 staticPort: "54345",
             },
             dev: {
