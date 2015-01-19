@@ -43,12 +43,11 @@ tm.define("Dev", {
         var geometry = new THREE.BufferGeometry();
 
         var position = [];
-        var change = [];
-        var duration = [];
+        var positionChange = [];
         var size = [];
         var sizeChange = [];
-        var sizeDuration = [];
-        var birth = [];
+        var start = [];
+        var end = [];
 
         var i;
         for (i = 0; i < count; i++) {
@@ -58,32 +57,30 @@ tm.define("Dev", {
 
             var c = new THREE.Vector3(Math.randf(-1, 1), Math.randf(-1, 1), Math.randf(-1, 1));
             c.normalize().multiplyScalar(Math.randf(30, 60));
-            change[i] = c;
-            duration[i] = 50;
+            positionChange[i] = c;
 
-            size[i] = 10;
-            sizeChange[i] = 50;
-            sizeDuration[i] = 25
+            size[i] = 50;
+            sizeChange[i] = 0;
 
-            birth[i] = Math.rand(10, 50);
+            start[i] = Math.randf(0.0, 0.5);
+            end[i] = Math.randf(0.5, 1.0);
         }
 
         var positionAttr = new THREE.BufferAttribute(new Float32Array(count * 3), 3);
         for (i = 0; i < position.length; i++) {
             positionAttr.setXYZ(i, position[i].x, position[i].y, position[i].z);
         }
-        var changeAttr = new THREE.BufferAttribute(new Float32Array(count * 3), 3);
-        for (i = 0; i < change.length; i++) {
-            changeAttr.setXYZ(i, change[i].x, change[i].y, change[i].z);
+        var positionChangeAttr = new THREE.BufferAttribute(new Float32Array(count * 3), 3);
+        for (i = 0; i < positionChange.length; i++) {
+            positionChangeAttr.setXYZ(i, positionChange[i].x, positionChange[i].y, positionChange[i].z);
         }
 
         geometry.addAttribute("position", positionAttr);
-        geometry.addAttribute("change", changeAttr);
-        geometry.addAttribute("duration", new THREE.BufferAttribute(new Float32Array(duration), 1));
+        geometry.addAttribute("positionChange", positionChangeAttr);
         geometry.addAttribute("size", new THREE.BufferAttribute(new Float32Array(size), 1));
         geometry.addAttribute("sizeChange", new THREE.BufferAttribute(new Float32Array(sizeChange), 1));
-        geometry.addAttribute("sizeDuration", new THREE.BufferAttribute(new Float32Array(sizeDuration), 1));
-        geometry.addAttribute("birth", new THREE.BufferAttribute(new Float32Array(birth), 1));
+        geometry.addAttribute("start", new THREE.BufferAttribute(new Float32Array(start), 1));
+        geometry.addAttribute("end", new THREE.BufferAttribute(new Float32Array(end), 1));
 
         var image = tm.graphics.Canvas()
             .resize(32, 32)
@@ -107,14 +104,15 @@ tm.define("Dev", {
 
         var material = new THREE.ShaderMaterial({
             attributes: {
-                change: {
+                position: {
                     type: "v3",
                     value: [],
                 },
-                duration: {
-                    type: "f",
+                positionChange: {
+                    type: "v3",
                     value: [],
                 },
+
                 size: {
                     type: "f",
                     value: [],
@@ -123,20 +121,17 @@ tm.define("Dev", {
                     type: "f",
                     value: [],
                 },
-                sizeDuration: {
+
+                start: {
                     type: "f",
                     value: [],
                 },
-                birth: {
+                end: {
                     type: "f",
                     value: [],
                 },
             },
             uniforms: {
-                amplitude: {
-                    type: "f",
-                    value: 1.0,
-                },
                 color: {
                     type: "c",
                     value: new THREE.Color(0xffffff),
@@ -145,34 +140,38 @@ tm.define("Dev", {
                     type: "t",
                     value: texture,
                 },
-                frame: {
+                time: {
                     type: "f",
                     value: 0,
                 },
             },
 
             vertexShader: [
-                "attribute vec3 change;",
-                "attribute float duration;",
+                // "attribute vec3 position;",
+                "attribute vec3 positionChange;",
+                "",
                 "attribute float size;",
                 "attribute float sizeChange;",
-                "attribute float sizeDuration;",
-                "attribute float birth;",
                 "",
-                "uniform float frame;",
+                "attribute float start;",
+                "attribute float end;",
+                "",
+                "uniform float time;",
                 "",
                 "varying float vTime;",
+                "varying float vT;",
                 "",
                 Easing,
                 "",
                 "void main() {",
-                "    float time = frame - birth;",
                 "    vTime = time;",
+                "    float t = 1.0 / (end - start) * (time - start);",
+                "    vT = t;",
                 "",
-                "    vec3 p = easeOutQuad(time, position, change, duration);",
+                "    vec3 p = position + (positionChange - position) * easeOutQuad(t);",
                 "    vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);",
                 "",
-                "    float s = easeInOutQuad(time, size, sizeChange, sizeDuration);",
+                "    float s = size + (sizeChange - size) * easeInOutQuad(t);",
                 "    gl_PointSize = s * (150.0 / length(mvPosition.xyz));",
                 "",
                 "    gl_Position = projectionMatrix * mvPosition;",
@@ -183,9 +182,11 @@ tm.define("Dev", {
                 "uniform sampler2D texture;",
                 "",
                 "varying float vTime;",
+                "varying float vT;",
                 "",
                 "void main() {",
-                "    if (vTime < 0.0) discard;",
+                "    if (vT <= 0.0 || 1.0 < vT) discard;",
+                "    if (vTime <= 0.0 || 1.0 < vTime) discard;",
                 "",
                 "    vec4 outColor = texture2D(texture, gl_PointCoord);",
                 "",
@@ -205,8 +206,10 @@ tm.define("Dev", {
             transparent: true,
         });
 
-        scene.on("enterframe", function() {
-            material.uniforms.frame.value += 1;
+        scene.on("enterframe", function(e) {
+            var f = e.app.frame;
+            material.uniforms.time.value = Math.clamp((f - 160) / 300, -0.1, 1.1);
+            console.log(material.uniforms.time.value);
         });
 
         var explosion = new THREE.PointCloud(geometry, material);
