@@ -1,5 +1,5 @@
 var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three.js");
+var THREE = require("../../../libs/three");
 
 tm.define("tm.hybrid.ThreeElement", {
     superClass: "tm.app.Element",
