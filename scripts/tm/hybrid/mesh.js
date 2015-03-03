@@ -1,7 +1,9 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
-require("./threeelement");
+    require("./threeelement");
+}
 
 tm.define("tm.hybrid.Mesh", {
     superClass: "tm.hybrid.ThreeElement",
@@ -16,6 +18,8 @@ tm.define("tm.hybrid.Mesh", {
             }
         } else if (mesh instanceof THREE.Mesh) {
             this.superInit(mesh);
+        } else {
+            this.superInit(new THREE.Mesh());
         }
     },
 });
@@ -28,3 +32,20 @@ tm.hybrid.Mesh.prototype.updateMorphTargets = function() {
     this.threeObject.updateMorphTargets();
     return this;
 };
+
+tm.hybrid.Mesh.prototype.accessor("geometry", {
+    get: function() {
+        return this.threeObject.geometry;
+    },
+    set: function(v) {
+        this.threeObject.geometry = v;
+    },
+});
+tm.hybrid.Mesh.prototype.accessor("material", {
+    get: function() {
+        return this.threeObject.material;
+    },
+    set: function(v) {
+        this.threeObject.material = v;
+    },
+});

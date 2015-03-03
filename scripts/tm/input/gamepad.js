@@ -1,4 +1,6 @@
-var tm = require("../../../libs/tmlib");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+}
 
 (function() {
 

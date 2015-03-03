@@ -1,12 +1,16 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
-require("./threeelement");
+    require("./threeelement");
+}
 
 tm.define("tm.hybrid.DirectionalLight", {
     superClass: "tm.hybrid.ThreeElement",
 
     init: function(hex, intensity) {
+        hex = hex || 0xffffff;
+        intensity = intensity || 1.0;
         this.superInit(new THREE.DirectionalLight(hex, intensity));
     },
 });

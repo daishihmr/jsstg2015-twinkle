@@ -1,5 +1,5 @@
 /*
- * tmlib.js 0.4.1
+ * tmlib.js 0.5.0
  * http://github.com/phi-jp/tmlib.js
  * MIT Licensed
  * 
@@ -26,7 +26,7 @@ if (typeof module !== 'undefined' && module.exports) {
     /**
      * バージョン
      */
-    tm.VERSION = '0.4.1';
+    tm.VERSION = '0.5.0';
 
     /**
      * tmlib.js のルートパス
@@ -12342,13 +12342,13 @@ tm.app = tm.app || {};
             this._matrix.identity();
             
             this.boundingType = "circle";
+            this.checkHierarchy = true;
             this.interactive = false;
             this.hitFlags = [];
             this.downFlags= [];
             this._clickFlag = false;
 
-            this._worldMatrix = tm.geom.Matrix33();
-            this._worldMatrix.identity();
+            this._worldMatrix = tm.geom.Matrix33().identity();
             this._worldAlpha = 1.0;
         },
         
@@ -12511,11 +12511,10 @@ tm.app = tm.app || {};
          * @param {Object} elm
          */
         globalToLocal: function(p) {
-            // var matrix = this.getFinalMatrix();
             var matrix = this._worldMatrix.clone();
             matrix.invert();
             matrix.transpose();
-            
+
             return matrix.multiplyVector2(p);
         },
         
@@ -12632,8 +12631,13 @@ tm.app = tm.app || {};
          * タッチ判定の有効/無効をセット
          * @param {Boolean} flag
          */
-        setInteractive: function(flag) {
+        setInteractive: function(flag, type) {
             this.interactive = flag;
+
+            if (type) {
+                this.boundingType = type;
+            }
+
             return this;
         },
         
@@ -12757,11 +12761,11 @@ tm.app = tm.app || {};
             localTransform[3] = this._sr * this.scale.x;
             localTransform[4] = this._cr * this.scale.y;
 
-            ///AAARR GETTER SETTTER!
+            // 
             localTransform[2] = this.position.x;
             localTransform[5] = this.position.y;
 
-            // Cache the matrix values (makes for huge speed increases!)
+            // cache
             var a00 = localTransform[0], a01 = localTransform[1], a02 = localTransform[2],
                 a10 = localTransform[3], a11 = localTransform[4], a12 = localTransform[5],
 
@@ -15508,7 +15512,10 @@ tm.display = tm.display || {};
         _buildLayer: function(layer) {
             var self     = this;
             var mapSheet = this.mapSheet;
-            var shape    = tm.display.Shape(this.width, this.height).addChildTo(this);
+            var shape    = tm.display.Shape({
+                width: this.width,
+                height: this.height
+            }).addChildTo(this);
             var visible  = (layer.visible === 1) || (layer.visible === undefined);
             var opacity  = layer.opacity === undefined ? 1 : layer.opacity;
             var tileset  = [];

@@ -1,6 +1,8 @@
-var tm = require("../libs/tmlib.js");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../libs/tmlib.js");
+}
 
-module.exports = {
+var SoundManager = {
     bgmVolume: 0.2,
     seVolume: 0.2,
     currentBgm: null,
@@ -20,3 +22,7 @@ module.exports = {
         }
     }
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = SoundManager;
+}

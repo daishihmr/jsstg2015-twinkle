@@ -1,7 +1,9 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
-require("./threeelement");
+    require("./threeelement");
+}
 
 tm.define("tm.hybrid.Sprite", {
     superClass: "tm.hybrid.ThreeElement",

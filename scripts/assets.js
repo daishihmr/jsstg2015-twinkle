@@ -12,6 +12,13 @@ var assets = {
         type: "three",
         url: "images/board.js",
     },
+
+    "test": {
+        type: "three",
+        url: "images/test.js",
+    },
 };
 
-module.exports = assets;
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = assets;
+}

@@ -1,5 +1,7 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+}
 
 var colorConv = {
     hsl: function(h, s, l) {
@@ -17,4 +19,6 @@ var colorConv = {
     },
 };
 
-module.exports = colorConv;
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = colorConv;
+}

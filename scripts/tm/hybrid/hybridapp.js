@@ -1,7 +1,9 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
-require("./hybridscene");
+    require("./hybridscene");
+}
 
 tm.define("tm.hybrid.HybridApp", {
     superClass: "tm.display.CanvasApp",
@@ -21,7 +23,7 @@ tm.define("tm.hybrid.HybridApp", {
         });
 
         if (this.element.parentNode) {
-            this.element.parentNode.appendChild(this.threeRenderer.domElement);
+            this.element.parentNode.insertBefore(this.threeRenderer.domElement, this.element);
         }
 
         this.threeCanvas = this.threeRenderer.domElement;

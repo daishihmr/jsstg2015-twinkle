@@ -1,4 +1,4 @@
-module.exports = {
+var consts = {
 
     W: 360,
     H: 480,
@@ -13,3 +13,7 @@ module.exports = {
     BLUR_LEVEL_RATE:  0.005,
 
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = consts;
+}

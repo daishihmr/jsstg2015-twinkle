@@ -1,8 +1,10 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
-require("./threeelement");
-require("./camera");
+    require("./threeelement");
+    require("./camera");
+}
 
 tm.define("tm.hybrid.HybridScene", {
     superClass: "tm.app.Scene",
@@ -27,6 +29,24 @@ tm.define("tm.hybrid.HybridScene", {
 
     render: function(renderer) {
         renderer.render(this.three.scene, this.three.camera.threeObject);
+    },
+
+    /** @override */
+    addChild: function(child) {
+        if (child instanceof tm.hybrid.ThreeElement) {
+            this.three.addChild(child);
+        } else {
+            this.two.addChild(child);
+        }
+    },
+
+    /** @override */
+    removeChild: function(child) {
+        if (child instanceof tm.hybrid.ThreeElement) {
+            this.three.removeChild(child);
+        } else {
+            this.two.removeChild(child);
+        }
     },
 });
 tm.hybrid.HybridScene.prototype.accessor("camera", {
@@ -92,5 +112,9 @@ tm.define("tm.hybrid.HybridScene.Three", {
 
         this.camera = tm.hybrid.Camera();
         this.camera.z = 7;
+
+        this.directionalLight = tm.hybrid.DirectionalLight()
+            .setPosition(1, 1, 1)
+            .addChildTo(this);
     },
 });

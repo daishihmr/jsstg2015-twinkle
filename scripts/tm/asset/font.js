@@ -1,4 +1,8 @@
-var tm = require("../../../libs/tmlib");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+}
+
+tm.asset = tm.asset || {};
 
 tm.define("tm.asset.WebFont", {
     superClass: "tm.event.EventDispatcher",

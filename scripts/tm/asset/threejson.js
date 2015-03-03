@@ -1,5 +1,9 @@
-var tm = require("../../../libs/tmlib");
-var THREE = require("../../../libs/three");
+if (typeof module !== 'undefined' && module.exports) {
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+}
+
+tm.asset = tm.asset || {};
 
 tm.define("tm.asset.ThreeJSON", {
     superClass: "tm.event.EventDispatcher",
