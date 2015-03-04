@@ -219,7 +219,11 @@ tm.define("Dev", {
         // var exp = tm.hybrid.ThreeElement(explosion);
         // exp.addChildTo(scene.gameBoard);
 
-        // var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard);
+        var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard).on("enterframe", function(e) {
+            this.rotation.x += 0.03;
+            this.rotation.y += 0.05;
+            this.x = Math.sin(e.app.frame * 0.1) * 15;
+        });
         // console.log(test);
 
     },

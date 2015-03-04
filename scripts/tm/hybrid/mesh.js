@@ -35,7 +35,7 @@
     delegater.property("geometry");
     delegater.property("material");
 
-    delegater.method("getMorphTargetIndexByName");
-    delegater.method("updateMorphTargets");
+    delegater.method("getMorphTargetIndexByName", true);
+    delegater.method("updateMorphTargets", true);
 
 })();

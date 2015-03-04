@@ -38,14 +38,24 @@
                 return this;
             });
         },
-        method: function(name, threeProperty) {
+        method: function(name, returnThis, threeProperty) {
             if (threeProperty) {
                 this.type.defineInstanceMethod(name, function() {
-                    return this.threeObject[threeProperty][name].apply(this.threeObject[threeProperty][name], arguments);
+                    var r = this.threeObject[threeProperty][name].apply(this.threeObject[threeProperty], arguments);
+                    if (returnThis) {
+                        return this;
+                    } else {
+                        return r;
+                    }
                 });
             } else {
                 this.type.defineInstanceMethod(name, function() {
-                    return this.threeObject[name].apply(this.threeObject[name], arguments);
+                    var r = this.threeObject[name].apply(this.threeObject, arguments);
+                    if (returnThis) {
+                        return this;
+                    } else {
+                        return r;
+                    }
                 });
             }
         },

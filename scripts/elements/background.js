@@ -11,14 +11,13 @@ tm.define("jsstg.elements.Background", {
         var self = this;
 
         var geometry = tm.asset.Manager.get("board").mesh.geometry;
+        var material = tm.asset.Manager.get("board").mesh.material;
+        material.materials.forEach(function(m) {
+            m.side = THREE.DoubleSide;
+        });
         (6).times(function(y) {
             (6).times(function(x) {
-                tm.hybrid.Mesh(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-                        color: colorConv.hsl("hsl(120, 40%, 20%)"),
-                        wireframe: true,
-                        wireframeLinewidth: 1,
-                        fog: true,
-                    })))
+                tm.hybrid.Mesh(new THREE.Mesh(geometry, material))
                     .setRotationZ(x / 6 * 360 + 90)
                     .setPosition(
                         Math.cos(x / 6 * 2 * Math.PI) * 2000,

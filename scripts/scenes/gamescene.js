@@ -8,6 +8,7 @@ require("../tm/hybrid/mesh");
 require("../tm/hybrid/shape");
 require("../tm/hybrid/directionallight");
 require("../postprocessing/glowpass");
+require("../postprocessing/brightrenderer");
 require("../elements/background");
 require("../elements/bullets");
 require("../elements/fighter");
@@ -24,7 +25,7 @@ tm.define("jsstg.scenes.GameScene", {
 
         var background = scene.background = jsstg.elements.Background().addChildTo(scene.three);
         var gameBoard = scene.gameBoard = jsstg.elements.GameBoard().addChildTo(scene.three);
-        var fighter = scene.fighter = jsstg.elements.Fighter().addChildTo(scene.gameBoard);
+        var fighter = scene.fighter = jsstg.elements.Fighter(); //.addChildTo(scene.gameBoard);
 
         var cameraTarget = new THREE.Vector3(0, 0, 0);
         var cameraMoveRate = new THREE.Vector3(0.25, 0, 0);
@@ -50,18 +51,17 @@ tm.define("jsstg.scenes.GameScene", {
         };
 
         /**
-         * ボケ
-         * 0.0～1.0
-         */
-        scene.blurLevel = 0.0;
-        /**
          * 輝き
          * 0.0～1.0
          */
-        scene.glowLevel = 0.5;
+        scene._glowLevel = 0.5;
+
+        scene.bright = jsstg.postprocessing.BrightRenderer();
 
         scene.one("enter", function(e) {
             var app = e.app;
+
+            tm.dom.Element(app.element).visible = false;
 
             var composer = scene.effectComposer = new THREE.EffectComposer(
                 app.threeRenderer,
@@ -74,13 +74,12 @@ tm.define("jsstg.scenes.GameScene", {
             );
 
             composer.addPass(new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject));
+            composer.addPass(new THREE.ShaderPass(THREE.CopyShader));
 
-            scene.glowPass = jsstg.postprocessing.GlowPass();
-            composer.addPass(scene.glowPass);
+            // scene.glowPass = jsstg.postprocessing.GlowPass();
+            // composer.addPass(scene.glowPass);
 
-            scene.blurPass = new THREE.ShaderPass(BlurShader);
-            scene.blurPass.uniforms.f.value = 0;
-            composer.addPass(scene.blurPass);
+            composer.addPass(scene.bright.getPass());
 
             composer.passes.forEach(function(pass, i, passes) {
                 pass.renderToScreen = i === passes.length - 1;
@@ -90,20 +89,20 @@ tm.define("jsstg.scenes.GameScene", {
         this.tweener
             .clear()
             .to({
-                glowLevel: 1.0,
+                _glowLevel: 1.0,
             }, 1000)
             .to({
-                glowLevel: 0.0,
+                _glowLevel: 0.0,
             }, 1000)
             .setLoop(true);
     },
 
     update: function(app) {
-        this.glowPass.blendMaterial.uniforms.glowLevel.value = this.glowLevel * consts.GLOW_LEVEL_RATE;
-        this.blurPass.uniforms.f.value = this.blurLevel * consts.BLUR_LEVEL_RATE;
+        // this.glowPass.glowLevel = this._glowLevel * consts.GLOW_LEVEL_RATE;
     },
 
     render: function(renderer) {
+        this.bright.renderBrightLayer(renderer, this);
         this.effectComposer.render();
     },
 

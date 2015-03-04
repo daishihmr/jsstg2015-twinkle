@@ -103,11 +103,27 @@
     delegater.property("id");
     delegater.property("uuid");
     delegater.property("name");
-    delegater.property("position");
+    
+    tm.hybrid.ThreeElement.prototype.accessor("position", {
+        get: function() {
+            return this.threeObject.position;
+        },
+        set: function(v) {
+            this.threeObject.position = v;
+        }
+    });
     delegater.property("x", "position");
     delegater.property("y", "position");
     delegater.property("z", "position");
-    delegater.property("scale");
+    
+    tm.hybrid.ThreeElement.prototype.accessor("scale", {
+        get: function() {
+            return this.threeObject.scale;
+        },
+        set: function(v) {
+            this.threeObject.scale = v;
+        }
+    });
     tm.hybrid.ThreeElement.prototype.accessor("scaleX", {
         get: function() {
             return this.threeObject.scale.x;
@@ -132,8 +148,15 @@
             this.threeObject.scale.z = v;
         }
     });
-    delegater.property("rotation");
     delegater.property("eulerOrder");
+    tm.hybrid.ThreeElement.prototype.accessor("rotation", {
+        get: function() {
+            return this.threeObject.rotation;
+        },
+        set: function(v) {
+            this.threeObject.rotation = v;
+        }
+    });
     tm.hybrid.ThreeElement.prototype.accessor("rotationX", {
         get: function() {
             return this.threeObject.rotation.x * Math.RAD_TO_DEG;
@@ -171,22 +194,19 @@
     delegater.property("userData");
     delegater.property("matrixWorld");
 
-    delegater.method("applyMatrix");
-    delegater.method("translateX");
-    delegater.method("translateY");
-    delegater.method("translateZ");
-    delegater.method("localToWorld");
-    delegater.method("worldToLocal");
-    tm.hybrid.ThreeElement.defineInstanceMethod("lookAt", function(target) {
-        if (target.position) {
-            this.threeObject.lookAt(target.position);
-        } else {
-            this.threeObject.lookAt(target);
-        }
-    });
-    delegater.method("updateMatrix");
-    delegater.method("updateMatrixWorld");
+    delegater.method("applyMatrix", true);
+    delegater.method("translateX", true);
+    delegater.method("translateY", true);
+    delegater.method("translateZ", true);
+    delegater.method("localToWorld", true);
+    delegater.method("worldToLocal", true);
+    delegater.method("lookAt", true);
+    delegater.method("traverse", true);
+    delegater.method("traverseVisible", true);
+    delegater.method("traverseAncestors", true);
+    delegater.method("updateMatrix", true);
+    delegater.method("updateMatrixWorld", true);
     delegater.method("getObjectByName");
-    delegater.method("rotateOnAxis");
+    delegater.method("rotateOnAxis", true);
 
 })();

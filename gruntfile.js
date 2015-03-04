@@ -134,6 +134,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask("web", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "koko:dev"]);
-    grunt.registerTask("default", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "nodewebkit:main"]);
+    grunt.registerTask("package", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "nodewebkit:main"]);
+    grunt.registerTask("default", ["browserify"]);
 
 };

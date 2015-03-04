@@ -16,16 +16,16 @@ tm.define("jsstg.postprocessing.GlowPass", {
         this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         this.scene = new THREE.Scene();
 
-        this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-        this.scene.add(this.quad);
+        this.screen = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+        this.scene.add(this.screen);
 
-        this.backupMaterial = new THREE.ShaderMaterial({
+        this.baseMaterial = new THREE.ShaderMaterial({
             uniforms: THREE.UniformsUtils.clone(THREE.CopyShader.uniforms),
             vertexShader: THREE.CopyShader.vertexShader,
             fragmentShader: THREE.CopyShader.fragmentShader
         });
 
-        this.backupBuffer = new THREE.WebGLRenderTarget(consts.W, consts.H, {
+        this.baseBuffer = new THREE.WebGLRenderTarget(consts.W, consts.H, {
             minFilter: THREE.LinearFilter,
             magFilter: THREE.LinearFilter,
             format: THREE.RGBFormat,
@@ -54,23 +54,32 @@ tm.define("jsstg.postprocessing.GlowPass", {
 
     render: function(renderer, writeBuffer, readBuffer, delta, maskActive) {
 
-        this.backupMaterial.uniforms.tDiffuse.value = readBuffer;
-        this.quad.material = this.backupMaterial;
-        renderer.render(this.scene, this.camera, this.backupBuffer, this.clear);
+        this.baseMaterial.uniforms.tDiffuse.value = readBuffer;
+        this.screen.material = this.baseMaterial;
+        renderer.render(this.scene, this.camera, this.baseBuffer, this.clear);
 
         this.blurMaterial.uniforms.tDiffuse.value = readBuffer;
         this.blurMaterial.uniforms.f.value = consts.GLOW_EFFECT_BLUR_VALUE;
-        this.quad.material = this.blurMaterial;
+        this.screen.material = this.blurMaterial;
         renderer.render(this.scene, this.camera, this.blurBuffer, this.clear);
 
-        this.blendMaterial.uniforms.tDiffuse1.value = this.backupBuffer;
+        this.blendMaterial.uniforms.tDiffuse1.value = this.baseBuffer;
         this.blendMaterial.uniforms.tDiffuse2.value = this.blurBuffer;
-        this.quad.material = this.blendMaterial;
+        this.screen.material = this.blendMaterial;
 
         if (this.renderToScreen) {
             renderer.render(this.scene, this.camera);
         } else {
             renderer.render(this.scene, this.camera, writeBuffer, this.clear);
         }
+    },
+});
+
+jsstg.postprocessing.GlowPass.prototype.accessor("glowLevel", {
+    get: function() {
+        return this.blendMaterial.uniforms.glowLevel.value
+    },
+    set: function(v) {
+        this.blendMaterial.uniforms.glowLevel.value = v;
     },
 });
