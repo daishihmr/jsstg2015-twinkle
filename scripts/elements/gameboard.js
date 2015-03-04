@@ -1,7 +1,7 @@
 var tm = require("../../libs/tmlib");
 var THREE = require("../../libs/three");
 
-tm.define("jsstg2015.elements.GameBoard", {
+tm.define("jsstg.elements.GameBoard", {
     superClass: "tm.hybrid.ThreeElement",
 
     init: function() {

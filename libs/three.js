@@ -7636,7 +7636,6 @@ THREE.Object3D.prototype = {
 	}(),
 
 	add: function ( object ) {
-		console.log("object", object instanceof THREE.Object3D);
 
 		if ( arguments.length > 1 ) {
 

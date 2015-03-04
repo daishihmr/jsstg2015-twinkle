@@ -1,34 +1,37 @@
-if (typeof module !== 'undefined' && module.exports) {
-    var tm = require("../../../libs/tmlib");
-    var THREE = require("../../../libs/three");
-}
+(function() {
 
-tm.asset = tm.asset || {};
+    if (typeof module !== 'undefined' && module.exports) {
+        var tm = require("../../../libs/tmlib");
+        var THREE = require("../../../libs/three");
+    }
 
-tm.define("tm.asset.ThreeJSON", {
-    superClass: "tm.event.EventDispatcher",
+    tm.asset = tm.asset || {};
 
-    init: function(path) {
-        this.superInit();
-        this.mesh = null;
+    tm.define("tm.asset.ThreeJSON", {
+        superClass: "tm.event.EventDispatcher",
 
-        if (tm.asset.ThreeJSON.loader === null) {
-            tm.asset.ThreeJSON.loader = new THREE.JSONLoader();
-        }
+        init: function(path) {
+            this.superInit();
+            this.mesh = null;
 
-        tm.asset.ThreeJSON.loader.load(path, function(geometry, materials) {
-            this.load(geometry, materials);
-            this.flare("load");
-        }.bind(this));
-    },
+            if (tm.asset.ThreeJSON.loader === null) {
+                tm.asset.ThreeJSON.loader = new THREE.JSONLoader();
+            }
 
-    load: function(geometry, materials) {
-        materials[0].shading = THREE.FlatShading;
-        this.mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
-    },
-});
-tm.asset.ThreeJSON.loader = null;
+            tm.asset.ThreeJSON.loader.load(path, function(geometry, materials) {
+                this.load(geometry, materials);
+                this.flare("load");
+            }.bind(this));
+        },
 
-tm.asset.Loader.register("three", function(path) {
-    return tm.asset.ThreeJSON(path);
-});
+        load: function(geometry, materials) {
+            this.mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+        },
+    });
+    tm.asset.ThreeJSON.loader = null;
+
+    tm.asset.Loader.register("three", function(path) {
+        return tm.asset.ThreeJSON(path);
+    });
+
+})();

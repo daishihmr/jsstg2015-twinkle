@@ -6,7 +6,7 @@ var consts = require("../consts");
 var BlurShader = require("./blurshader");
 var AddBlendShader = require("./addblendshader");
 
-tm.define("jsstg2015.postprocessing.GlowPass", {
+tm.define("jsstg.postprocessing.GlowPass", {
     init: function() {
         this.renderToScreen = false;
         this.clear = false;

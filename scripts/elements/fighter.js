@@ -4,7 +4,7 @@ var THREE = require("../../libs/three");
 var consts = require("../consts");
 var colorConv = require("../tm/hybrid/colorconv");
 
-tm.define("jsstg2015.elements.Fighter", {
+tm.define("jsstg.elements.Fighter", {
     superClass: "tm.hybrid.BoxMesh",
 
     init: function() {
@@ -25,8 +25,6 @@ tm.define("jsstg2015.elements.Fighter", {
 
         if (app.pointing.getPointing()) {
             this.delta.copy(app.pointing.deltaPosition).multiplyScalar(0.5);
-        } else if (app.gamepad.enabled) {
-            this.delta.copy(app.gamepad.getKeyDirection().mul(3.0));
         } else {
             this.delta.copy(app.keyboard.getKeyDirection().mul(3.0));
         }

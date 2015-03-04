@@ -10,7 +10,7 @@ var SoundManager = require("./soundmanager");
 var Explosion = require("./elements/explosion");
 
 tm.define("Dev", {
-    superClass: "jsstg2015.scenes.GameScene",
+    superClass: "jsstg.scenes.GameScene",
 
     init: function() {
         var scene = this;
@@ -219,8 +219,8 @@ tm.define("Dev", {
         // var exp = tm.hybrid.ThreeElement(explosion);
         // exp.addChildTo(scene.gameBoard);
 
-        var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard);
-        console.log(test);
+        // var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard);
+        // console.log(test);
 
     },
 });

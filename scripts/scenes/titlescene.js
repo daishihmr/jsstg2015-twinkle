@@ -5,7 +5,7 @@ var consts = require("../consts");
 
 require("../dev");
 
-tm.define("jsstg2015.scenes.TitleScene", {
+tm.define("jsstg.scenes.TitleScene", {
     superClass: "tm.app.Scene",
     init: function() {
         this.superInit();

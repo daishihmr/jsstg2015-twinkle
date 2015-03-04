@@ -3,7 +3,7 @@ var THREE = require("../../libs/three");
 
 var colorConv = require("../tm/hybrid/colorconv");
 
-tm.define("jsstg2015.elements.Background", {
+tm.define("jsstg.elements.Background", {
     superClass: "tm.hybrid.ThreeElement",
 
     init: function() {

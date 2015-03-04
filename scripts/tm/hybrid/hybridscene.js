@@ -1,120 +1,128 @@
-if (typeof module !== 'undefined' && module.exports) {
-    var tm = require("../../../libs/tmlib");
-    var THREE = require("../../../libs/three");
+/*
+ * hybridscene.js
+ */
 
-    require("./threeelement");
-    require("./camera");
-}
+(function() {
 
-tm.define("tm.hybrid.HybridScene", {
-    superClass: "tm.app.Scene",
+    if (typeof module !== 'undefined' && module.exports) {
+        var tm = require("../../../libs/tmlib");
+        var THREE = require("../../../libs/three");
 
-    two: null,
-    three: null,
+        require("./threeelement");
+        require("./camera");
+    }
 
-    effectComposer: null,
+    tm.define("tm.hybrid.HybridScene", {
+        superClass: "tm.app.Scene",
 
-    init: function() {
-        this.superInit();
-        this.two = this;
-        this.three = tm.hybrid.HybridScene.Three();
+        two: null,
+        three: null,
 
-        // TODO どう扱うか
-        this.effectComposer = null;
+        effectComposer: null,
 
-        this.on("enter", function(e) {
-            this.camera.aspect = e.app.width / e.app.height;
-        });
-    },
+        init: function() {
+            this.superInit();
+            this.two = this;
+            this.three = tm.hybrid.HybridScene.Three();
 
-    render: function(renderer) {
-        renderer.render(this.three.scene, this.three.camera.threeObject);
-    },
+            // TODO どう扱うか
+            this.effectComposer = null;
 
-    /** @override */
-    addChild: function(child) {
-        if (child instanceof tm.hybrid.ThreeElement) {
-            this.three.addChild(child);
-        } else {
-            this.two.addChild(child);
-        }
-    },
+            this.on("enter", function(e) {
+                this.camera.aspect = e.app.width / e.app.height;
+            });
+        },
 
-    /** @override */
-    removeChild: function(child) {
-        if (child instanceof tm.hybrid.ThreeElement) {
-            this.three.removeChild(child);
-        } else {
-            this.two.removeChild(child);
-        }
-    },
-});
-tm.hybrid.HybridScene.prototype.accessor("camera", {
-    get: function() {
-        return this.three.camera;
-    },
-    set: function(v) {
-        this.three.camera = v;
-    },
-});
-tm.hybrid.HybridScene.prototype.accessor("ambientLight", {
-    get: function() {
-        return this.three.ambientLight;
-    },
-    set: function(v) {
-        this.three.ambientLight = v;
-    },
-});
-tm.hybrid.HybridScene.prototype.accessor("directionalLight", {
-    get: function() {
-        return this.three.directionalLight;
-    },
-    set: function(v) {
-        this.three.directionalLight = v;
-    },
-});
+        render: function(renderer) {
+            renderer.render(this.three.scene, this.three.camera.threeObject);
+        },
 
-tm.hybrid.HybridScene.prototype.accessor("fog", {
-    get: function() {
-        return this.three.scene.fog;
-    },
-    set: function(v) {
-        this.three.scene.fog = v;
-    },
-});
+        /** @override */
+        addChild: function(child) {
+            if (child instanceof tm.hybrid.ThreeElement) {
+                this.three.addChild(child);
+            } else {
+                this.two.addChild(child);
+            }
+        },
 
-tm.hybrid.HybridScene.prototype.accessor("overrideMaterial", {
-    get: function() {
-        return this.three.scene.overrideMaterial;
-    },
-    set: function(v) {
-        this.three.scene.overrideMaterial = v;
-    },
-});
+        /** @override */
+        removeChild: function(child) {
+            if (child instanceof tm.hybrid.ThreeElement) {
+                this.three.removeChild(child);
+            } else {
+                this.two.removeChild(child);
+            }
+        },
+    });
+    tm.hybrid.HybridScene.prototype.accessor("camera", {
+        get: function() {
+            return this.three.camera;
+        },
+        set: function(v) {
+            this.three.camera = v;
+        },
+    });
+    tm.hybrid.HybridScene.prototype.accessor("ambientLight", {
+        get: function() {
+            return this.three.ambientLight;
+        },
+        set: function(v) {
+            this.three.ambientLight = v;
+        },
+    });
+    tm.hybrid.HybridScene.prototype.accessor("directionalLight", {
+        get: function() {
+            return this.three.directionalLight;
+        },
+        set: function(v) {
+            this.three.directionalLight = v;
+        },
+    });
 
-tm.hybrid.HybridScene.prototype.accessor("autoUpdate", {
-    get: function() {
-        return this.three.scene.autoUpdate;
-    },
-    set: function(v) {
-        this.three.scene.autoUpdate = v;
-    },
-});
+    tm.hybrid.HybridScene.prototype.accessor("fog", {
+        get: function() {
+            return this.three.scene.fog;
+        },
+        set: function(v) {
+            this.three.scene.fog = v;
+        },
+    });
 
-tm.define("tm.hybrid.HybridScene.Three", {
-    superClass: "tm.hybrid.ThreeElement",
+    tm.hybrid.HybridScene.prototype.accessor("overrideMaterial", {
+        get: function() {
+            return this.three.scene.overrideMaterial;
+        },
+        set: function(v) {
+            this.three.scene.overrideMaterial = v;
+        },
+    });
 
-    init: function() {
-        this.superInit(new THREE.Scene());
+    tm.hybrid.HybridScene.prototype.accessor("autoUpdate", {
+        get: function() {
+            return this.three.scene.autoUpdate;
+        },
+        set: function(v) {
+            this.three.scene.autoUpdate = v;
+        },
+    });
 
-        this.scene = this.threeObject;
-        this.scene.fog = new THREE.Fog(0x000000, 1000, 15000);
+    tm.define("tm.hybrid.HybridScene.Three", {
+        superClass: "tm.hybrid.ThreeElement",
 
-        this.camera = tm.hybrid.Camera();
-        this.camera.z = 7;
+        init: function() {
+            this.superInit(new THREE.Scene());
 
-        this.directionalLight = tm.hybrid.DirectionalLight()
-            .setPosition(1, 1, 1)
-            .addChildTo(this);
-    },
-});
+            this.scene = this.threeObject;
+            this.scene.fog = new THREE.Fog(0x000000, 1000, 15000);
+
+            this.camera = tm.hybrid.Camera();
+            this.camera.z = 7;
+
+            this.directionalLight = tm.hybrid.DirectionalLight()
+                .setPosition(1, 1, 1)
+                .addChildTo(this);
+        },
+    });
+
+})();

@@ -3,7 +3,7 @@ var THREE = require("../../libs/three");
 
 (function() {
 
-    tm.define("jsstg2015.elements.Building", {
+    tm.define("jsstg.elements.Building", {
         superClass: "tm.hybrid.Mesh",
 
         init: function(geometryParam, materialParam) {

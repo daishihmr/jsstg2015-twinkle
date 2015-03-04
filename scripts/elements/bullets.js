@@ -4,7 +4,7 @@ var THREE = require("../../libs/three");
 var consts = require("../consts");
 var utils = require("../utils");
 
-tm.define("jsstg2015.elements.Bullets", {
+tm.define("jsstg.elements.Bullets", {
     superClass: "tm.hybrid.ThreeElement",
     init: function(hue, size, poolSize) {
         hue = hue || 0;
@@ -28,7 +28,7 @@ tm.define("jsstg2015.elements.Bullets", {
         var vertex;
         for (var i = 0; i < poolSize; i++) {
             vertex = new THREE.Vector3(0, consts.Y_MAX * 2, 0);
-            this.bullets.push(jsstg2015.elements.Bullet(vertex));
+            this.bullets.push(jsstg.elements.Bullet(vertex));
             geometry.vertices.push(vertex);
         }
 
@@ -65,7 +65,7 @@ tm.define("jsstg2015.elements.Bullets", {
     },
 });
 
-tm.define("jsstg2015.elements.Bullet", {
+tm.define("jsstg.elements.Bullet", {
 
     init: function(vertex) {
         this.position = vertex;

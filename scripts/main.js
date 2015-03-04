@@ -5,5 +5,5 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 tm.main(function() {
-    jsstg2015.app.Application().run();
+    jsstg.app.Application().run();
 });
