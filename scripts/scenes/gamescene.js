@@ -7,14 +7,11 @@ require("../tm/hybrid/hybridscene");
 require("../tm/hybrid/mesh");
 require("../tm/hybrid/shape");
 require("../tm/hybrid/directionallight");
-require("../postprocessing/glowpass");
-require("../postprocessing/brightrenderer");
+require("../postprocessing/brighteffectpass");
 require("../elements/background");
 require("../elements/bullets");
 require("../elements/fighter");
 require("../elements/gameboard");
-
-var BlurShader = require("../postprocessing/blurshader");
 
 tm.define("jsstg.scenes.GameScene", {
     superClass: "tm.hybrid.HybridScene",
@@ -50,13 +47,8 @@ tm.define("jsstg.scenes.GameScene", {
             blueLarge: jsstg.elements.Bullets(240, 35).addChildTo(gameBoard),
         };
 
-        /**
-         * 輝き
-         * 0.0～1.0
-         */
-        scene._glowLevel = 0.5;
-
-        scene.bright = jsstg.postprocessing.BrightRenderer();
+        var sceneRenderPass = new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject);
+        var brightEffectPass = jsstg.postprocessing.BrightEffectPass(scene.three.scene, scene.three.camera.threeObject);
 
         scene.one("enter", function(e) {
             var app = e.app;
@@ -73,36 +65,20 @@ tm.define("jsstg.scenes.GameScene", {
                 })
             );
 
-            composer.addPass(new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject));
-            composer.addPass(new THREE.ShaderPass(THREE.CopyShader));
-
-            // scene.glowPass = jsstg.postprocessing.GlowPass();
-            // composer.addPass(scene.glowPass);
-
-            composer.addPass(scene.bright.getPass());
+            composer.addPass(sceneRenderPass);
+            // composer.addPass(new THREE.ShaderPass(THREE.CopyShader));
+            composer.addPass(brightEffectPass);
 
             composer.passes.forEach(function(pass, i, passes) {
                 pass.renderToScreen = i === passes.length - 1;
             });
         });
-
-        this.tweener
-            .clear()
-            .to({
-                _glowLevel: 1.0,
-            }, 1000)
-            .to({
-                _glowLevel: 0.0,
-            }, 1000)
-            .setLoop(true);
     },
 
     update: function(app) {
-        // this.glowPass.glowLevel = this._glowLevel * consts.GLOW_LEVEL_RATE;
     },
 
     render: function(renderer) {
-        this.bright.renderBrightLayer(renderer, this);
         this.effectComposer.render();
     },
 
