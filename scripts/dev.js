@@ -34,9 +34,9 @@
             //     }
             // });
 
-            scene.one("enter", function(e) {
-                SoundManager.playBgm("sounds/bgm1");
-            });
+            // scene.one("enter", function(e) {
+            //     SoundManager.playBgm("sounds/bgm1");
+            // });
 
             // var count = 100;
             // var geometry = new THREE.BufferGeometry();
@@ -218,10 +218,14 @@
             // var exp = tm.hybrid.ThreeElement(explosion);
             // exp.addChildTo(scene.gameBoard);
 
+            var t = 0;
             var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard).on("enterframe", function(e) {
-                this.rotation.x += 0.03;
-                this.rotation.y += 0.05;
-                this.x = Math.sin(e.app.frame * 0.1) * 15;
+                if (e.app.keyboard.getKey("space")) {
+                    this.rotation.x += 0.03;
+                    this.rotation.y += 0.05;
+                    this.x = Math.sin(t * 0.02) * 15;
+                    t += 1;
+                }
             });
             // console.log(test);
 

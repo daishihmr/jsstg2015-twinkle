@@ -15,9 +15,14 @@
             url: "images/board.js",
         },
 
+        // "test": {
+        //     type: "three",
+        //     url: "images/test.js",
+        // },
+
         "test": {
             type: "three",
-            url: "images/test.js",
+            url: "images/building2.js",
         },
     };
 

@@ -16,12 +16,16 @@
             }
 
             tm.asset.ThreeJSON.loader.load(path, function(geometry, materials) {
-                this.load(geometry, materials);
+                this.build(geometry, materials);
                 this.flare("load");
             }.bind(this));
         },
 
-        load: function(geometry, materials) {
+        build: function(geometry, materials) {
+            materials.forEach(function(m) {
+                console.log(m.shading);
+                m.shading = THREE.FlatShading;
+            });
             this.mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
         },
     });
