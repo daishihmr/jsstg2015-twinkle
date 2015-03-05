@@ -3,11 +3,8 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
     tm.hybrid = tm.hybrid || {};
 
@@ -27,8 +24,5 @@
         },
     };
 
-    if (typeof module !== 'undefined' && module.exports) {
-        module.exports = tm.hybrid.ColorConv;
-    }
-
+    module.exports = tm.hybrid.ColorConv;
 })();

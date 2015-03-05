@@ -3,13 +3,9 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-
-        require("./hybridscene");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+    require("./hybridscene");
 
     tm.define("tm.hybrid.HybridApp", {
         superClass: "tm.display.CanvasApp",
@@ -101,5 +97,4 @@
             return tm.display.CanvasApp.prototype.resize.call(this, w, h);
         }
     });
-
 })();

@@ -1,35 +1,46 @@
-var BrightShader = {
+(function() {
 
-    uniforms: {
+    var BrightShader = {
 
-        "tDiffuseBase": { type: "t", value: null },
-        "tDiffuseBright": { type: "t", value: null },
-        "f":        { type: "f", value: 1.0 / 512.0 }
+        uniforms: {
 
-    },
+            "tDiffuseBase": {
+                type: "t",
+                value: null
+            },
+            "tDiffuseBright": {
+                type: "t",
+                value: null
+            },
+            "f": {
+                type: "f",
+                value: 1.0 / 512.0
+            }
 
-    vertexShader: [
+        },
 
-        "varying vec2 vUv;",
+        vertexShader: [
 
-        "void main() {",
+            "varying vec2 vUv;",
+
+            "void main() {",
 
             "vUv = uv;",
             "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
 
-        "}"
+            "}"
 
-    ].join("\n"),
+        ].join("\n"),
 
-    fragmentShader: [
+        fragmentShader: [
 
-        "uniform sampler2D tDiffuseBase;",
-        "uniform sampler2D tDiffuseBright;",
-        "uniform float f;",
+            "uniform sampler2D tDiffuseBase;",
+            "uniform sampler2D tDiffuseBright;",
+            "uniform float f;",
 
-        "varying vec2 vUv;",
+            "varying vec2 vUv;",
 
-        "void main() {",
+            "void main() {",
 
             "vec4 sum = vec4( 0.0 );",
 
@@ -125,10 +136,11 @@ var BrightShader = {
 
             "gl_FragColor = texture2D(tDiffuseBase, vUv) + sum * 3.0;",
 
-        "}"
+            "}"
 
-    ].join("\n")
+        ].join("\n")
 
-};
+    };
 
-module.exports = BrightShader;
+    module.exports = BrightShader;
+})();

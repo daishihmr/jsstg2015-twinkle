@@ -1,98 +1,100 @@
-var tm = require("../../libs/tmlib");
-var THREE = require("../../libs/three");
+(function() {
+    var tm = require("../../libs/tmlib");
+    var THREE = require("../../libs/three");
 
-module.exports = {
-    material: null,
-    getMaterial: function() {
-        if (!this.material) {
-            material = new THREE.ShaderMaterial(ExplosionShader);
-        }
-        return material;
-    },
-
-    create: function() {
-        var result = new THREE.Object3D();
-        return result;
-    },
-};
-
-var ExplosionShader = {
-
-    attributes: null,
-
-    uniforms: THREE.UniformsUtils.merge([
-
-        {
-            size: {
-                type: "f",
-                value: 10
-            },
-            scale: {
-                type: "f",
-                value: 1
-            },
+    module.exports = {
+        material: null,
+        getMaterial: function() {
+            if (!this.material) {
+                material = new THREE.ShaderMaterial(ExplosionShader);
+            }
+            return material;
         },
 
-        THREE.UniformsLib["particle"],
-        THREE.UniformsLib["shadowmap"]
+        create: function() {
+            var result = new THREE.Object3D();
+            return result;
+        },
+    };
 
-    ]),
+    var ExplosionShader = {
 
-    vertexShader: [
+        attributes: null,
 
-        "uniform float size;",
-        "uniform float scale;",
+        uniforms: THREE.UniformsUtils.merge([
 
-        THREE.ShaderChunk["color_pars_vertex"],
-        THREE.ShaderChunk["shadowmap_pars_vertex"],
-        THREE.ShaderChunk["logdepthbuf_pars_vertex"],
+            {
+                size: {
+                    type: "f",
+                    value: 10
+                },
+                scale: {
+                    type: "f",
+                    value: 1
+                },
+            },
 
-        "void main() {",
+            THREE.UniformsLib["particle"],
+            THREE.UniformsLib["shadowmap"]
 
-        THREE.ShaderChunk["color_vertex"],
+        ]),
 
-        "   vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
+        vertexShader: [
 
-        "   #ifdef USE_SIZEATTENUATION",
-        "       gl_PointSize = size * ( scale / length( mvPosition.xyz ) );",
-        "   #else",
-        "       gl_PointSize = size;",
-        "   #endif",
+            "uniform float size;",
+            "uniform float scale;",
 
-        "   gl_Position = projectionMatrix * mvPosition;",
+            THREE.ShaderChunk["color_pars_vertex"],
+            THREE.ShaderChunk["shadowmap_pars_vertex"],
+            THREE.ShaderChunk["logdepthbuf_pars_vertex"],
 
-        THREE.ShaderChunk["logdepthbuf_vertex"],
-        THREE.ShaderChunk["worldpos_vertex"],
-        THREE.ShaderChunk["shadowmap_vertex"],
+            "void main() {",
 
-        "}"
+            THREE.ShaderChunk["color_vertex"],
 
-    ].join("\n"),
+            "   vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
 
-    fragmentShader: [
+            "   #ifdef USE_SIZEATTENUATION",
+            "       gl_PointSize = size * ( scale / length( mvPosition.xyz ) );",
+            "   #else",
+            "       gl_PointSize = size;",
+            "   #endif",
 
-        "uniform vec3 psColor;",
-        "uniform float opacity;",
+            "   gl_Position = projectionMatrix * mvPosition;",
 
-        THREE.ShaderChunk["color_pars_fragment"],
-        THREE.ShaderChunk["map_particle_pars_fragment"],
-        THREE.ShaderChunk["fog_pars_fragment"],
-        THREE.ShaderChunk["shadowmap_pars_fragment"],
-        THREE.ShaderChunk["logdepthbuf_pars_fragment"],
+            THREE.ShaderChunk["logdepthbuf_vertex"],
+            THREE.ShaderChunk["worldpos_vertex"],
+            THREE.ShaderChunk["shadowmap_vertex"],
 
-        "void main() {",
+            "}"
 
-        "   gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);",
+        ].join("\n"),
 
-        THREE.ShaderChunk["logdepthbuf_fragment"],
-        THREE.ShaderChunk["map_particle_fragment"],
-        THREE.ShaderChunk["alphatest_fragment"],
-        THREE.ShaderChunk["color_fragment"],
-        THREE.ShaderChunk["shadowmap_fragment"],
-        THREE.ShaderChunk["fog_fragment"],
+        fragmentShader: [
 
-        "}"
+            "uniform vec3 psColor;",
+            "uniform float opacity;",
 
-    ].join("\n"),
+            THREE.ShaderChunk["color_pars_fragment"],
+            THREE.ShaderChunk["map_particle_pars_fragment"],
+            THREE.ShaderChunk["fog_pars_fragment"],
+            THREE.ShaderChunk["shadowmap_pars_fragment"],
+            THREE.ShaderChunk["logdepthbuf_pars_fragment"],
 
-};
+            "void main() {",
+
+            "   gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);",
+
+            THREE.ShaderChunk["logdepthbuf_fragment"],
+            THREE.ShaderChunk["map_particle_fragment"],
+            THREE.ShaderChunk["alphatest_fragment"],
+            THREE.ShaderChunk["color_fragment"],
+            THREE.ShaderChunk["shadowmap_fragment"],
+            THREE.ShaderChunk["fog_fragment"],
+
+            "}"
+
+        ].join("\n"),
+
+    };
+})();

@@ -1,24 +1,25 @@
-var assets = {
-    "titleFont": "fonts/Teko/Teko-Bold.ttf",
-    "uiFont": "fonts/Oxygen/Oxygen-Regular.ttf",
-    "numberFont": "fonts/UbuntuMono/UbuntuMono-Bold.ttf",
+(function() {
 
-    "sounds/bgm1": "sounds/nc99965.ogg",
-    "sounds/crash": "sounds/sei_ge_garasu_kudake02.ogg",
+    var assets = {
+        "titleFont": "fonts/Teko/Teko-Bold.ttf",
+        "uiFont": "fonts/Oxygen/Oxygen-Regular.ttf",
+        "numberFont": "fonts/UbuntuMono/UbuntuMono-Bold.ttf",
 
-    "bullet": "images/arrow-down-icon.png",
+        "sounds/bgm1": "sounds/nc99965.ogg",
+        "sounds/crash": "sounds/sei_ge_garasu_kudake02.ogg",
 
-    "board": {
-        type: "three",
-        url: "images/board.js",
-    },
+        "bullet": "images/arrow-down-icon.png",
 
-    "test": {
-        type: "three",
-        url: "images/test.js",
-    },
-};
+        "board": {
+            type: "three",
+            url: "images/board.js",
+        },
 
-if (typeof module !== 'undefined' && module.exports) {
+        "test": {
+            type: "three",
+            url: "images/test.js",
+        },
+    };
+
     module.exports = assets;
-}
+})();

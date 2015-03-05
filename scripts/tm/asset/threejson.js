@@ -1,9 +1,6 @@
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
 
     tm.asset = tm.asset || {};
 

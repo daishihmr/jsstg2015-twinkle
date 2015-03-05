@@ -3,13 +3,10 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-        require("./delegateutil");
-        require("./threeelement");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+    require("./delegateutil");
+    require("./threeelement");
 
     tm.define("tm.hybrid.DirectionalLight", {
         superClass: "tm.hybrid.ThreeElement",

@@ -1,12 +1,11 @@
 (function() {
-
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
     var consts = require("../consts");
     var addBlendShader = require("./addblendshader");
     var brightShader = require("./brightshader");
 
-    tm.define("jsstg.postprocessing.BrightEffectPass", {
+    var BrightEffectPass = tm.createClass({
         init: function(scene, camera) {
             this.scene = scene;
             this.camera = camera;
@@ -148,4 +147,5 @@
         }
     };
 
+    module.exports = BrightEffectPass;
 })();

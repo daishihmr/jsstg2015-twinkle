@@ -3,10 +3,7 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-    }
+    var tm = require("../../../libs/tmlib");
 
     tm.define("tm.hybrid.DelegateUtil", {
         init: function(type) {
@@ -65,8 +62,5 @@
         return "set" + propertyName[0].toUpperCase() + propertyName.substring(1);
     }
 
-    if (typeof module !== 'undefined' && module.exports) {
-        module.exports = tm.hybrid.DelegateUtil;
-    }
-
+    module.exports = tm.hybrid.DelegateUtil;
 })();

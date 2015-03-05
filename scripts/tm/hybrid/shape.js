@@ -3,13 +3,9 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-
-        require("./mesh");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+    require("./mesh");
 
     tm.define("tm.hybrid.PlaneMesh", {
         superClass: "tm.hybrid.Mesh",

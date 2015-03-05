@@ -1,16 +1,19 @@
-module.exports = [
+(function() {
 
-    "float easeInQuad(float t) {",
-    "  return t * t;",
-    "}",
+    module.exports = [
 
-    "float easeOutQuad(float t) {",
-    "  return -t * (t - 2.0);",
-    "}",
+        "float easeInQuad(float t) {",
+        "  return t * t;",
+        "}",
 
-    "float easeInOutQuad(float t) {",
-    "  float p = 2.0 * t * t;",
-    "  return t < 0.5 ? p : -p + (4.0 * t) - 1.0;",
-    "}",
+        "float easeOutQuad(float t) {",
+        "  return -t * (t - 2.0);",
+        "}",
 
-].join("\n");
+        "float easeInOutQuad(float t) {",
+        "  float p = 2.0 * t * t;",
+        "  return t < 0.5 ? p : -p + (4.0 * t) - 1.0;",
+        "}",
+
+    ].join("\n");
+})();

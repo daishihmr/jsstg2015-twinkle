@@ -1,52 +1,54 @@
-var tm = require("../../libs/tmlib");
+(function() {
+    var tm = require("../../libs/tmlib");
+    var consts = require("../consts.js");
+    var assets = require("../assets.js");
+    require("../tm/asset/threejson");
+    require("../tm/hybrid/hybridapp");
 
-var consts = require("../consts.js");
-var assets = require("../assets.js");
+    var TitleScene = require("../scenes/titlescene");
 
-require("../tm/asset/threejson");
+    var Application = tm.createClass({
+        superClass: tm.hybrid.HybridApp,
 
-require("../tm/hybrid/hybridapp");
-require("../scenes/titlescene");
+        init: function() {
+            tm.dom.Element("body").style.set("backgroundColor", "hsl(240, 40%, 10%)");
+            var app = this;
+            this.superInit();
 
-tm.define("jsstg.app.Application", {
-    superClass: "tm.hybrid.HybridApp",
+            app.fps = 60;
+            app.resize(consts.W, consts.H).fitWindow();
 
-    init: function() {
-        tm.dom.Element("body").style.set("backgroundColor", "hsl(240, 40%, 10%)");
-        var app = this;
-        this.superInit();
+            var canvas2d = tm.dom.Element(app.element);
+            var canvas3d = tm.dom.Element(app.threeCanvas);
+            // canvas3d.style.set("backgroundColor", "black");
+            tm.dom.Element("body")
+                .prepend(canvas2d)
+                .prepend(canvas3d);
 
-        app.fps = 60;
-        app.resize(consts.W, consts.H).fitWindow();
+            // oggが再生できない環境ならmp3を使う
+            var canPlayOgg = new Audio().canPlayType("audio/ogg");
+            if (!canPlayOgg) {
+                assets.$forIn(function(key) {
+                    if (typeof(assets[key]) === "string" && assets[key].match(/\.ogg$/)) {
+                        assets[key] = assets[key].replace(/\.ogg$/, ".mp3");
+                    }
+                });
+            }
 
-        var canvas2d = tm.dom.Element(app.element);
-        var canvas3d = tm.dom.Element(app.threeCanvas);
-        // canvas3d.style.set("backgroundColor", "black");
-        tm.dom.Element("body")
-            .prepend(canvas2d)
-            .prepend(canvas3d);
+            app.pushScene(tm.ui.LoadingScene({
+                nextScene: TitleScene,
+                width: consts.W,
+                height: consts.H,
+                assets: assets,
+            }));
 
-        // oggが再生できない環境ならmp3を使う
-        var canPlayOgg = new Audio().canPlayType("audio/ogg");
-        if (!canPlayOgg) {
-            assets.$forIn(function(key) {
-                if (typeof(assets[key]) === "string" && assets[key].match(/\.ogg$/)) {
-                    assets[key] = assets[key].replace(/\.ogg$/, ".mp3");
-                }
-            });
-        }
-
-        app.pushScene(tm.ui.LoadingScene({
-            nextScene: jsstg.scenes.TitleScene,
-            width: consts.W,
-            height: consts.H,
-            assets: assets,
-        }));
-
-        // if (window.location.hostname === "localhost") {
+            // if (window.location.hostname === "localhost") {
             tm.util.Script.loadStats().on("load", function() {
                 app.enableStats();
             });
-        // }
-    },
-});
+            // }
+        },
+    });
+
+    module.exports = Application;
+})();

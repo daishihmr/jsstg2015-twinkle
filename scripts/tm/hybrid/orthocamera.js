@@ -3,12 +3,9 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-        require("./threeelement");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+    require("./threeelement");
 
     tm.define("tm.hybrid.OrthoCamera", {
         superClass: "tm.hybrid.ThreeElement",

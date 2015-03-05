@@ -1,9 +1,9 @@
-if (typeof module !== 'undefined' && module.exports) {
+(function() {
+
     var tm = require("../libs/tmlib");
+    var Application = require("./app/application");
 
-    require("./app/application");
-}
-
-tm.main(function() {
-    jsstg.app.Application().run();
-});
+    tm.main(function() {
+        Application().run();
+    });
+})();

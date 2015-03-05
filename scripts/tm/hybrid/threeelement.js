@@ -3,12 +3,9 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-        require("./delegateutil");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+    require("./delegateutil");
 
     tm.define("tm.hybrid.ThreeElement", {
         superClass: "tm.app.Element",
@@ -103,7 +100,7 @@
     delegater.property("id");
     delegater.property("uuid");
     delegater.property("name");
-    
+
     tm.hybrid.ThreeElement.prototype.accessor("position", {
         get: function() {
             return this.threeObject.position;
@@ -115,7 +112,7 @@
     delegater.property("x", "position");
     delegater.property("y", "position");
     delegater.property("z", "position");
-    
+
     tm.hybrid.ThreeElement.prototype.accessor("scale", {
         get: function() {
             return this.threeObject.scale;

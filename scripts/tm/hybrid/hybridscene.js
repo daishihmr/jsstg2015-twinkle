@@ -3,14 +3,11 @@
  */
 
 (function() {
-
-    if (typeof module !== 'undefined' && module.exports) {
-        var tm = require("../../../libs/tmlib");
-        var THREE = require("../../../libs/three");
-
-        require("./threeelement");
-        require("./camera");
-    }
+    var tm = require("../../../libs/tmlib");
+    var THREE = require("../../../libs/three");
+    require("./threeelement");
+    require("./camera");
+    require("./directionallight");
 
     tm.define("tm.hybrid.HybridScene", {
         superClass: "tm.app.Scene",
@@ -124,5 +121,4 @@
                 .addChildTo(this);
         },
     });
-
 })();

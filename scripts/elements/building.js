@@ -1,10 +1,9 @@
-var tm = require("../../libs/tmlib");
-var THREE = require("../../libs/three");
-
 (function() {
+    var tm = require("../../libs/tmlib");
+    var THREE = require("../../libs/three");
 
-    tm.define("jsstg.elements.Building", {
-        superClass: "tm.hybrid.Mesh",
+    var Building = tm.createClass({
+        superClass: tm.hybrid.Mesh,
 
         init: function(geometryParam, materialParam) {
             geometryParam = {}.$extend(DEFAULT_GEOMETRY_PARAM, geometryParam);
@@ -35,4 +34,5 @@ var THREE = require("../../libs/three");
         color: 0xffffff,
     };
 
+    module.exports = Building;
 })();

@@ -1,104 +1,69 @@
-var tm = require("../../libs/tmlib");
-var THREE = require("../../libs/three");
+(function() {
+    var tm = require("../../libs/tmlib");
+    var THREE = require("../../libs/three");
+    var consts = require("../consts");
+    var Bullet = require("./bullet");
 
-var consts = require("../consts");
-var utils = require("../utils");
+    var Bullets = tm.createClass({
+        superClass: tm.hybrid.ThreeElement,
+        init: function(hue, size, poolSize) {
+            hue = hue || 0;
+            size = size || 20;
+            poolSize = poolSize || 512;
 
-tm.define("jsstg.elements.Bullets", {
-    superClass: "tm.hybrid.ThreeElement",
-    init: function(hue, size, poolSize) {
-        hue = hue || 0;
-        size = size || 20;
-        poolSize = poolSize || 512;
+            this.bullets = [];
 
-        this.bullets = [];
+            var image = tm.graphics.Canvas()
+                .resize(32, 32)
+                .setFillStyle("hsl({0}, 80%, 80%)".format(hue))
+                .setStrokeStyle("hsl({0}, 100%, 50%)".format(hue))
+                .setLineStyle(8)
+                .fillCircle(16, 16, 12)
+                .strokeCircle(16, 16, 12)
+                .element;
+            var texture = new THREE.Texture(image);
+            texture.needsUpdate = true;
 
-        var image = tm.graphics.Canvas()
-            .resize(32, 32)
-            .setFillStyle("hsl({0}, 80%, 80%)".format(hue))
-            .setStrokeStyle("hsl({0}, 100%, 50%)".format(hue))
-            .setLineStyle(8)
-            .fillCircle(16, 16, 12)
-            .strokeCircle(16, 16, 12)
-            .element;
-        var texture = new THREE.Texture(image);
-        texture.needsUpdate = true;
+            var geometry = new THREE.Geometry();
+            var vertex;
+            for (var i = 0; i < poolSize; i++) {
+                vertex = new THREE.Vector3(0, consts.Y_MAX * 2, 0);
+                this.bullets.push(Bullet(vertex));
+                geometry.vertices.push(vertex);
+            }
 
-        var geometry = new THREE.Geometry();
-        var vertex;
-        for (var i = 0; i < poolSize; i++) {
-            vertex = new THREE.Vector3(0, consts.Y_MAX * 2, 0);
-            this.bullets.push(jsstg.elements.Bullet(vertex));
-            geometry.vertices.push(vertex);
-        }
+            var material = new THREE.PointCloudMaterial({
+                size: size,
+                sizeAttenuation: false,
+                map: texture,
+                transparent: false,
+            });
 
-        var material = new THREE.PointCloudMaterial({
-            size: size,
-            sizeAttenuation: false,
-            map: texture,
-            transparent: false,
-        });
+            var particles = new THREE.PointCloud(geometry, material);
+            particles.sortParticles = true;
+            particles.frustumCulled = false;
 
-        var particles = new THREE.PointCloud(geometry, material);
-        particles.sortParticles = true;
-        particles.frustumCulled = false;
+            this.superInit(particles);
+        },
 
-        this.superInit(particles);
-    },
+        get: function() {
+            var bullets = this.bullets;
+            var len = bullets.length;
+            for (var i = 0; i < len; i++) {
+                if (bullets[i].active === false) return bullets[i];
+            }
+            console.warn("弾切れ");
+            return null;
+        },
 
-    get: function() {
-        var bullets = this.bullets;
-        var len = bullets.length;
-        for (var i = 0; i < len; i++) {
-            if (bullets[i].active === false) return bullets[i];
-        }
-        console.warn("弾切れ");
-        return null;
-    },
+        update: function() {
+            var bullets = this.bullets;
+            var len = bullets.length;
+            for (var i = 0; i < len; i++) {
+                bullets[i].update();
+            }
+        },
+    });
 
-    update: function() {
-        var bullets = this.bullets;
-        var len = bullets.length;
-        for (var i = 0; i < len; i++) {
-            bullets[i].update();
-        }
-    },
-});
-
-tm.define("jsstg.elements.Bullet", {
-
-    init: function(vertex) {
-        this.position = vertex;
-        this.age = 0;
-        this.active = false;
-    },
-
-    update: function() {
-        if (!this.active) return;
-
-        this.position.x += this.vx;
-        this.position.y += this.vy;
-
-        if (!utils.isOutScreen(this.position)) {
-            this.age += 1;
-        } else {
-            this.dispose();
-        }
-    },
-
-    activate: function(x, y, direction) {
-        this.position.set(x, y, 0);
-
-        this.vx = Math.cos(direction);
-        this.vy = Math.sin(direction);
-
-        this.active = true;
-    },
-
-    dispose: function() {
-        this.active = false;
-        this.age = 0;
-        this.position.set(0, consts.Y_MAX * 2, 0);
-    },
-
-});
+    module.exports = Bullets;
+})();
