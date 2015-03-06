@@ -16,7 +16,9 @@
             this.superInit();
 
             app.fps = 60;
-            app.resize(consts.W, consts.H).fitWindow();
+            app.resize(consts.W, consts.H);
+            app.threeRenderer.setSize(consts.W * consts.THREE_QUALITY, consts.H * consts.THREE_QUALITY);
+            app.fitWindow();
 
             var canvas2d = tm.dom.Element(app.element);
             var canvas3d = tm.dom.Element(app.threeCanvas);

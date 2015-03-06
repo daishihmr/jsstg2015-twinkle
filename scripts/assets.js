@@ -22,7 +22,7 @@
 
         "test": {
             type: "three",
-            url: "images/building2.js",
+            url: "images/road_test.js",
         },
     };
 
