@@ -5,8 +5,8 @@
         "uiFont": "fonts/Oxygen/Oxygen-Regular.ttf",
         "numberFont": "fonts/UbuntuMono/UbuntuMono-Bold.ttf",
 
-        "sounds/bgm1": "sounds/nc99965.ogg",
-        "sounds/crash": "sounds/sei_ge_garasu_kudake02.ogg",
+        // "sounds/bgm1": "sounds/nc99965.ogg",
+        // "sounds/crash": "sounds/sei_ge_garasu_kudake02.ogg",
 
         "bullet": "images/arrow-down-icon.png",
 
