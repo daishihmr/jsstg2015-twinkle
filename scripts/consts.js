@@ -5,7 +5,7 @@
         W: 360,
         H: 480,
 
-        THREE_QUALITY: 2.0,
+        THREE_QUALITY: 0.5,
 
         X_MIN: -82.0,
         X_MAX: +82.0,
