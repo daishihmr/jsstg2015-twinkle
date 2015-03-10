@@ -1,5 +1,5 @@
 /*
- * hybridscene.js
+ * scene.js
  */
 
 (function() {
@@ -7,9 +7,10 @@
     var THREE = require("../../../libs/three");
     require("./threeelement");
     require("./camera");
+    require("./ambientlight");
     require("./directionallight");
 
-    tm.define("tm.hybrid.HybridScene", {
+    tm.define("tm.hybrid.Scene", {
         superClass: "tm.app.Scene",
 
         two: null,
@@ -20,7 +21,7 @@
         init: function() {
             this.superInit();
             this.two = this;
-            this.three = tm.hybrid.HybridScene.Three();
+            this.three = tm.hybrid.Scene.Three();
 
             // TODO どう扱うか
             this.effectComposer = null;
@@ -52,7 +53,7 @@
             }
         },
     });
-    tm.hybrid.HybridScene.prototype.accessor("camera", {
+    tm.hybrid.Scene.prototype.accessor("camera", {
         get: function() {
             return this.three.camera;
         },
@@ -60,7 +61,7 @@
             this.three.camera = v;
         },
     });
-    tm.hybrid.HybridScene.prototype.accessor("ambientLight", {
+    tm.hybrid.Scene.prototype.accessor("ambientLight", {
         get: function() {
             return this.three.ambientLight;
         },
@@ -68,7 +69,7 @@
             this.three.ambientLight = v;
         },
     });
-    tm.hybrid.HybridScene.prototype.accessor("directionalLight", {
+    tm.hybrid.Scene.prototype.accessor("directionalLight", {
         get: function() {
             return this.three.directionalLight;
         },
@@ -77,7 +78,7 @@
         },
     });
 
-    tm.hybrid.HybridScene.prototype.accessor("fog", {
+    tm.hybrid.Scene.prototype.accessor("fog", {
         get: function() {
             return this.three.scene.fog;
         },
@@ -86,7 +87,7 @@
         },
     });
 
-    tm.hybrid.HybridScene.prototype.accessor("overrideMaterial", {
+    tm.hybrid.Scene.prototype.accessor("overrideMaterial", {
         get: function() {
             return this.three.scene.overrideMaterial;
         },
@@ -95,7 +96,7 @@
         },
     });
 
-    tm.hybrid.HybridScene.prototype.accessor("autoUpdate", {
+    tm.hybrid.Scene.prototype.accessor("autoUpdate", {
         get: function() {
             return this.three.scene.autoUpdate;
         },
@@ -104,7 +105,7 @@
         },
     });
 
-    tm.define("tm.hybrid.HybridScene.Three", {
+    tm.define("tm.hybrid.Scene.Three", {
         superClass: "tm.hybrid.ThreeElement",
 
         init: function() {
@@ -116,7 +117,10 @@
             this.camera = tm.hybrid.Camera();
             this.camera.z = 7;
 
-            this.directionalLight = tm.hybrid.DirectionalLight()
+            this.ambientLight = tm.hybrid.AmbientLight(0x888888)
+                .addChildTo(this);
+
+            this.directionalLight = tm.hybrid.DirectionalLight(0xffffff, 1)
                 .setPosition(1, 1, 1)
                 .addChildTo(this);
         },

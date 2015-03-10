@@ -5,28 +5,38 @@
 (function() {
     var tm = require("../../../libs/tmlib");
     var THREE = require("../../../libs/three");
-    require("./hybridscene");
+    require("./scene");
 
-    tm.define("tm.hybrid.HybridApp", {
+    tm.define("tm.hybrid.Application", {
         superClass: "tm.display.CanvasApp",
 
         threeRenderer: null,
         threeCanvas: null,
 
-        init: function(canvas) {
-            this.superInit(canvas);
-            this.setupThree();
+        init: function(canvas2d, canvas3d) {
+            this.superInit(canvas2d);
+            this.setupThree(canvas3d);
             this.background = "transparent";
         },
 
-        setupThree: function() {
-            this.threeRenderer = new THREE.WebGLRenderer({
-                antialias: false,
-            });
-
-            if (this.element.parentNode) {
-                this.element.parentNode.insertBefore(this.threeRenderer.domElement, this.element);
+        setupThree: function(canvas3d) {
+            var param = {
+                antialias: true,
+            };
+            if (canvas3d) {
+                if (canvas3d instanceof HTMLCanvasElement) {
+                    param.canvas = canvas3d;
+                } else if (typeof canvas3d === "string") {
+                    param.canvas = document.querySelector(canvas3d);
+                }
             }
+            this.threeRenderer = new THREE.WebGLRenderer(param);
+
+            // if (this.element.parentNode) {
+            //     this.element.parentNode.insertBefore(this.threeRenderer.domElement, this.element);
+            // } else {
+            //     window.document.body.appendChild(this.threeRenderer.domElement);
+            // }
 
             this.threeCanvas = this.threeRenderer.domElement;
         },
@@ -70,9 +80,9 @@
 
         /** @override */
         _update: function() {
-            tm.app.BaseApp.prototype._update.call(this);
+            tm.app.CanvasApp.prototype._update.call(this);
             var scene = this.currentScene;
-            if (this.awake && scene instanceof tm.hybrid.HybridScene) {
+            if (this.awake && scene instanceof tm.hybrid.Scene) {
                 this.updater.update(scene.three.camera);
                 this.updater.update(scene.three);
             }
@@ -82,7 +92,7 @@
         _draw: function() {
             tm.display.CanvasApp.prototype._draw.call(this);
             var scene = this.currentScene;
-            if (scene instanceof tm.hybrid.HybridScene) {
+            if (scene instanceof tm.hybrid.Scene) {
                 scene.render(this.threeRenderer);
             }
         },
@@ -91,7 +101,7 @@
         resize: function(w, h) {
             this.threeRenderer.setSize(w, h);
             var scene = this.currentScene;
-            if (scene instanceof tm.hybrid.HybridScene) {
+            if (scene instanceof tm.hybrid.Scene) {
                 scene.three.camera.aspect = w / h;
             }
             return tm.display.CanvasApp.prototype.resize.call(this, w, h);

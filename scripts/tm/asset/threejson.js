@@ -23,7 +23,6 @@
 
         build: function(geometry, materials) {
             materials.forEach(function(m) {
-                console.log(m.shading);
                 m.shading = THREE.FlatShading;
             });
             this.mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));

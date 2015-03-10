@@ -1,7 +1,7 @@
 (function() {
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
-    require("../tm/hybrid/hybridscene");
+    require("../tm/hybrid/scene");
 
     var consts = require("../consts");
     var BrightEffectPass = require("../postprocessing/brighteffectpass");
@@ -11,28 +11,29 @@
     var GameBoard = require("../elements/gameboard");
 
     var GameScene = tm.createClass({
-        superClass: tm.hybrid.HybridScene,
+        superClass: tm.hybrid.Scene,
 
         init: function() {
             var scene = this;
             scene.superInit();
 
-            var background = scene.background = Background().addChildTo(scene.three);
             var gameBoard = scene.gameBoard = GameBoard().addChildTo(scene.three);
-            var fighter = scene.fighter = Fighter(); //.addChildTo(scene.gameBoard);
+            var fighter = scene.fighter = Fighter().addChildTo(scene.gameBoard);
 
+            var light = this.directionalLight;
             var cameraTarget = new THREE.Vector3(0, 0, 0);
             var cameraMoveRate = new THREE.Vector3(0.25, 0, 0);
             scene.camera
-                .setPosition(0, 0, -200)
+                .setPosition(0, 150, -150)
                 .on("enterframe", function() {
-                    cameraTarget
-                        .copy(fighter.position)
-                        .multiply(cameraMoveRate)
-                        .add(gameBoard.position);
-                    this.lookAt(cameraTarget);
-                })
-                .addChildTo(gameBoard);
+                    // cameraTarget
+                    //     .copy(fighter.position)
+                    //     .multiply(cameraMoveRate)
+                    //     .add(gameBoard.position);
+                    // this.lookAt(cameraTarget);
+                    this.lookAt(gameBoard);
+                    light.setPosition(this.x, this.y, this.z);
+                });
 
             /**
              * 弾プール
@@ -49,8 +50,6 @@
 
             scene.one("enter", function(e) {
                 var app = e.app;
-
-                tm.dom.Element(app.element).visible = false;
 
                 var composer = scene.effectComposer = new THREE.EffectComposer(
                     app.threeRenderer,

@@ -24,6 +24,11 @@
             type: "three",
             url: "images/road_test.js",
         },
+
+        "fighter": {
+            type: "three",
+            url: "images/fighter_lined.js",
+        },
     };
 
     module.exports = assets;

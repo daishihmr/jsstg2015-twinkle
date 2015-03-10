@@ -218,17 +218,17 @@
             // var exp = tm.hybrid.ThreeElement(explosion);
             // exp.addChildTo(scene.gameBoard);
 
-            var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard).on("enterframe", function(e) {
-                if (e.app.keyboard.getKey("w")) this.y += 0.1;
-                if (e.app.keyboard.getKey("s")) this.y -= 0.1;
-                if (e.app.keyboard.getKey("a")) this.x -= 0.1;
-                if (e.app.keyboard.getKey("d")) this.x += 0.1;
+            // var test = tm.hybrid.Mesh("test").setScale(10).addChildTo(scene.gameBoard).on("enterframe", function(e) {
+            //     if (e.app.keyboard.getKey("w")) this.y += 0.1;
+            //     if (e.app.keyboard.getKey("s")) this.y -= 0.1;
+            //     if (e.app.keyboard.getKey("a")) this.x -= 0.1;
+            //     if (e.app.keyboard.getKey("d")) this.x += 0.1;
 
-                if (e.app.keyboard.getKey("left")) this.rotationY -= 0.1;
-                if (e.app.keyboard.getKey("right")) this.rotationY += 0.1;
-                if (e.app.keyboard.getKey("up")) this.rotationX += 0.1;
-                if (e.app.keyboard.getKey("down")) this.rotationX -= 0.1;
-            });
+            //     if (e.app.keyboard.getKey("left")) this.rotationY -= 0.1;
+            //     if (e.app.keyboard.getKey("right")) this.rotationY += 0.1;
+            //     if (e.app.keyboard.getKey("up")) this.rotationX += 0.1;
+            //     if (e.app.keyboard.getKey("down")) this.rotationX -= 0.1;
+            // });
             // console.log(test);
 
         },

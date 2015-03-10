@@ -7,13 +7,12 @@
 
         init: function() {
             this.superInit();
+            tm.hybrid.PlaneMesh().setScale(100).addChildTo(this);
 
-            this.target = new THREE.Vector3();
+            this.rotationX += 90;
         },
 
         update: function(app) {
-            this.target.set(Math.cos(app.frame * 0.009) * 1000, -2500, Math.sin(app.frame * 0.002) * 2600 + 2800);
-            this.lookAt(this.target);
         }
     });
 

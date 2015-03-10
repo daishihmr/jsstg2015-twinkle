@@ -3,29 +3,21 @@
     var consts = require("../consts.js");
     var assets = require("../assets.js");
     require("../tm/asset/threejson");
-    require("../tm/hybrid/hybridapp");
+    require("../tm/hybrid/application");
 
     var TitleScene = require("../scenes/titlescene");
 
     var Application = tm.createClass({
-        superClass: tm.hybrid.HybridApp,
+        superClass: tm.hybrid.Application,
 
         init: function() {
-            tm.dom.Element("body").style.set("backgroundColor", "hsl(240, 40%, 10%)");
             var app = this;
-            this.superInit();
+            this.superInit("#canvas2d", "#canvas3d");
 
             app.fps = 60;
             app.resize(consts.W, consts.H);
             app.threeRenderer.setSize(consts.W * consts.THREE_QUALITY, consts.H * consts.THREE_QUALITY);
             app.fitWindow();
-
-            var canvas2d = tm.dom.Element(app.element);
-            var canvas3d = tm.dom.Element(app.threeCanvas);
-            // canvas3d.style.set("backgroundColor", "black");
-            tm.dom.Element("body")
-                .prepend(canvas2d)
-                .prepend(canvas3d);
 
             // oggが再生できない環境ならmp3を使う
             var canPlayOgg = new Audio().canPlayType("audio/ogg");

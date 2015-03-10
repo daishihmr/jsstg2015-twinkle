@@ -7,32 +7,35 @@
     var consts = require("../consts");
 
     var Fighter = tm.createClass({
-        superClass: tm.hybrid.BoxMesh,
+        superClass: tm.hybrid.Mesh,
 
         init: function() {
-            this.superInit();
-            this.threeObject.material = new THREE.MeshBasicMaterial({
-                color: colorConv.hsl("hsl(220, 70%, 90%)"),
-                wireframe: true,
-                wireframeLinewidth: 3,
-            });
-            this.setScale(10);
-
+            this.superInit("fighter");
+            this.setScale(5);
             this.delta = new THREE.Vector3();
+
+            this.rotationY = 180;
+            this.rotationX = -90;
         },
 
         update: function(app) {
-            this.rotationX += 10;
-            this.rotationY += 5;
-
             if (app.pointing.getPointing()) {
                 this.delta.copy(app.pointing.deltaPosition).multiplyScalar(0.5);
             } else {
                 this.delta.copy(app.keyboard.getKeyDirection().mul(3.0));
             }
 
+            var lastX = this.x;
+
             this.x = Math.clamp(this.x - this.delta.x, consts.X_MIN, consts.X_MAX);
             this.y = Math.clamp(this.y - this.delta.y, consts.Y_MIN, consts.Y_MAX);
+
+            var d = this.x - lastX;
+            if (d != 0) {
+                this.rotationZ += (d / Math.abs(d)) * 6;
+            }
+            this.rotationZ -= (this.rotationZ / Math.abs(this.rotationY)) * 9;
+            this.rotationZ = Math.clamp(this.rotationZ, -90, 90);
         },
 
     });

@@ -66,7 +66,7 @@
 
             // currentBufferとzanzoBufferをブレンドしてbrightLayerにレンダリング
             this.zanzoMaterial.uniforms.tDiffuse1.value = this.zanzoBuffer;
-            this.zanzoMaterial.uniforms.level1.value = 0.8;
+            this.zanzoMaterial.uniforms.level1.value = 0.6;
             this.zanzoMaterial.uniforms.tDiffuse2.value = this.currentBuffer;
             this.zanzoMaterial.uniforms.level2.value = 1.0;
             this.osScreen.material = this.zanzoMaterial;
