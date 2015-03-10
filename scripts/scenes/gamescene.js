@@ -24,14 +24,15 @@
             var cameraTarget = new THREE.Vector3(0, 0, 0);
             var cameraMoveRate = new THREE.Vector3(0.25, 0, 0);
             scene.camera
-                .setPosition(0, 150, -150)
+                .setUp(new THREE.Vector3(0, 0, 1))
+                .setPosition(consts.CAMERA_DEFAULT_POSITION_X, consts.CAMERA_DEFAULT_POSITION_Y, consts.CAMERA_DEFAULT_POSITION_Z)
                 .on("enterframe", function() {
-                    // cameraTarget
-                    //     .copy(fighter.position)
-                    //     .multiply(cameraMoveRate)
-                    //     .add(gameBoard.position);
-                    // this.lookAt(cameraTarget);
-                    this.lookAt(gameBoard);
+                    cameraTarget
+                        .copy(fighter.position)
+                        .multiply(cameraMoveRate)
+                        .add(gameBoard.position);
+                    this.lookAt(cameraTarget);
+                    // this.lookAt(gameBoard);
                     light.setPosition(this.x, this.y, this.z);
                 });
 
