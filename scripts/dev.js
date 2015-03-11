@@ -15,21 +15,26 @@
             var scene = this;
             scene.superInit();
 
-            var m;
-
+            var geo = new THREE.Geometry();
             var box = new THREE.BoxGeometry(10, 10, 10);
-            var mat = new THREE.MeshNormalMaterial();
-            for (var x = -400; x < 400; x += 50) {
+            var matrix = new THREE.Matrix4();
+
+            for (var x = -200; x < 200; x += 50) {
                 for (var y = -200; y < 200; y += 50) {
-                    for (var z = -400; z < 400; z += 50) {
-                        m = tm.hybrid.Mesh()
-                              .setGeometry(box)
-                              .setMaterial(mat)
-                              .setPosition(x, y, z)
-                              .addChildTo(this);
+                    for (var z = -200; z < 200; z += 50) {
+                        matrix.identity().setPosition({
+                            x: x,
+                            y: y,
+                            z: z,
+                        });
+                        geo.merge(box, matrix);
                     }
                 }
             }
+            tm.hybrid.Mesh()
+                .setGeometry(geo)
+                .setMaterial(new THREE.MeshNormalMaterial())
+                .addChildTo(this);
 
             // var newBullet;
             // scene.on("enterframe", function(e) {
