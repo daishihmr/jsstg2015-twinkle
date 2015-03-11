@@ -62,6 +62,15 @@
 
             this.ambientLight.color = new THREE.Color(0x666666);
 
+            this.on("enterframe", function() {
+                if (this.camera.isInSight(this.fighter)) {
+                    console.log("in");
+                } else {
+                    console.error("out");
+                }
+            });
+
+
             // var newBullet;
             // scene.on("enterframe", function(e) {
             //     if (e.app.frame % 50 === 0) {

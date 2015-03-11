@@ -12,19 +12,16 @@
 
             this.rotationX = 90;
 
-            // if (consts.DEBUG) {
-            //     tm.hybrid.Mesh()
-            //         .setGeometry(new THREE.PlaneGeometry(500, 500, 20, 20))
-            //         .setMaterial(new THREE.MeshBasicMaterial({
-            //             color: tm.hybrid.ColorConv.hsl(220, 70, 10),
-            //             wireframe: true,
-            //         }))
-            //         .addChildTo(this);
-            // }
+            this.plane = tm.hybrid.Mesh()
+                .setGeometry(new THREE.PlaneGeometry(1000, 1000, 20, 20))
+                .setMaterial(new THREE.MeshBasicMaterial({
+                    color: tm.hybrid.ColorConv.hsl(220, 70, 10),
+                    wireframe: true,
+                }))
+                .addChildTo(this);
         },
 
-        update: function(app) {
-        }
+        update: function(app) {}
     });
 
     module.exports = GameBoard;

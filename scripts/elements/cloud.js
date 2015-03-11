@@ -27,10 +27,7 @@
                 uniforms: {
                     "map": {
                         type: "t",
-                        value: tm.hybrid.Texture("cloud", {
-                            magFilter: THREE.LinearMipMapLinearFilter, 
-                            minFilter: THREE.LinearMipMapLinearFilter,
-                        }),
+                        value: tm.hybrid.Texture("cloud"),
                     },
                     "fogColor": {
                         type: "c",

@@ -10,6 +10,7 @@
     var Bullets = require("../elements/bullets");
     var Fighter = require("../elements/fighter");
     var GameBoard = require("../elements/gameboard");
+    var BackgroundSphere = require("../elements/backgroundsphere");
 
     var GameScene = tm.createClass({
         superClass: tm.hybrid.Scene,
@@ -21,7 +22,7 @@
             var first = scene.first = tm.hybrid.ThreeElement().addChildTo(this);
 
             var gameBoard = scene.gameBoard = GameBoard().addChildTo(scene.three);
-            var fighter = scene.fighter = Fighter().addChildTo(scene.gameBoard);
+            var fighter = scene.fighter = Fighter(scene).addChildTo(scene.gameBoard);
 
             this.directionalLight
                 .setPosition(1, 0.2, 0)
@@ -43,15 +44,7 @@
                 .addChildTo(gameBoard);
             scene.camera.lookAt(fighter.position);
 
-            this.backgroundSphere = tm.hybrid.Mesh()
-                .setGeometry(new THREE.SphereGeometry(800, 32, 32))
-                .setMaterial(new THREE.MeshPhongMaterial({
-                    side: THREE.BackSide,
-                    ambient: new THREE.Color(0xffffff),
-                    specular: new THREE.Color(0x000000),
-                    shininess: 0,
-                    map: tm.hybrid.Texture("bluesky"),
-                }))
+            this.backgroundSphere = BackgroundSphere("bluesky")
                 .addChildTo(this)
                 .on("enterframe", function() {
                     this.position.set(0, 0, 0);
@@ -62,10 +55,10 @@
              * 弾プール
              */
             scene.bullets = {
-                redSmall: Bullets(0).addChildTo(gameBoard),
-                blueSmall: Bullets(240).addChildTo(gameBoard),
-                redLarge: Bullets(0, 35).addChildTo(gameBoard),
-                blueLarge: Bullets(240, 35).addChildTo(gameBoard),
+                // redSmall: Bullets(0).addChildTo(gameBoard),
+                // blueSmall: Bullets(240).addChildTo(gameBoard),
+                // redLarge: Bullets(0, 35).addChildTo(gameBoard),
+                // blueLarge: Bullets(240, 35).addChildTo(gameBoard),
             };
 
             var sceneRenderPass = this.sceneRenderPass = new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject);

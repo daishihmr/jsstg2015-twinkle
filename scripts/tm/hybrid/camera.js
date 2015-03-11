@@ -14,7 +14,14 @@
         init: function() {
             this.superInit(new THREE.PerspectiveCamera(45, 1, 1, 20000));
         },
+
+        isInSight: function(obj) {
+            tempVector.setFromMatrixPosition(obj.matrixWorld).project(this);
+            return -1 <= tempVector.x && tempVector.x <= 1 && -1 <= tempVector.y && tempVector.y <= 1;
+        },
     });
+
+    var tempVector = new THREE.Vector3();
 
     var delegater = tm.hybrid.DelegateUtil(tm.hybrid.Camera);
 
