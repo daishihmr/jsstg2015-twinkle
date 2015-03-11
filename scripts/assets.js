@@ -30,7 +30,8 @@
             url: "images/fighter_lined.js",
         },
 
-        "earth": "images/earth.jpg",
+        "bluesky": "images/bluesky.png",
+        "cloud": "images/cloud.png",
     };
 
     module.exports = assets;

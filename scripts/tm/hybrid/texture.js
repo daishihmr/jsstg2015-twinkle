@@ -6,18 +6,20 @@
     var tm = require("../../../libs/tmlib");
     var THREE = require("../../../libs/three");
 
-    tm.hybrid.Texture = function(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy) {
-        if (typeof image === "string") {
-            var texture = new THREE.Texture(tm.asset.Manager.get(image).element, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy);
-            texture.needsUpdate = true;
-            return texture;
-        } else if (image instanceof Image || image instanceof HTMLImageElement) {
-            var texture = new THREE.Texture(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy);
-            texture.needsUpdate = true;
-            return texture;
-        }
-        return null;
-    };
+    tm.hybrid = tm.hybrid || {};
 
-    module.exports = tm.hybrid.Texture;
+    tm.hybrid.Texture = function(image, option) {
+        option = option || {};
+
+        if (typeof image === "string") {
+            image = tm.asset.Manager.get(image).element;
+        } else if (image instanceof tm.graphics.Canvas || image instanceof tm.asset.Texture) {
+            image = image.element;
+        }
+
+        // var texture = new THREE.Texture(image, option.mapping, option.wrapS, option.wrapT, option.magFilter, option.minFilter, option.format, option.type, option.anisotropy);
+        var texture = new THREE.Texture(image);
+        texture.needsUpdate = true;
+        return texture;
+    };
 })();

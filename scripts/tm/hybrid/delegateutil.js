@@ -61,6 +61,4 @@
     function setterName(propertyName) {
         return "set" + propertyName[0].toUpperCase() + propertyName.substring(1);
     }
-
-    module.exports = tm.hybrid.DelegateUtil;
 })();

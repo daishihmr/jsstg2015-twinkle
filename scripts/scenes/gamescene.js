@@ -18,10 +18,16 @@
             var scene = this;
             scene.superInit();
 
+            var first = scene.first = tm.hybrid.ThreeElement().addChildTo(this);
+
             var gameBoard = scene.gameBoard = GameBoard().addChildTo(scene.three);
             var fighter = scene.fighter = Fighter().addChildTo(scene.gameBoard);
 
-            this.directionalLight.setPosition(consts.CAMERA_DEFAULT_POSITION_X, consts.CAMERA_DEFAULT_POSITION_Y, consts.CAMERA_DEFAULT_POSITION_Z);
+            this.directionalLight
+                .setPosition(1, 0.2, 0)
+                .setIntensity(0.6);
+
+            var camera = scene.camera;
 
             scene.camera.target = new THREE.Vector3(0, 0, 0);
             scene.camera.moveRate = new THREE.Vector3(0.25, 0, 0);
@@ -38,17 +44,18 @@
             scene.camera.lookAt(fighter.position);
 
             this.backgroundSphere = tm.hybrid.Mesh()
-                .setGeometry(new THREE.SphereGeometry(500, 32, 32))
+                .setGeometry(new THREE.SphereGeometry(800, 32, 32))
                 .setMaterial(new THREE.MeshPhongMaterial({
                     side: THREE.BackSide,
                     ambient: new THREE.Color(0xffffff),
                     specular: new THREE.Color(0x000000),
                     shininess: 0,
-                    map: tm.hybrid.Texture("earth"),
+                    map: tm.hybrid.Texture("bluesky"),
                 }))
                 .addChildTo(this)
                 .on("enterframe", function() {
-                    this.position.copy(scene.gameBoard.position);
+                    this.position.set(0, 0, 0);
+                    camera.localToGlobal(this.position);
                 });
 
             /**
@@ -61,8 +68,8 @@
                 blueLarge: Bullets(240, 35).addChildTo(gameBoard),
             };
 
-            var sceneRenderPass = new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject);
-            var brightEffectPass = BrightEffectPass(scene.three.scene, scene.three.camera.threeObject);
+            var sceneRenderPass = this.sceneRenderPass = new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject);
+            var brightEffectPass = this.brightEffectPass = BrightEffectPass(scene.three.scene, scene.three.camera.threeObject);
 
             scene.one("enter", function(e) {
                 var app = e.app;

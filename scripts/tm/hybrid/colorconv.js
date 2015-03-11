@@ -23,6 +23,4 @@
             return new THREE.Color().setHSL(h / 360, s / 100, l / 100).getHex();
         },
     };
-
-    module.exports = tm.hybrid.ColorConv;
 })();

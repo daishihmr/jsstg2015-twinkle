@@ -1,7 +1,6 @@
 (function() {
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
-    var colorConv = require("../tm/hybrid/colorconv");
     require("../tm/hybrid/shape");
 
     var consts = require("../consts");

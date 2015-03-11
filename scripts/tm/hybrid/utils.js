@@ -11,6 +11,4 @@
     tm.hybrid.Utils = {
         
     };
-
-    module.exports = tm.hybrid.Utils;
 })();

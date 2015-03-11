@@ -7,6 +7,7 @@
     var Easing = require("./shader/easing.js");
     var SoundManager = require("./soundmanager");
     var Explosion = require("./elements/explosion");
+    var Cloud = require("./elements/cloud");
 
     var Dev = tm.createClass({
         superClass: GameScene,
@@ -18,10 +19,9 @@
             var geo = new THREE.Geometry();
             var box = new THREE.BoxGeometry(10, 10, 10);
             var matrix = new THREE.Matrix4();
-
-            for (var x = -200; x < 200; x += 50) {
-                for (var y = -200; y < 200; y += 50) {
-                    for (var z = -200; z < 200; z += 50) {
+            for (var x = -200; x < 200; x += 75) {
+                for (var y = -400; y < 400; y += 75) {
+                    for (var z = -200; z < 200; z += 75) {
                         matrix.identity().setPosition({
                             x: x,
                             y: y,
@@ -33,8 +33,34 @@
             }
             tm.hybrid.Mesh()
                 .setGeometry(geo)
-                .setMaterial(new THREE.MeshNormalMaterial())
-                .addChildTo(this);
+                .setMaterial(new THREE.MeshBasicMaterial({
+                    color: 0x442200
+                }))
+                .addChildTo(this)
+                .on("enterframe", function() {
+                    this.z -= 2;
+                    if (this.z < -400) this.z += 800;
+                });
+            tm.hybrid.Mesh()
+                .setZ(400)
+                .setGeometry(geo)
+                .setMaterial(new THREE.MeshBasicMaterial({
+                    color: 0x004422
+                }))
+                .addChildTo(this)
+                .on("enterframe", function() {
+                    this.z -= 2;
+                    if (this.z < -400) this.z += 800;
+                });
+
+            var cloud = Cloud()
+                .setY(-60)
+                .addChildTo(this.first)
+                .on("enterframe", function() {
+                    this.z -= 0.2;
+                });
+
+            this.ambientLight.color = new THREE.Color(0x666666);
 
             // var newBullet;
             // scene.on("enterframe", function(e) {

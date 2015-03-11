@@ -2,7 +2,6 @@
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
     var consts = require("../consts");
-    var addBlendShader = require("./addblendshader");
     var brightShader = require("./brightshader");
 
     var BrightEffectPass = tm.createClass({
@@ -20,7 +19,9 @@
             this.zanzoBuffer = createRenderTarget();
 
             this.brightMaterial = new THREE.ShaderMaterial(brightShader);
-            this.zanzoMaterial = new THREE.ShaderMaterial(addBlendShader);
+            this.brightMaterial.uniforms.blueLevel.value = consts.GLOW_EFFECT_BLUR_VALUE;
+
+            this.zanzoMaterial = new THREE.ShaderMaterial(THREE.BlendShader);
 
             // オフスクリーンレンダリング用
             this.osCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -31,7 +32,6 @@
         render: function(renderer, writeBuffer, readBuffer) {
             this._renderBrightLayer(renderer);
 
-            this.brightMaterial.uniforms.f.value = consts.GLOW_EFFECT_BLUR_VALUE;
             this.brightMaterial.uniforms.tDiffuseBase.value = readBuffer;
             this.brightMaterial.uniforms.tDiffuseBright.value = this.brightLayer;
             this.osScreen.material = this.brightMaterial;
@@ -66,9 +66,9 @@
 
             // currentBufferとzanzoBufferをブレンドしてbrightLayerにレンダリング
             this.zanzoMaterial.uniforms.tDiffuse1.value = this.zanzoBuffer;
-            this.zanzoMaterial.uniforms.level1.value = 0.6;
             this.zanzoMaterial.uniforms.tDiffuse2.value = this.currentBuffer;
-            this.zanzoMaterial.uniforms.level2.value = 1.0;
+            this.zanzoMaterial.uniforms.mixRatio.value = 0.3;
+            this.zanzoMaterial.uniforms.opacity.value = 1.0;
             this.osScreen.material = this.zanzoMaterial;
             renderer.render(this.osScene, this.osCamera, this.brightLayer);
         },
