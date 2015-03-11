@@ -29,6 +29,8 @@
             type: "three",
             url: "images/fighter_lined.js",
         },
+
+        "earth": "images/earth.jpg",
     };
 
     module.exports = assets;

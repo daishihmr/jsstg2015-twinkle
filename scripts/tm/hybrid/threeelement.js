@@ -74,6 +74,19 @@
             return this;
         },
 
+        rotatePitch: function(degree) {
+            var q = new THREE.Quaternion().setFromAxisAngle(V3_RIGHT, degree * Math.DEG_TO_RAD);
+            this.quaternion.multiply(q);
+        },
+        rotateYaw: function(degree) {
+            var q = new THREE.Quaternion().setFromAxisAngle(V3_UP, degree * Math.DEG_TO_RAD);
+            this.quaternion.multiply(q);
+        },
+        rotateRoll: function(degree) {
+            var q = new THREE.Quaternion().setFromAxisAngle(V3_FORWARD, degree * Math.DEG_TO_RAD);
+            this.quaternion.multiply(q);
+        },
+
         setScale: function(x, y, z) {
             if (arguments.length === 1) {
                 y = x;
@@ -94,6 +107,10 @@
             return this;
         },
     });
+
+    var V3_RIGHT = new THREE.Vector3(1, 0, 0);
+    var V3_UP = new THREE.Vector3(0, 1, 0);
+    var V3_FORWARD = new THREE.Vector3(0, 0, 1);
 
     var delegater = tm.hybrid.DelegateUtil(tm.hybrid.ThreeElement);
 
@@ -179,7 +196,6 @@
         }
     });
     delegater.property("up");
-    delegater.property("useQuaternion");
     delegater.property("quaternion");
     delegater.property("visible");
     delegater.property("castShadow");
@@ -195,8 +211,8 @@
     delegater.method("translateX", true);
     delegater.method("translateY", true);
     delegater.method("translateZ", true);
-    delegater.method("localToWorld", true);
-    delegater.method("worldToLocal", true);
+    delegater.method("localToWorld");
+    delegater.method("worldToLocal");
     delegater.method("lookAt", true);
     delegater.method("traverse", true);
     delegater.method("traverseVisible", true);
@@ -205,5 +221,8 @@
     delegater.method("updateMatrixWorld", true);
     delegater.method("getObjectByName");
     delegater.method("rotateOnAxis", true);
+
+    tm.hybrid.ThreeElement.prototype.localToGlobal = tm.hybrid.ThreeElement.prototype.localToWorld;
+    tm.hybrid.ThreeElement.prototype.globalToLocal = tm.hybrid.ThreeElement.prototype.globalToLocal;
 
 })();

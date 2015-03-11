@@ -15,6 +15,22 @@
             var scene = this;
             scene.superInit();
 
+            var m;
+
+            var box = new THREE.BoxGeometry(10, 10, 10);
+            var mat = new THREE.MeshNormalMaterial();
+            for (var x = -400; x < 400; x += 50) {
+                for (var y = -200; y < 200; y += 50) {
+                    for (var z = -400; z < 400; z += 50) {
+                        m = tm.hybrid.Mesh()
+                              .setGeometry(box)
+                              .setMaterial(mat)
+                              .setPosition(x, y, z)
+                              .addChildTo(this);
+                    }
+                }
+            }
+
             // var newBullet;
             // scene.on("enterframe", function(e) {
             //     if (e.app.frame % 50 === 0) {

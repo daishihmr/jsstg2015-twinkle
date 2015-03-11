@@ -8136,9 +8136,7 @@ tm.input = tm.input || {};
          * @constructor
          */
         init: function(element) {
-            console.log(element);
             this.element = element || window.document;
-
             
             this.position       = tm.geom.Vector2(0, 0);
             this.deltaPosition  = tm.geom.Vector2(0, 0);

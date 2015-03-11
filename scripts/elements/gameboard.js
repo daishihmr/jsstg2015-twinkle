@@ -1,28 +1,31 @@
 (function() {
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
+    var consts = require("../consts");
+    var ColorConv = require("../tm/hybrid/colorconv");
 
     var GameBoard = tm.createClass({
         superClass: tm.hybrid.ThreeElement,
 
         init: function() {
             this.superInit();
+
             this.rotationX = 90;
+
+            if (consts.DEBUG) {
+                tm.hybrid.Mesh()
+                    .setGeometry(new THREE.PlaneGeometry(500, 500, 20, 20))
+                    .setMaterial(new THREE.MeshBasicMaterial({
+                        color: ColorConv.hsl(220, 70, 10),
+                        wireframe: true,
+                    }))
+                    .addChildTo(this);
+            }
         },
 
         update: function(app) {
-            if (app.frame % 5 != 0) return;
-
-            tm.hybrid.BoxMesh()
-                .setPosition(Math.rand(-100, 100), 120, 0)
-                .setScale(10)
-                .addChildTo(this)
-                .on("enterframe", function() {
-                    this.rotationX += 1;
-                    this.rotationY += 2;
-                    this.y += -4;
-                    if (this.y < -120) this.remove();
-                });
+            this.rotationX += 0.5;
+            this.rotationY += 0.25;
         }
     });
 
