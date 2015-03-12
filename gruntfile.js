@@ -34,6 +34,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-koko');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-exorcise');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.initConfig({
@@ -74,12 +75,13 @@ module.exports = function(grunt) {
         nodewebkit: {
             main: {
                 options: {
-                    version: "0.11.5",
+                    version: "0.11.6",
                     platforms: ["win", "osx"],
                 },
                 src: [
                     "fonts/**",
-                    "images/**",
+                    "images/*.png",
+                    "images/*.js",
                     "sounds/**",
                     "index.html",
                     "build/twinkle.min.js",
@@ -89,12 +91,13 @@ module.exports = function(grunt) {
             },
             dev: {
                 options: {
-                    version: "0.11.5",
+                    version: "0.11.6",
                     platforms: ["win", "osx"],
                 },
                 src: [
                     "fonts/**",
-                    "images/**",
+                    "images/*.png",
+                    "images/*.js",
                     "sounds/**",
                     "dev.html",
                     "build/twinkle.js",
@@ -119,22 +122,44 @@ module.exports = function(grunt) {
                     "build/twinkle.js": ["scripts/main.js"],
                 },
             },
-            options: {
-                browserifyOptions: {
-                    debug: true,
+            dev: {
+                files: {
+                    "build/twinkle.js": ["scripts/main.js"],
+                },
+                options: {
+                    browserifyOptions: {
+                        debug: true,
+                    },
+                },
+            },
+            watch: {
+                files: {
+                    "build/twinkle.js": ["scripts/main.js"],
+                },
+                options: {
+                    browserifyOptions: {
+                        debug: true,
+                    },
+                    watch: true,
+                    keepAlive: true,
                 },
             },
         },
-        watch: {
-            scripts: {
-                files: ["scripts/**/*.js"],
-                tasks: ["browserify"]
-            }
+        exorcise: {
+            main: {
+                options: [],
+                files: {
+                    "build/twinkle.map": ["build/twinkle.js"],
+                },
+            },
         },
     });
 
-    grunt.registerTask("web", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "koko:dev"]);
-    grunt.registerTask("package", ["clean", "copy", "concat:threejsaddins", "browserify", "uglify", "nodewebkit:main"]);
-    grunt.registerTask("default", ["browserify"]);
+    grunt.registerTask("default", ["browserify:dev", "exorcise", "uglify"]);
+    grunt.registerTask("watch", ["browserify:watch"]);
+
+    grunt.registerTask("web", ["clean", "copy", "concat:threejsaddins", "browserify:main", "uglify", "koko:dev"]);
+    grunt.registerTask("package", ["clean", "copy", "concat:threejsaddins", "browserify:main", "uglify", "nodewebkit:dev"]);
+    grunt.registerTask("release", ["clean", "copy", "concat:threejsaddins", "browserify:main", "uglify", "nodewebkit:main"]);
 
 };

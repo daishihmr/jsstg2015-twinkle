@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<canvas id="c" width="512" height="512"></canvas>
+
+<script src="../../libs/tmlib.js"></script>
+<script>
+tm.main(function() {
+
+    var c = tm.graphics.Canvas("#c");
+
+    var grad = tm.graphics.LinearGradient(0, 0, 0, 512)
+        .addColorStopList([
+            { offset: 0.00, color: "hsl(220, 100%,  10%)"},
+            { offset: 0.40, color: "hsl(220, 100%,  50%)"},
+            // { offset: 0.60, color: "hsl(220, 100%,  50%)"},
+            { offset: 1.00, color: "hsl(220,  20%, 100%)"},
+
+        ])
+        .toStyle();
+
+    c.setFillStyle(grad).fillRect(0, 0, 512, 512);
+
+});
+</script>
+
+</body>
+</html>

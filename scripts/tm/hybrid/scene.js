@@ -86,6 +86,22 @@
             this.three.scene.fog = v;
         },
     });
+    tm.hybrid.Scene.prototype.accessor("fogNear", {
+        get: function() {
+            return this.three.scene.fog.near;
+        },
+        set: function(v) {
+            this.three.scene.fog.near = v;
+        },
+    });
+    tm.hybrid.Scene.prototype.accessor("fogFar", {
+        get: function() {
+            return this.three.scene.fog.far;
+        },
+        set: function(v) {
+            this.three.scene.fog.far = v;
+        },
+    });
 
     tm.hybrid.Scene.prototype.accessor("overrideMaterial", {
         get: function() {
@@ -112,7 +128,7 @@
             this.superInit(new THREE.Scene());
 
             this.scene = this.threeObject;
-            this.scene.fog = new THREE.Fog(0x000000, 1000, 15000);
+            this.scene.fog = new THREE.Fog(0x000000, 1000, 5000);
 
             this.camera = tm.hybrid.Camera();
             this.camera.z = 7;

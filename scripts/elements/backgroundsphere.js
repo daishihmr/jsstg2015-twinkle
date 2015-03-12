@@ -21,7 +21,7 @@
             });
 
             this
-                .setGeometry(new THREE.SphereGeometry(800, 32, 32))
+                .setGeometry(new THREE.SphereGeometry(3200, 32, 32))
                 .setMaterial(material);
         }
     });

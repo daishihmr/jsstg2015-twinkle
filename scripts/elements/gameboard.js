@@ -14,8 +14,8 @@
 
             this.plane = tm.hybrid.Mesh()
                 .setGeometry(new THREE.PlaneGeometry(1000, 1000, 20, 20))
-                .setMaterial(new THREE.MeshBasicMaterial({
-                    color: tm.hybrid.ColorConv.hsl(220, 70, 10),
+                .setVisible(false)
+                .setMaterial(new THREE.MeshNormalMaterial({
                     wireframe: true,
                 }))
                 .addChildTo(this);

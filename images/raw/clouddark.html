@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body style="background:black">
+
+<canvas id="c" width="512" height="512"></canvas>
+
+<script src="../../libs/tmlib.js"></script>
+<script>
+tm.main(function() {
+
+    var c = tm.graphics.Canvas("#c");
+    tm.asset.Texture("../cloud10.png").on("load", function() {
+
+        var bm = this.getBitmap();
+        for (var i = 0, len = bm.length; i < len; i++) {
+            var p = bm.getPixelIndex(i);
+            bm.setPixelIndex(i, Math.pow(p[0] * 0.013, 3.6), Math.pow(p[1] * 0.013, 3.6), Math.pow(p[2] * (0.013 * 1.1), 3.6));
+        }
+
+        var tex = tm.graphics.Canvas().resize(this.width, this.height);
+        tex.drawBitmap(bm, 0, 0);
+
+        (150).times(function(i) {
+            var s = Math.randf(1, 2) * 64;
+            c.save();
+            c.translate(Math.rand(0, 512), Math.rand(64, 512 - 64));
+            c.rotate(Math.random() * Math.PI);
+            c.drawTexture(tex, -s * 0.5, -s * 0.5, s, s);
+            c.restore();
+        });
+
+
+    });
+
+});
+</script>
+
+</body>
+</html>

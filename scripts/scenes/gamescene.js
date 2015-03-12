@@ -5,12 +5,13 @@
     require("../tm/hybrid/texture");
 
     var consts = require("../consts");
-    var BrightEffectPass = require("../postprocessing/brighteffectpass");
     var Background = require("../elements/background");
     var Bullets = require("../elements/bullets");
     var Fighter = require("../elements/fighter");
     var GameBoard = require("../elements/gameboard");
     var BackgroundSphere = require("../elements/backgroundsphere");
+    var GameSceneManager = require("./gamescenemanager");
+    var BrightEffectPass = require("../postprocessing/brighteffectpass");
 
     var GameScene = tm.createClass({
         superClass: tm.hybrid.Scene,
@@ -19,10 +20,12 @@
             var scene = this;
             scene.superInit();
 
+            GameSceneManager.gameScene = this;
+
             var first = scene.first = tm.hybrid.ThreeElement().addChildTo(this);
 
             var gameBoard = scene.gameBoard = GameBoard().addChildTo(scene.three);
-            var fighter = scene.fighter = Fighter(scene).addChildTo(scene.gameBoard);
+            var fighter = scene.fighter = Fighter().addChildTo(scene.gameBoard);
 
             this.directionalLight
                 .setPosition(1, 0.2, 0)
@@ -33,7 +36,7 @@
             scene.camera.target = new THREE.Vector3(0, 0, 0);
             scene.camera.moveRate = new THREE.Vector3(0.25, 0, 0);
             scene.camera
-                .setUp(new THREE.Vector3(0, 1, 0))
+                .setUp(new THREE.Vector3(0, 1, -1))
                 .setPosition(consts.CAMERA_DEFAULT_POSITION_X, consts.CAMERA_DEFAULT_POSITION_Y, consts.CAMERA_DEFAULT_POSITION_Z)
                 .on("enterframe", function() {
                     this.target
@@ -44,7 +47,7 @@
                 .addChildTo(gameBoard);
             scene.camera.lookAt(fighter.position);
 
-            this.backgroundSphere = BackgroundSphere("bluesky")
+            this.backgroundSphere = BackgroundSphere("darksky")
                 .addChildTo(this)
                 .on("enterframe", function() {
                     this.position.set(0, 0, 0);

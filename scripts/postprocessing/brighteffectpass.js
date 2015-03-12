@@ -67,7 +67,7 @@
             // currentBufferとzanzoBufferをブレンドしてbrightLayerにレンダリング
             this.zanzoMaterial.uniforms.tDiffuse1.value = this.zanzoBuffer;
             this.zanzoMaterial.uniforms.tDiffuse2.value = this.currentBuffer;
-            this.zanzoMaterial.uniforms.mixRatio.value = 0.3;
+            this.zanzoMaterial.uniforms.mixRatio.value = 0.5;
             this.zanzoMaterial.uniforms.opacity.value = 1.0;
             this.osScreen.material = this.zanzoMaterial;
             renderer.render(this.osScene, this.osCamera, this.brightLayer);
@@ -108,22 +108,27 @@
 
         if (!materialForBright) {
             if (orig instanceof THREE.MeshBasicMaterial) {
+                orig.fog = false;
                 return;
             } else if (orig instanceof THREE.MeshFaceMaterial) {
                 materialForBright = new THREE.MeshFaceMaterial(
                     orig.materials.map(function(m) {
                         if (m instanceof THREE.MeshBasicMaterial) {
-                            return m.clone();
+                            var clone = m.clone();
+                            clone.fog = false;
+                            return clone;
                         } else {
                             return new THREE.MeshBasicMaterial({
-                                color: 0x000000
+                                color: 0x000000,
+                                fog: false,
                             });
                         }
                     })
                 );
             } else {
                 materialForBright = new THREE.MeshBasicMaterial({
-                    color: 0x000000
+                    color: 0x000000,
+                    fog: false,
                 });
             }
 

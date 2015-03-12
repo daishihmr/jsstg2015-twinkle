@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<canvas id="c" width="1024" height="1024"></canvas>
+
+<script src="../../libs/tmlib.js"></script>
+<script src="perlin.js"></script>
+<script>
+tm.main(function() {
+
+    var c = tm.graphics.Canvas("#c");
+
+    var grad = tm.graphics.LinearGradient(0, 0, 0, 1024)
+        .addColorStopList([
+            { offset: 0.00, color: "hsl( 20,  0%,  80%)"},
+            { offset: 0.30, color: "hsl( 40, 20%,  30%)"},
+            { offset: 0.50, color: "hsl( 40, 20%,  30%)"},
+            { offset: 0.70, color: "hsl(120, 20%,  20%)"},
+            { offset: 0.92, color: "hsl(120, 20%,  25%)"},
+            { offset: 0.93, color: "hsl(120, 20%,  25%)"},
+            { offset: 0.94, color: "hsl(120, 90%,  90%)"},
+            { offset: 0.95, color: "hsl(220, 20%,  20%)"},
+            { offset: 1.00, color: "hsl(220, 20%,  20%)"},
+        ])
+        .toStyle();
+    c.setFillStyle(grad).fillRect(0, 0, 1024, 1024);
+});
+</script>
+
+</body>
+</html>

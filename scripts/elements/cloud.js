@@ -5,8 +5,10 @@
     var Cloud = tm.createClass({
         superClass: tm.hybrid.Mesh,
 
-        init: function() {
+        init: function(texture) {
             this.superInit();
+
+            texture = texture || "cloud";
 
             var geometry = new THREE.Geometry();
             var plane = new THREE.PlaneGeometry(512, 512);
@@ -27,7 +29,7 @@
                 uniforms: {
                     "map": {
                         type: "t",
-                        value: tm.hybrid.Texture("cloud"),
+                        value: tm.hybrid.Texture(texture),
                     },
                     "fogColor": {
                         type: "c",

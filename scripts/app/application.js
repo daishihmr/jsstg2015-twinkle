@@ -6,6 +6,7 @@
     require("../tm/hybrid/application");
 
     var TitleScene = require("../scenes/titlescene");
+    var GameSceneManager = require("../scenes/gamescenemanager");
 
     var Application = tm.createClass({
         superClass: tm.hybrid.Application,
@@ -13,6 +14,8 @@
         init: function() {
             var app = this;
             this.superInit("#canvas2d", "#canvas3d");
+
+            GameSceneManager.application = this;
 
             app.fps = 60;
             app.resize(consts.W, consts.H);
