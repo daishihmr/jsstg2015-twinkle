@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body style="background:black">
+
+<canvas id="c" width="2048" height="512"></canvas>
+
+<script src="../../libs/tmlib.js"></script>
+<script>
+tm.main(function() {
+
+    var c = tm.graphics.Canvas("#c");
+    tm.asset.Texture("../cloud10.png").on("load", function() {
+
+        var tex = this;
+
+        (200).times(function(_i) {
+            var i = 60 + _i;
+            var s = Math.randf(1, 2) * 64;
+            c.save();
+            c.globalAlpha = i * 0.1;
+            c.translate(Math.rand(0, 2048), Math.rand(150, 512 - 150));
+            c.rotate(Math.random() * Math.PI);
+            c.scale(Math.pow(i * 0.006, 2), Math.pow(i * 0.006, 2));
+            c.drawTexture(tex, -s * 0.5, -s * 0.5, s, s);
+            c.restore();
+        });
+
+
+    });
+
+});
+</script>
+
+</body>
+</html>

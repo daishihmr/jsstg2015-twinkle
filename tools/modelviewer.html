@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body style="margin:0;overflow:hidden">
+
+    <script src="../three.js/build/three.js"></script>
+    <script src="../three.js/examples/js/controls/OrbitControls.js"></script>
+    <script>
+    var URL = "../images/fighter_lined.js";
+
+    window.onload = function() {
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.set(10, 10, 10);
+
+        scene.add(new THREE.DirectionalLight(0xffffff, 1.0));
+        scene.add(new THREE.AmbientLight(0x888888));
+
+        var axisHelper = new THREE.AxisHelper(100);
+        scene.add(axisHelper);
+
+        var jsonloader = new THREE.JSONLoader();
+        jsonloader.load(URL, function(geometry, materials) {
+            var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+            scene.add(mesh);
+        });
+
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 0, 0);
+
+        var render = function() {
+            requestAnimationFrame(render);
+            controls.update();
+            renderer.render(scene, camera);
+        };
+        render();
+
+        window.addEventListener('resize', function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }, false);
+    };
+    </script>
+
+</body>
+
+</html>

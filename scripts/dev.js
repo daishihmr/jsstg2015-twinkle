@@ -60,6 +60,7 @@
                     this.z -= 0.6;
                 });
 
+            this.fogColor = new THREE.Color(0x000000);
             this.fogNear = 100;
             this.fogFar = 500;
             this.tweener.clear()

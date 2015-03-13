@@ -75,15 +75,15 @@
         },
 
         rotatePitch: function(degree) {
-            var q = new THREE.Quaternion().setFromAxisAngle(V3_RIGHT, degree * Math.DEG_TO_RAD);
+            var q = tempQuat.setFromAxisAngle(V3_RIGHT, degree * Math.DEG_TO_RAD);
             this.quaternion.multiply(q);
         },
         rotateYaw: function(degree) {
-            var q = new THREE.Quaternion().setFromAxisAngle(V3_UP, degree * Math.DEG_TO_RAD);
+            var q = tempQuat.setFromAxisAngle(V3_UP, degree * Math.DEG_TO_RAD);
             this.quaternion.multiply(q);
         },
         rotateRoll: function(degree) {
-            var q = new THREE.Quaternion().setFromAxisAngle(V3_FORWARD, degree * Math.DEG_TO_RAD);
+            var q = tempQuat.setFromAxisAngle(V3_FORWARD, degree * Math.DEG_TO_RAD);
             this.quaternion.multiply(q);
         },
 
@@ -111,6 +111,7 @@
     var V3_RIGHT = new THREE.Vector3(1, 0, 0);
     var V3_UP = new THREE.Vector3(0, 1, 0);
     var V3_FORWARD = new THREE.Vector3(0, 0, 1);
+    var tempQuat = new THREE.Quaternion();
 
     var delegater = tm.hybrid.DelegateUtil(tm.hybrid.ThreeElement);
 

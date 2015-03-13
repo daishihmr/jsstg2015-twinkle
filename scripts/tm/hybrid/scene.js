@@ -86,6 +86,14 @@
             this.three.scene.fog = v;
         },
     });
+    tm.hybrid.Scene.prototype.accessor("fogColor", {
+        get: function() {
+            return this.three.scene.fog.color;
+        },
+        set: function(v) {
+            this.three.scene.fog.color = v;
+        },
+    });
     tm.hybrid.Scene.prototype.accessor("fogNear", {
         get: function() {
             return this.three.scene.fog.near;
@@ -128,7 +136,7 @@
             this.superInit(new THREE.Scene());
 
             this.scene = this.threeObject;
-            this.scene.fog = new THREE.Fog(0x000000, 1000, 5000);
+            this.scene.fog = new THREE.Fog(0xffffff, 1000, 5000);
 
             this.camera = tm.hybrid.Camera();
             this.camera.z = 7;

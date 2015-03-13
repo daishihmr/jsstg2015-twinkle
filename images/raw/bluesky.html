@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<canvas id="c" width="2048" height="2048"></canvas>
+<canvas id="c" width="512" height="512"></canvas>
 
 <script src="../../libs/tmlib.js"></script>
 <script>
@@ -13,20 +13,17 @@ tm.main(function() {
 
     var c = tm.graphics.Canvas("#c");
 
-    var grad = tm.graphics.LinearGradient(0, 0, 0, 2048)
+    var grad = tm.graphics.LinearGradient(0, 0, 0, 512)
         .addColorStopList([
-            { offset: 0.00, color: "hsl(220, 100%,   5%)"},
-            { offset: 0.40, color: "hsl(220, 100%,  18%)"},
+            { offset: 0.00, color: "hsl(220, 100%,  10%)"},
+            { offset: 0.40, color: "hsl(220, 100%,  50%)"},
             // { offset: 0.60, color: "hsl(220, 100%,  50%)"},
-            { offset: 1.00, color: "hsl(220,  20%,  25%)"},
+            { offset: 1.00, color: "hsl(220,  20%, 100%)"},
 
         ])
         .toStyle();
-    c.setFillStyle(grad).fillRect(0, 0, 2048, 2048);
 
-    (600).times(function() {
-        c.setFillStyle("hsl({0}, 45%, 80%)".format(Math.rand(0, 360))).fillRect(Math.rand(0, 2048), Math.rand(2048 * 0.1, 2048 * 0.6), 1, 1);
-    });
+    c.setFillStyle(grad).fillRect(0, 0, 512, 512);
 
 });
 </script>

@@ -22,6 +22,8 @@
 
             GameSceneManager.gameScene = this;
 
+            this.demoPlaying = false;
+
             var first = scene.first = tm.hybrid.ThreeElement().addChildTo(this);
 
             var gameBoard = scene.gameBoard = GameBoard().addChildTo(scene.three);
