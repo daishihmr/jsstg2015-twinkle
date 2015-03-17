@@ -10,7 +10,7 @@
     <script src="../three.js/build/three.js"></script>
     <script src="../three.js/examples/js/controls/OrbitControls.js"></script>
     <script>
-    var URL = "../images/fighter_lined.js";
+    var URL = "../images/test.json";
 
     window.onload = function() {
 
@@ -30,6 +30,10 @@
 
         var jsonloader = new THREE.JSONLoader();
         jsonloader.load(URL, function(geometry, materials) {
+            materials.forEach(function(m) {
+                console.log(m);
+            });
+
             var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
             scene.add(mesh);
         });

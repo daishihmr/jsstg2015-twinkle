@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body style="margin:0;overflow:hidden">
+
+    <script src="../tmlib.js/build/tmlib.js"></script>
+    <script src="../three.js/build/three.js"></script>
+    <script src="../three.js/examples/js/controls/OrbitControls.js"></script>
+    <script src="../scripts/shader/easing.js"></script>
+    <script>
+    var vertexShader = [
+
+        "attribute float startTime;",
+        "attribute float endTime;",
+
+        "attribute vec3 positionTo;",
+        "uniform   int  positionEasing;",
+
+        "attribute float sizeFrom;",
+        "attribute float sizeTo;",
+        "uniform   int   sizeEasing;",
+
+        "attribute float redFrom;",
+        "attribute float redTo;",
+        "uniform   int   redEasing;",
+
+        "attribute float greenFrom;",
+        "attribute float greenTo;",
+        "uniform   int   greenEasing;",
+
+        "attribute float blueFrom;",
+        "attribute float blueTo;",
+        "uniform   int   blueEasing;",
+
+        "attribute float alphaFrom;",
+        "attribute float alphaTo;",
+        "uniform   int   alphaEasing;",
+
+        "attribute float texRot;",
+
+        "uniform float now;",
+        "uniform float duration;",
+
+        "varying mat3 vTexRot;",
+        "varying float vVisible;",
+        "varying vec4 vColor;",
+
+        EasingFunctions,
+
+        "void main() {",
+        "    float time = (now / duration - startTime) / (endTime - startTime);",
+        "    if (time < 0.0) {",
+        "        vVisible = 0.0;",
+        "        return;",
+        "    } else {",
+        "        vVisible = 1.0;",
+        "    }",
+        "",
+        "    vTexRot = mat3(",
+        "        1.0, 0.0, 0.0,",
+        "        0.0, 1.0, 0.0,",
+        "        0.5, 0.5, 1.0",
+        "    ) * mat3(",
+        "        cos(texRot), sin(texRot), 0.0,",
+        "       -sin(texRot), cos(texRot), 0.0,",
+        "        0.0, 0.0, 1.0",
+        "    ) * mat3(",
+        "        1.0, 0.0, 0.0,",
+        "        0.0, 1.0, 0.0,",
+        "       -0.5,-0.5, 1.0",
+        "    );",
+        "",
+        "    vColor = vec4(",
+        "        redFrom   + (redTo   - redFrom)   * ease(redEasing,   time),",
+        "        greenFrom + (greenTo - greenFrom) * ease(greenEasing, time),",
+        "        blueFrom  + (blueTo  - blueFrom)  * ease(blueEasing,  time),",
+        "        alphaFrom + (alphaTo - alphaFrom) * ease(alphaEasing, time)",
+        "    );",
+        "",
+        "    vec4 mvPosition = modelViewMatrix * vec4( position + (positionTo - position) * ease(positionEasing, time), 1.0 );",
+        "    float size = sizeFrom + (sizeTo - sizeFrom) * ease(sizeEasing, time);",
+        "    gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );",
+        "    gl_Position = projectionMatrix * mvPosition;",
+        "}",
+    ].join("\n");
+
+    var fragmentShader = [
+
+        "uniform sampler2D texture;",
+
+        "varying mat3 vTexRot;",
+        "varying float vVisible;",
+        "varying vec4 vColor;",
+
+        "void main() {",
+        "    if (vVisible == 0.0) {",
+        "        discard;",
+        "    }",
+        "    gl_FragColor = texture2D( texture, (vTexRot * vec3(gl_PointCoord, 1.0)).xy ) * vColor;",
+        "}",
+
+    ].join("\n");
+
+    tm.main(function() {
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.set(10, 10, 10);
+
+        scene.add(new THREE.DirectionalLight(0xffffff, 1.0));
+        scene.add(new THREE.AmbientLight(0x888888));
+
+        var axisHelper = new THREE.AxisHelper(100);
+        scene.add(axisHelper);
+
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 0, 0);
+
+        var frame = 0;
+        var render = function() {
+            requestAnimationFrame(render);
+
+            update(frame);
+            controls.update();
+            renderer.render(scene, camera);
+
+            frame += 1;
+        };
+
+        window.addEventListener('resize', function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }, false);
+
+        start(scene);
+        render();
+    });
+
+    var particles = 1000;
+    var mesh;
+    var geometry;
+    var material;
+
+    var start = function(scene) {
+
+        geometry = new THREE.BufferGeometry();
+
+        var startTime = new Float32Array(particles);
+        var endTime = new Float32Array(particles);
+        var position = new Float32Array(particles * 3);
+        var positionTo = new Float32Array(particles * 3);
+        var positionEasing = new Int32Array(particles);
+        var sizeFrom = new Float32Array(particles);
+        var sizeTo = new Float32Array(particles);
+        var redFrom = new Float32Array(particles);
+        var redTo = new Float32Array(particles);
+        var greenFrom = new Float32Array(particles);
+        var greenTo = new Float32Array(particles);
+        var blueFrom = new Float32Array(particles);
+        var blueTo = new Float32Array(particles);
+        var alphaFrom = new Float32Array(particles);
+        var alphaTo = new Float32Array(particles);
+        var texRot = new Float32Array(particles);
+            
+        var vec = new THREE.Vector3();
+        for (var v = 0; v < particles; v++) {
+            startTime[v] = 0.0;
+            endTime[v] = 1.0;
+
+            position[v * 3 + 0] = 0;
+            position[v * 3 + 1] = 0;
+            position[v * 3 + 2] = 0;
+
+            vec.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+            vec.setLength(Math.random() * 7);
+            positionTo[v * 3 + 0] = vec.x;
+            positionTo[v * 3 + 1] = vec.y;
+            positionTo[v * 3 + 2] = vec.z;
+
+            sizeFrom[v] = 1.0;
+            sizeTo[v] = 3.0;
+
+            redFrom[v] = 1.0;
+            redTo[v] = 1.0;
+
+            greenFrom[v] = 1.0;
+            greenTo[v] = 0.0;
+
+            blueFrom[v] = 0.0;
+            blueTo[v] = 0.0;
+
+            alphaFrom[v] = 1.0;
+            alphaTo[v] = 0.0;
+
+            texRot[v] = 0;
+        }
+
+        geometry.addAttribute('startTime', new THREE.BufferAttribute(startTime, 1));
+        geometry.addAttribute('endTime', new THREE.BufferAttribute(endTime, 1));
+        geometry.addAttribute('position', new THREE.BufferAttribute(position, 3));
+        geometry.addAttribute('positionTo', new THREE.BufferAttribute(positionTo, 3));
+        geometry.addAttribute('sizeFrom', new THREE.BufferAttribute(sizeFrom, 1));
+        geometry.addAttribute('sizeTo', new THREE.BufferAttribute(sizeTo, 1));
+        geometry.addAttribute('redFrom', new THREE.BufferAttribute(redFrom, 1));
+        geometry.addAttribute('redTo', new THREE.BufferAttribute(redTo, 1));
+        geometry.addAttribute('greenFrom', new THREE.BufferAttribute(greenFrom, 1));
+        geometry.addAttribute('greenTo', new THREE.BufferAttribute(greenTo, 1));
+        geometry.addAttribute('blueFrom', new THREE.BufferAttribute(blueFrom, 1));
+        geometry.addAttribute('blueTo', new THREE.BufferAttribute(blueTo, 1));
+        geometry.addAttribute('alphaFrom', new THREE.BufferAttribute(alphaFrom, 1));
+        geometry.addAttribute('alphaTo', new THREE.BufferAttribute(alphaTo, 1));
+        geometry.addAttribute('texRot', new THREE.BufferAttribute(texRot, 1));
+
+        var canvas = document.createElement("canvas");
+        canvas.width = 256;
+        canvas.height = 256;
+        var ctx = canvas.getContext("2d");
+        var g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+        g.addColorStop(0.00, "hsla( 80, 80%, 80%, 1.0)");
+        g.addColorStop(0.20, "hsla( 80, 80%, 80%, 1.0)");
+        g.addColorStop(0.70, "hsla(  0, 80%, 80%, 1.0)");
+        g.addColorStop(0.99, "hsla(  0, 80%, 80%, 0.0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 256, 256);
+        var texture = new THREE.Texture(canvas);
+        texture.needsUpdate = true;
+
+        material = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            attributes: {
+                startTime: {
+                    type: 'f',
+                    value: null
+                },
+                endTime: {
+                    type: 'f',
+                    value: null
+                },
+                positionTo: {
+                    type: 'v3',
+                    value: null
+                },
+                sizeFrom: {
+                    type: 'f',
+                    value: null
+                },
+                sizeTo: {
+                    type: 'f',
+                    value: null
+                },
+                redFrom: {
+                    type: 'f',
+                    value: null
+                },
+                redTo: {
+                    type: 'f',
+                    value: null
+                },
+                greenFrom: {
+                    type: 'f',
+                    value: null
+                },
+                greenTo: {
+                    type: 'f',
+                    value: null
+                },
+                blueFrom: {
+                    type: 'f',
+                    value: null
+                },
+                blueTo: {
+                    type: 'f',
+                    value: null
+                },
+                alphaFrom: {
+                    type: 'f',
+                    value: null
+                },
+                alphaTo: {
+                    type: 'f',
+                    value: null
+                },
+                texRot: {
+                    type: 'f',
+                    value: null
+                },
+            },
+            uniforms: {
+                now: {
+                    type: "f",
+                    value: 0.0
+                },
+                duration: {
+                    type: "f",
+                    value: 60.0
+                },
+                texture: {
+                    type: "t",
+                    value: texture
+                },
+                positionEasing: {
+                    type: 'i',
+                    value: 0
+                },
+                sizeEasing: {
+                    type: 'i',
+                    value: 0
+                },
+                redEasing: {
+                    type: 'i',
+                    value: 0
+                },
+                greenEasing: {
+                    type: 'i',
+                    value: 0
+                },
+                blueEasing: {
+                    type: 'i',
+                    value: 0
+                },
+                alphaEasing: {
+                    type: 'i',
+                    value: 0
+                },
+            },
+            size: 50,
+            sizeAttenuation: true,
+            blending: THREE.AdditiveBlending,
+            depthTest: false,
+            transparent: true
+        });
+
+        material.uniforms.positionEasing.value = 18;
+
+        mesh = new THREE.PointCloud(geometry, material);
+        scene.add(mesh);
+
+    };
+
+    var update = function(frame) {
+        material.uniforms.now.value += 1;
+    };
+    </script>
+
+</body>
+
+</html>
