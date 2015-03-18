@@ -6,7 +6,7 @@
 </head>
 
 <body style="margin:0;overflow:hidden">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
     <script src="../tmlib.js/build/tmlib.js"></script>
     <script src="../three.js/build/three.js"></script>
     <script src="../three.js/examples/js/controls/OrbitControls.js"></script>
@@ -17,33 +17,30 @@
         "attribute float startTime;",
         "attribute float endTime;",
 
-        "attribute vec3 positionTo;",
-        "uniform   int  positionEasing;",
+        "attribute vec3  positionTo;",
+        "uniform   int   positionEasing;",
 
-        "attribute float sizeFrom;",
-        "attribute float sizeTo;",
+        "attribute vec3  sizeInfo;",
         "uniform   int   sizeEasing;",
 
-        "attribute float redFrom;",
-        "attribute float redTo;",
+        "attribute vec3  texRotInfo;",
+        "uniform   int   texRotEasing;",
+
+        "attribute vec3  redInfo;",
         "uniform   int   redEasing;",
 
-        "attribute float greenFrom;",
-        "attribute float greenTo;",
+        "attribute vec3  greenInfo;",
         "uniform   int   greenEasing;",
 
-        "attribute float blueFrom;",
-        "attribute float blueTo;",
+        "attribute vec3  blueInfo;",
         "uniform   int   blueEasing;",
 
-        "attribute float alphaFrom;",
-        "attribute float alphaTo;",
+        "attribute vec3  alphaInfo;",
         "uniform   int   alphaEasing;",
 
-        "attribute float texRot;",
-
         "uniform float now;",
-        "uniform float duration;",
+        "uniform float timeScale;",
+        "uniform float scale;",
 
         "varying mat3 vTexRot;",
         "varying float vVisible;",
@@ -52,7 +49,31 @@
         EasingFunctions,
 
         "void main() {",
-        "    float time = (now / duration - startTime) / (endTime - startTime);",
+        "    float sizeFrom      = sizeInfo[0];",
+        "    float sizeTo        = sizeInfo[1];",
+        "    float sizeDuration  = sizeInfo[2];",
+        "",
+        "    float texRotFrom    = texRotInfo[0];",
+        "    float texRotTo      = texRotInfo[1];",
+        "    float texRotDuration= texRotInfo[2];",
+        "",
+        "    float redFrom       = redInfo[0];",
+        "    float redTo         = redInfo[1];",
+        "    float redDuration   = redInfo[2];",
+        "",
+        "    float greenFrom     = greenInfo[0];",
+        "    float greenTo       = greenInfo[1];",
+        "    float greenDuration = greenInfo[2];",
+        "",
+        "    float blueFrom      = blueInfo[0];",
+        "    float blueTo        = blueInfo[1];",
+        "    float blueDuration  = blueInfo[2];",
+        "",
+        "    float alphaFrom     = alphaInfo[0];",
+        "    float alphaTo       = alphaInfo[1];",
+        "    float alphaDuration = alphaInfo[2];",
+        "",
+        "    float time = (now / timeScale - startTime) / (endTime - startTime);",
         "    if (time < 0.0) {",
         "        vVisible = 0.0;",
         "        return;",
@@ -60,6 +81,14 @@
         "        vVisible = 1.0;",
         "    }",
         "",
+        "    float sizeTime  = (now / timeScale - startTime) / sizeDuration;",
+        "    float texRotTime= (now / timeScale - startTime) / texRotDuration;",
+        "    float redTime   = (now / timeScale - startTime) / redDuration;",
+        "    float greenTime = (now / timeScale - startTime) / greenDuration;",
+        "    float blueTime  = (now / timeScale - startTime) / blueDuration;",
+        "    float alphaTime = (now / timeScale - startTime) / alphaDuration;",
+        "",
+        "    float texRot = texRotFrom + (texRotTo - texRotFrom) * ease(texRotEasing, texRotTime);",
         "    vTexRot = mat3(",
         "        1.0, 0.0, 0.0,",
         "        0.0, 1.0, 0.0,",
@@ -75,15 +104,15 @@
         "    );",
         "",
         "    vColor = vec4(",
-        "        redFrom   + (redTo   - redFrom)   * ease(redEasing,   time),",
-        "        greenFrom + (greenTo - greenFrom) * ease(greenEasing, time),",
-        "        blueFrom  + (blueTo  - blueFrom)  * ease(blueEasing,  time),",
-        "        alphaFrom + (alphaTo - alphaFrom) * ease(alphaEasing, time)",
+        "        redFrom   + (redTo   - redFrom)   * ease(redEasing,   redTime),",
+        "        greenFrom + (greenTo - greenFrom) * ease(greenEasing, greenTime),",
+        "        blueFrom  + (blueTo  - blueFrom)  * ease(blueEasing,  blueTime),",
+        "        alphaFrom + (alphaTo - alphaFrom) * ease(alphaEasing, alphaTime)",
         "    );",
         "",
         "    vec4 mvPosition = modelViewMatrix * vec4( position + (positionTo - position) * ease(positionEasing, time), 1.0 );",
-        "    float size = sizeFrom + (sizeTo - sizeFrom) * ease(sizeEasing, time);",
-        "    gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );",
+        "    float s = sizeFrom + (sizeTo - sizeFrom) * ease(sizeEasing, sizeTime);",
+        "    gl_PointSize = s * ( 300.0 / length( mvPosition.xyz ) ) * scale;",
         "    gl_Position = projectionMatrix * mvPosition;",
         "}",
     ].join("\n");
@@ -111,7 +140,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        var scene = new THREE.Scene();
+        scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
         camera.position.set(10, 10, 10);
 
@@ -141,100 +170,244 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }, false);
 
-        start(scene);
+        window.addEventListener('mouseup', function() {
+            restart(param);
+        });
+
+        var param = {}.$extend(DEFAULT_PARAM);
+        param.texture = (function() {
+            var radius = 1024;
+            var canvas = document.createElement("canvas");
+            canvas.width = radius;
+            canvas.height = radius;
+            var ctx = canvas.getContext("2d");
+            var g = ctx.createRadialGradient(radius * 0.5, radius * 0.5, 0, radius * 0.5, radius * 0.5, radius * 0.5);
+            g.addColorStop(0.00, "hsla(  0,  80%, 100%, 1.0)");
+            g.addColorStop(0.20, "hsla(  0,  80%, 100%, 1.0)");
+            g.addColorStop(1.00, "hsla(  0,  80%, 100%, 0.0)");
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, radius, radius);
+
+            var texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+            return texture;
+        })();
+
+        var s = function() {
+            restart(param)
+        };
+        var easings = {
+            LINEAR: 0,
+            EASE_IN_QUAD: 1,
+            EASE_OUT_QUAD: 2,
+            EASE_INOUT_QUAD: 3,
+            CUBIC_IN: 4,
+            CUBIC_OUT: 5,
+            CUBIC_IN_OUT: 6,
+            QUARTIC_IN: 7,
+            QUARTIC_OUT: 8,
+            QUARTIC_IN_OUT: 9,
+            QINTIC_IN: 10,
+            QINTIC_OUT: 11,
+            QINTIC_IN_OUT: 12,
+            SINE_IN: 13,
+            SINE_OUT: 14,
+            SINE_IN_OUT: 15,
+            EXPONENTIAL_IN: 16,
+            EXPONENTIAL_OUT: 17,
+            EXPONENTIAL_IN_OUT: 18,
+            CIRCULAR_IN: 19,
+            CIRCULAR_OUT: 20,
+            CIRCULAR_IN_OUT: 21,
+            ELASTIC_IN: 22,
+            ELASTIC_OUT: 23,
+            ELASTIC_IN_OUT: 24,
+            BACK_IN: 25,
+            BACK_OUT: 26,
+            BACK_IN_OUT: 27,
+            BOUNCE_OUT: 28,
+            BOUNCE_IN: 29,
+            BOUNCE_IN_OUT: 30,
+        };
+        var gui = new dat.GUI();
+        gui.remember(param);
+        gui.add(param, "count", 0.0, 5000.0).onFinishChange(s);
+        gui.add(param, "scale", 0.0, 5.0).onFinishChange(s);
+        gui.add(param, "timeScale", 0.0, 300.0).onFinishChange(s);
+        gui.add(param, "startRandom", 0.0, 3.0).onFinishChange(s);
+        gui.add(param, "lifeTime", 0.0, 10.0).onFinishChange(s);
+        gui.add(param, "lifeTimeRandom", 0.0, 10.0).onFinishChange(s);
+        gui.add(param, "distance", 0.0, 20.0).onFinishChange(s);
+        gui.add(param, "distanceRandom", 0.0, 10.0).onFinishChange(s);
+        var sizeFolder = gui.addFolder("size");
+        sizeFolder.add(param, "sizeFrom", 0.0, 10.0).onFinishChange(s);
+        sizeFolder.add(param, "sizeTo", 0.0, 10.0).onFinishChange(s);
+        sizeFolder.add(param, "sizeDuration", 0.0, 5.0).onFinishChange(s);
+        sizeFolder.open();
+        var texRotFolder = gui.addFolder("texRot");
+        texRotFolder.add(param, "texRotFrom", 0.0, 10.0).onFinishChange(s);
+        texRotFolder.add(param, "texRotTo", 0.0, 10.0).onFinishChange(s);
+        texRotFolder.add(param, "texRotDuration", 0.0, 5.0).onFinishChange(s);
+        var redFolder = gui.addFolder("red");
+        redFolder.add(param, "redFrom", 0.0, 10.0).onFinishChange(s);
+        redFolder.add(param, "redTo", 0.0, 10.0).onFinishChange(s);
+        redFolder.add(param, "redDuration", 0.0, 5.0).onFinishChange(s);
+        redFolder.open();
+        var greenFolder = gui.addFolder("green");
+        greenFolder.add(param, "greenFrom", 0.0, 10.0).onFinishChange(s);
+        greenFolder.add(param, "greenTo", 0.0, 10.0).onFinishChange(s);
+        greenFolder.add(param, "greenDuration", 0.0, 5.0).onFinishChange(s);
+        greenFolder.open();
+        var blueFolder = gui.addFolder("blue");
+        blueFolder.add(param, "blueFrom", 0.0, 10.0).onFinishChange(s);
+        blueFolder.add(param, "blueTo", 0.0, 10.0).onFinishChange(s);
+        blueFolder.add(param, "blueDuration", 0.0, 5.0).onFinishChange(s);
+        blueFolder.open();
+        var alphaFolder = gui.addFolder("alpha");
+        alphaFolder.add(param, "alphaFrom", 0.0, 10.0).onFinishChange(s);
+        alphaFolder.add(param, "alphaTo", 0.0, 10.0).onFinishChange(s);
+        alphaFolder.add(param, "alphaDuration", 0.0, 5.0).onFinishChange(s);
+        alphaFolder.open();
+        var easingFolder = gui.addFolder("easing");
+        easingFolder.add(param, "positionEasing", easings).onFinishChange(s);
+        easingFolder.add(param, "sizeEasing", easings).onFinishChange(s);
+        easingFolder.add(param, "texRotEasing", easings).onFinishChange(s);
+        easingFolder.add(param, "redEasing", easings).onFinishChange(s);
+        easingFolder.add(param, "greenEasing", easings).onFinishChange(s);
+        easingFolder.add(param, "blueEasing", easings).onFinishChange(s);
+        easingFolder.add(param, "alphaEasing", easings).onFinishChange(s);
+        easingFolder.open();
+
+        restart(param);
         render();
+
     });
 
-    var particles = 1000;
+    var scene;
     var mesh;
-    var geometry;
-    var material;
 
-    var start = function(scene) {
+    var DEFAULT_PARAM = {
+        position: function() {
+            return {
+                from: new THREE.Vector3(0, 0, 0),
+                to: new THREE.Vector3(Math.random() * 1 - 0.5, Math.random() * 1 - 0.5, Math.random() * 1 - 0.5),
+            };
+        },
+        count: 1000,
+        scale: 1.0,
+        timeScale: 60,
+        texture: null,
+        lifeTime: 1.0,
+        lifeTimeRandom: 0.0,
+        startRandom: 0,
+        distance: 5,
+        distanceRandom: 0,
+        sizeFrom: 1.0,
+        sizeTo: 1.0,
+        sizeDuration: 1.0,
+        texRotFrom: 1.0,
+        texRotTo: 1.0,
+        texRotDuration: 1.0,
+        redFrom: 1.0,
+        redTo: 1.0,
+        redDuration: 1.0,
+        greenFrom: 1.0,
+        greenTo: 1.0,
+        greenDuration: 1.0,
+        blueFrom: 1.0,
+        blueTo: 1.0,
+        blueDuration: 1.0,
+        alphaFrom: 1.0,
+        alphaTo: 0.0,
+        alphaDuration: 1.0,
+        positionEasing: 0,
+        sizeEasing: 0,
+        texRotEasing: 0,
+        redEasing: 0,
+        greenEasing: 0,
+        blueEasing: 0,
+        alphaEasing: 0,
+    };
 
-        geometry = new THREE.BufferGeometry();
+    var restart = function(param) {
+        if (mesh) {
+            scene.remove(mesh);
+        }
 
-        var startTime = new Float32Array(particles);
-        var endTime = new Float32Array(particles);
-        var position = new Float32Array(particles * 3);
-        var positionTo = new Float32Array(particles * 3);
-        var positionEasing = new Int32Array(particles);
-        var sizeFrom = new Float32Array(particles);
-        var sizeTo = new Float32Array(particles);
-        var redFrom = new Float32Array(particles);
-        var redTo = new Float32Array(particles);
-        var greenFrom = new Float32Array(particles);
-        var greenTo = new Float32Array(particles);
-        var blueFrom = new Float32Array(particles);
-        var blueTo = new Float32Array(particles);
-        var alphaFrom = new Float32Array(particles);
-        var alphaTo = new Float32Array(particles);
-        var texRot = new Float32Array(particles);
-            
+        param = {}.$extend(DEFAULT_PARAM, param);
+
+        var count = param.count;
+
+        var geometry = new THREE.BufferGeometry();
+
+        var startTime = new Float32Array(count);
+        var endTime = new Float32Array(count);
+        var positionFrom = new Float32Array(count * 3);
+        var positionTo = new Float32Array(count * 3);
+        var positionEasing = new Int32Array(count);
+        var sizeInfo = new Float32Array(count * 3);
+        var texRotInfo = new Float32Array(count * 3);
+        var redInfo = new Float32Array(count * 3);
+        var greenInfo = new Float32Array(count * 3);
+        var blueInfo = new Float32Array(count * 3);
+        var alphaInfo = new Float32Array(count * 3);
+        var texRot = new Float32Array(count);
+
         var vec = new THREE.Vector3();
-        for (var v = 0; v < particles; v++) {
-            startTime[v] = 0.0;
-            endTime[v] = 1.0;
+        for (var i = 0; i < count; i++) {
 
-            position[v * 3 + 0] = 0;
-            position[v * 3 + 1] = 0;
-            position[v * 3 + 2] = 0;
+            var pos = param.position();
 
-            vec.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-            vec.setLength(Math.random() * 7);
-            positionTo[v * 3 + 0] = vec.x;
-            positionTo[v * 3 + 1] = vec.y;
-            positionTo[v * 3 + 2] = vec.z;
+            startTime[i] = Math.random() * param.startRandom;
+            endTime[i] = startTime[i] + param.lifeTime * (1.0 + Math.random() * param.lifeTimeRandom);
 
-            sizeFrom[v] = 1.0;
-            sizeTo[v] = 3.0;
+            positionFrom[i * 3 + 0] = pos.from.x;
+            positionFrom[i * 3 + 1] = pos.from.y;
+            positionFrom[i * 3 + 2] = pos.from.z;
 
-            redFrom[v] = 1.0;
-            redTo[v] = 1.0;
+            pos.to.setLength(param.distance * (1.0 + Math.random() * param.distanceRandom));
 
-            greenFrom[v] = 1.0;
-            greenTo[v] = 0.0;
+            positionTo[i * 3 + 0] = pos.to.x;
+            positionTo[i * 3 + 1] = pos.to.y;
+            positionTo[i * 3 + 2] = pos.to.z;
 
-            blueFrom[v] = 0.0;
-            blueTo[v] = 0.0;
+            sizeInfo[i * 3 + 0] = param.sizeFrom; // from
+            sizeInfo[i * 3 + 1] = param.sizeTo; // to
+            sizeInfo[i * 3 + 2] = param.sizeDuration; // duration
 
-            alphaFrom[v] = 1.0;
-            alphaTo[v] = 0.0;
+            texRotInfo[i * 3 + 0] = param.texRotFrom; // from
+            texRotInfo[i * 3 + 1] = param.texRotTo; // to
+            texRotInfo[i * 3 + 2] = param.texRotDuration; // duration
 
-            texRot[v] = 0;
+            redInfo[i * 3 + 0] = param.redFrom; // from
+            redInfo[i * 3 + 1] = param.redTo; // to
+            redInfo[i * 3 + 2] = param.redDuration; // duration
+
+            greenInfo[i * 3 + 0] = param.greenFrom; // from
+            greenInfo[i * 3 + 1] = param.greenTo; // to
+            greenInfo[i * 3 + 2] = param.greenDuration; // duration
+
+            blueInfo[i * 3 + 0] = param.blueFrom; // from
+            blueInfo[i * 3 + 1] = param.blueTo; // to
+            blueInfo[i * 3 + 2] = param.blueDuration; // duration
+
+            alphaInfo[i * 3 + 0] = param.alphaFrom; // from
+            alphaInfo[i * 3 + 1] = param.alphaTo; // to
+            alphaInfo[i * 3 + 2] = param.alphaDuration; // duration
         }
 
         geometry.addAttribute('startTime', new THREE.BufferAttribute(startTime, 1));
         geometry.addAttribute('endTime', new THREE.BufferAttribute(endTime, 1));
-        geometry.addAttribute('position', new THREE.BufferAttribute(position, 3));
+        geometry.addAttribute('position', new THREE.BufferAttribute(positionFrom, 3));
         geometry.addAttribute('positionTo', new THREE.BufferAttribute(positionTo, 3));
-        geometry.addAttribute('sizeFrom', new THREE.BufferAttribute(sizeFrom, 1));
-        geometry.addAttribute('sizeTo', new THREE.BufferAttribute(sizeTo, 1));
-        geometry.addAttribute('redFrom', new THREE.BufferAttribute(redFrom, 1));
-        geometry.addAttribute('redTo', new THREE.BufferAttribute(redTo, 1));
-        geometry.addAttribute('greenFrom', new THREE.BufferAttribute(greenFrom, 1));
-        geometry.addAttribute('greenTo', new THREE.BufferAttribute(greenTo, 1));
-        geometry.addAttribute('blueFrom', new THREE.BufferAttribute(blueFrom, 1));
-        geometry.addAttribute('blueTo', new THREE.BufferAttribute(blueTo, 1));
-        geometry.addAttribute('alphaFrom', new THREE.BufferAttribute(alphaFrom, 1));
-        geometry.addAttribute('alphaTo', new THREE.BufferAttribute(alphaTo, 1));
-        geometry.addAttribute('texRot', new THREE.BufferAttribute(texRot, 1));
+        geometry.addAttribute('sizeInfo', new THREE.BufferAttribute(sizeInfo, 3));
+        geometry.addAttribute('texRotInfo', new THREE.BufferAttribute(texRotInfo, 3));
+        geometry.addAttribute('redInfo', new THREE.BufferAttribute(redInfo, 3));
+        geometry.addAttribute('greenInfo', new THREE.BufferAttribute(greenInfo, 3));
+        geometry.addAttribute('blueInfo', new THREE.BufferAttribute(blueInfo, 3));
+        geometry.addAttribute('alphaInfo', new THREE.BufferAttribute(alphaInfo, 3));
 
-        var canvas = document.createElement("canvas");
-        canvas.width = 256;
-        canvas.height = 256;
-        var ctx = canvas.getContext("2d");
-        var g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
-        g.addColorStop(0.00, "hsla( 80, 80%, 80%, 1.0)");
-        g.addColorStop(0.20, "hsla( 80, 80%, 80%, 1.0)");
-        g.addColorStop(0.70, "hsla(  0, 80%, 80%, 1.0)");
-        g.addColorStop(0.99, "hsla(  0, 80%, 80%, 0.0)");
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 256, 256);
-        var texture = new THREE.Texture(canvas);
-        texture.needsUpdate = true;
-
-        material = new THREE.ShaderMaterial({
+        var material = new THREE.ShaderMaterial({
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
             attributes: {
@@ -250,48 +423,28 @@
                     type: 'v3',
                     value: null
                 },
-                sizeFrom: {
-                    type: 'f',
+                sizeInfo: {
+                    type: 'v3',
                     value: null
                 },
-                sizeTo: {
-                    type: 'f',
+                texRotInfo: {
+                    type: 'v3',
                     value: null
                 },
-                redFrom: {
-                    type: 'f',
+                redInfo: {
+                    type: 'v3',
                     value: null
                 },
-                redTo: {
-                    type: 'f',
+                greenInfo: {
+                    type: 'v3',
                     value: null
                 },
-                greenFrom: {
-                    type: 'f',
+                blueInfo: {
+                    type: 'v3',
                     value: null
                 },
-                greenTo: {
-                    type: 'f',
-                    value: null
-                },
-                blueFrom: {
-                    type: 'f',
-                    value: null
-                },
-                blueTo: {
-                    type: 'f',
-                    value: null
-                },
-                alphaFrom: {
-                    type: 'f',
-                    value: null
-                },
-                alphaTo: {
-                    type: 'f',
-                    value: null
-                },
-                texRot: {
-                    type: 'f',
+                alphaInfo: {
+                    type: 'v3',
                     value: null
                 },
             },
@@ -300,58 +453,60 @@
                     type: "f",
                     value: 0.0
                 },
-                duration: {
+                scale: {
+                    type: 'f',
+                    value: param.scale
+                },
+                timeScale: {
                     type: "f",
-                    value: 60.0
+                    value: param.timeScale
                 },
                 texture: {
                     type: "t",
-                    value: texture
+                    value: param.texture
                 },
                 positionEasing: {
                     type: 'i',
-                    value: 0
+                    value: param.positionEasing
                 },
                 sizeEasing: {
                     type: 'i',
-                    value: 0
+                    value: param.sizeEasing
+                },
+                texRotEasing: {
+                    type: 'i',
+                    value: param.texRotEasing
                 },
                 redEasing: {
                     type: 'i',
-                    value: 0
+                    value: param.redEasing
                 },
                 greenEasing: {
                     type: 'i',
-                    value: 0
+                    value: param.greenEasing
                 },
                 blueEasing: {
                     type: 'i',
-                    value: 0
+                    value: param.blueEasing
                 },
                 alphaEasing: {
                     type: 'i',
-                    value: 0
+                    value: param.alphaEasing
                 },
             },
-            size: 50,
-            sizeAttenuation: true,
             blending: THREE.AdditiveBlending,
             depthTest: false,
             transparent: true
         });
 
-        material.uniforms.positionEasing.value = 18;
-
         mesh = new THREE.PointCloud(geometry, material);
         scene.add(mesh);
-
     };
 
     var update = function(frame) {
-        material.uniforms.now.value += 1;
+        mesh.material.uniforms.now.value += 1;
     };
     </script>
-
 </body>
 
 </html>
