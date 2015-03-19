@@ -69,3 +69,738 @@
   "alphaEasing": 0
 }
 
+
+{
+  "preset": "test",
+  "closed": false,
+  "remembered": {
+    "Default": {
+      "0": {
+        "count": 3101.4191761855313,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 3.608174770965469,
+        "sizeTo": 1,
+        "sizeDuration": 2.649753347427766,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test": {
+      "0": {
+        "count": 300,
+        "scale": 1,
+        "timeScale": 30,
+        "startRandom": 0.2,
+        "lifeTime": 3.8767739702319144,
+        "lifeTimeRandom": 2,
+        "distance": 1.07,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 1.4658210007047217,
+        "sizeDuration": 0.3382663847780127,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.9922480620155039,
+        "redDuration": 1.014799154334038,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.3530655391120507,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1.127554615926709,
+        "positionEasing": "2",
+        "sizeEasing": "13",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    },
+    "small": {
+      "0": {
+        "count": 1000,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 1,
+        "sizeTo": 1,
+        "sizeDuration": 1,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 1,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    }
+  },
+  "folders": {
+    "size": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "texRot": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    },
+    "red": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "green": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "blue": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "alpha": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "easing": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    }
+  }
+}
+
+
+
+{
+  "preset": "test2",
+  "closed": false,
+  "remembered": {
+    "Default": {
+      "0": {
+        "count": 3101.4191761855313,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 3.608174770965469,
+        "sizeTo": 1,
+        "sizeDuration": 2.649753347427766,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test": {
+      "0": {
+        "count": 300,
+        "scale": 1,
+        "timeScale": 30,
+        "startRandom": 0.2,
+        "lifeTime": 3.8767739702319144,
+        "lifeTimeRandom": 2,
+        "distance": 1.07,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 1.4658210007047217,
+        "sizeDuration": 0.3382663847780127,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.9922480620155039,
+        "redDuration": 1.014799154334038,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.3530655391120507,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1.127554615926709,
+        "positionEasing": "2",
+        "sizeEasing": "13",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    },
+    "small": {
+      "0": {
+        "count": 1000,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 1,
+        "sizeTo": 1,
+        "sizeDuration": 1,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 1,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test2": {
+      "0": {
+        "count": 160,
+        "scale": 1,
+        "timeScale": 30,
+        "startRandom": 0.2,
+        "lifeTime": 3.8767739702319144,
+        "lifeTimeRandom": 2,
+        "distance": 1.07,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 2.4,
+        "sizeDuration": 0.9584214235377025,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.9922480620155039,
+        "redDuration": 1.014799154334038,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.3530655391120507,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1.127554615926709,
+        "positionEasing": "8",
+        "sizeEasing": "13",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    }
+  },
+  "folders": {
+    "size": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "texRot": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    },
+    "red": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "green": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "blue": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "alpha": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "easing": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    }
+  }
+}
+
+
+{
+  "preset": "test2",
+  "closed": false,
+  "remembered": {
+    "Default": {
+      "0": {
+        "count": 3101.4191761855313,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 3.608174770965469,
+        "sizeTo": 1,
+        "sizeDuration": 2.649753347427766,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test": {
+      "0": {
+        "count": 300,
+        "scale": 1,
+        "timeScale": 30,
+        "startRandom": 0.2,
+        "lifeTime": 3.8767739702319144,
+        "lifeTimeRandom": 2,
+        "distance": 1.07,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 1.4658210007047217,
+        "sizeDuration": 0.3382663847780127,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.9922480620155039,
+        "redDuration": 1.014799154334038,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.3530655391120507,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1.127554615926709,
+        "positionEasing": "2",
+        "sizeEasing": "13",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    },
+    "small": {
+      "0": {
+        "count": 1000,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 1,
+        "sizeTo": 1,
+        "sizeDuration": 1,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 1,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test2": {
+      "0": {
+        "count": 750,
+        "scale": 1,
+        "timeScale": 10,
+        "startRandom": 0.2,
+        "lifeTime": 4.5,
+        "lifeTimeRandom": 2,
+        "distance": 1.9,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 3.7,
+        "sizeDuration": 0.78,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.4510218463706836,
+        "redDuration": 1.4,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.5,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 0.09020436927413672,
+        "alphaTo": 0,
+        "alphaDuration": 2.2,
+        "positionEasing": "8",
+        "sizeEasing": "2",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    }
+  },
+  "folders": {
+    "size": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "texRot": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    },
+    "red": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "green": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "blue": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "alpha": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "easing": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    }
+  }
+}
+
+
+{
+  "preset": "test2",
+  "closed": false,
+  "remembered": {
+    "Default": {
+      "0": {
+        "count": 3101.4191761855313,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 3.608174770965469,
+        "sizeTo": 1,
+        "sizeDuration": 2.649753347427766,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test": {
+      "0": {
+        "count": 300,
+        "scale": 1,
+        "timeScale": 30,
+        "startRandom": 0.2,
+        "lifeTime": 3.8767739702319144,
+        "lifeTimeRandom": 2,
+        "distance": 1.07,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 1.4658210007047217,
+        "sizeDuration": 0.3382663847780127,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.9922480620155039,
+        "redDuration": 1.014799154334038,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.3530655391120507,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1.127554615926709,
+        "positionEasing": "2",
+        "sizeEasing": "13",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    },
+    "small": {
+      "0": {
+        "count": 1000,
+        "scale": 1,
+        "timeScale": 60,
+        "startRandom": 0,
+        "lifeTime": 1,
+        "lifeTimeRandom": 0,
+        "distance": 5,
+        "distanceRandom": 0,
+        "sizeFrom": 1,
+        "sizeTo": 1,
+        "sizeDuration": 1,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 1,
+        "redDuration": 1,
+        "greenFrom": 1,
+        "greenTo": 1,
+        "greenDuration": 1,
+        "blueFrom": 1,
+        "blueTo": 1,
+        "blueDuration": 1,
+        "alphaFrom": 1,
+        "alphaTo": 0,
+        "alphaDuration": 1,
+        "positionEasing": 0,
+        "sizeEasing": 0,
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": 0
+      }
+    },
+    "test2": {
+      "0": {
+        "count": 750,
+        "scale": 1,
+        "timeScale": 16,
+        "startRandom": 0.2,
+        "lifeTime": 4.5,
+        "lifeTimeRandom": 2,
+        "distance": 1.9,
+        "distanceRandom": 1.9,
+        "sizeFrom": 1,
+        "sizeTo": 3.7,
+        "sizeDuration": 0.78,
+        "texRotFrom": 1,
+        "texRotTo": 1,
+        "texRotDuration": 1,
+        "redFrom": 1,
+        "redTo": 0.4510218463706836,
+        "redDuration": 1.4,
+        "greenFrom": 1,
+        "greenTo": 0,
+        "greenDuration": 1.5,
+        "blueFrom": 1,
+        "blueTo": 0,
+        "blueDuration": 0.9584214235377025,
+        "alphaFrom": 0.09020436927413672,
+        "alphaTo": 0,
+        "alphaDuration": 2.2,
+        "positionEasing": "8",
+        "sizeEasing": "2",
+        "texRotEasing": 0,
+        "redEasing": 0,
+        "greenEasing": 0,
+        "blueEasing": 0,
+        "alphaEasing": "0"
+      }
+    }
+  },
+  "folders": {
+    "size": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "texRot": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    },
+    "red": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "green": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "blue": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "alpha": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "easing": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    }
+  }
+}

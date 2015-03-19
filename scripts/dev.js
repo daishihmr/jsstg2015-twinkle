@@ -6,7 +6,7 @@
     var GameScene = require("./scenes/gamescene");
     var Easing = require("./shader/easing.js");
     var SoundManager = require("./soundmanager");
-    var Explosion = require("./elements/explosion");
+    var ParticleSystem = require("./elements/particlesystem");
     var Cloud = require("./elements/cloud");
 
     var Dev = tm.createClass({
@@ -67,7 +67,7 @@
                 .to({
                     fogNear: 1000,
                     fogFar: 1500
-                },  60 * 1000);
+                }, 60 * 1000);
 
             var groundScale = 800;
 
@@ -112,6 +112,30 @@
             });
 
             this.ambientLight.color = new THREE.Color(0x666666);
+
+            var particleSystem = ParticleSystem({
+                life: 30,
+                distance: 30,
+                sizeFrom: 20.0,
+                sizeTo: 40.0,
+                sizeEasing: 2,
+                greenTo: 0.0,
+                blueTo: 0.0,
+                blueDuration: 0.5,
+                alphaFrom: 0.1,
+            }).addChildTo(this.gameBoard);
+            this.on("enterframe", function(e) {
+                if (e.app.frame % 5 === 0) {
+                    var pos = {
+                        x: Math.rand(-100, 100),
+                        y: Math.rand(-100, 100),
+                        z: Math.rand(0, 200),
+                    };
+                    (100).times(function() {
+                        particleSystem._emit(pos);
+                    }.bind(this));
+                }
+            });
 
             // var newBullet;
             // scene.on("enterframe", function(e) {

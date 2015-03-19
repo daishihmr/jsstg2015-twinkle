@@ -1,98 +1,131 @@
 (function() {
+    var easing = {
+        LINEAR: 0,
+        EASE_IN_QUAD: 1,
+        EASE_OUT_QUAD: 2,
+        EASE_INOUT_QUAD: 3,
+        CUBIC_IN: 4,
+        CUBIC_OUT: 5,
+        CUBIC_IN_OUT: 6,
+        QUARTIC_IN: 7,
+        QUARTIC_OUT: 8,
+        QUARTIC_IN_OUT: 9,
+        QINTIC_IN: 10,
+        QINTIC_OUT: 11,
+        QINTIC_IN_OUT: 12,
+        SINE_IN: 13,
+        SINE_OUT: 14,
+        SINE_IN_OUT: 15,
+        EXPONENTIAL_IN: 16,
+        EXPONENTIAL_OUT: 17,
+        EXPONENTIAL_IN_OUT: 18,
+        CIRCULAR_IN: 19,
+        CIRCULAR_OUT: 20,
+        CIRCULAR_IN_OUT: 21,
+        ELASTIC_IN: 22,
+        ELASTIC_OUT: 23,
+        ELASTIC_IN_OUT: 24,
+        BACK_IN: 25,
+        BACK_OUT: 26,
+        BACK_IN_OUT: 27,
+        BOUNCE_OUT: 28,
+        BOUNCE_IN: 29,
+        BOUNCE_IN_OUT: 30,
+    };
 
     var EasingFunctions = [
         "#ifndef LINEAR",
-        "#define LINEAR 0",
+        "#define LINEAR " + easing.LINEAR,
         "#endif",
         "#ifndef EASE_IN_QUAD",
-        "#define EASE_IN_QUAD 1",
+        "#define EASE_IN_QUAD " + easing.EASE_IN_QUAD,
         "#endif",
         "#ifndef EASE_OUT_QUAD",
-        "#define EASE_OUT_QUAD 2",
+        "#define EASE_OUT_QUAD " + easing.EASE_OUT_QUAD,
         "#endif",
         "#ifndef EASE_INOUT_QUAD",
-        "#define EASE_INOUT_QUAD 3",
+        "#define EASE_INOUT_QUAD " + easing.EASE_INOUT_QUAD,
         "#endif",
         "#ifndef CUBIC_IN",
-        "#define CUBIC_IN 4",
+        "#define CUBIC_IN " + easing.CUBIC_IN,
         "#endif",
         "#ifndef CUBIC_OUT",
-        "#define CUBIC_OUT 5",
+        "#define CUBIC_OUT " + easing.CUBIC_OUT,
         "#endif",
         "#ifndef CUBIC_IN_OUT",
-        "#define CUBIC_IN_OUT 6",
+        "#define CUBIC_IN_OUT " + easing.CUBIC_IN_OUT,
         "#endif",
         "#ifndef QUARTIC_IN",
-        "#define QUARTIC_IN 7",
+        "#define QUARTIC_IN " + easing.QUARTIC_IN,
         "#endif",
         "#ifndef QUARTIC_OUT",
-        "#define QUARTIC_OUT 8",
+        "#define QUARTIC_OUT " + easing.QUARTIC_OUT,
         "#endif",
         "#ifndef QUARTIC_IN_OUT",
-        "#define QUARTIC_IN_OUT 9",
+        "#define QUARTIC_IN_OUT " + easing.QUARTIC_IN_OUT,
         "#endif",
         "#ifndef QINTIC_IN",
-        "#define QINTIC_IN 10",
+        "#define QINTIC_IN " + easing.QINTIC_IN,
         "#endif",
         "#ifndef QINTIC_OUT",
-        "#define QINTIC_OUT 11",
+        "#define QINTIC_OUT " + easing.QINTIC_OUT,
         "#endif",
         "#ifndef QINTIC_IN_OUT",
-        "#define QINTIC_IN_OUT 12",
+        "#define QINTIC_IN_OUT " + easing.QINTIC_IN_OUT,
         "#endif",
         "#ifndef SINE_IN",
-        "#define SINE_IN 13",
+        "#define SINE_IN " + easing.SINE_IN,
         "#endif",
         "#ifndef SINE_OUT",
-        "#define SINE_OUT 14",
+        "#define SINE_OUT " + easing.SINE_OUT,
         "#endif",
         "#ifndef SINE_IN_OUT",
-        "#define SINE_IN_OUT 15",
+        "#define SINE_IN_OUT " + easing.SINE_IN_OUT,
         "#endif",
         "#ifndef EXPONENTIAL_IN",
-        "#define EXPONENTIAL_IN 16",
+        "#define EXPONENTIAL_IN " + easing.EXPONENTIAL_IN,
         "#endif",
         "#ifndef EXPONENTIAL_OUT",
-        "#define EXPONENTIAL_OUT 17",
+        "#define EXPONENTIAL_OUT " + easing.EXPONENTIAL_OUT,
         "#endif",
         "#ifndef EXPONENTIAL_IN_OUT",
-        "#define EXPONENTIAL_IN_OUT 18",
+        "#define EXPONENTIAL_IN_OUT " + easing.EXPONENTIAL_IN_OUT,
         "#endif",
         "#ifndef CIRCULAR_IN",
-        "#define CIRCULAR_IN 19",
+        "#define CIRCULAR_IN " + easing.CIRCULAR_IN,
         "#endif",
         "#ifndef CIRCULAR_OUT",
-        "#define CIRCULAR_OUT 20",
+        "#define CIRCULAR_OUT " + easing.CIRCULAR_OUT,
         "#endif",
         "#ifndef CIRCULAR_IN_OUT",
-        "#define CIRCULAR_IN_OUT 21",
+        "#define CIRCULAR_IN_OUT " + easing.CIRCULAR_IN_OUT,
         "#endif",
         "#ifndef ELASTIC_IN",
-        "#define ELASTIC_IN 22",
+        "#define ELASTIC_IN " + easing.ELASTIC_IN,
         "#endif",
         "#ifndef ELASTIC_OUT",
-        "#define ELASTIC_OUT 23",
+        "#define ELASTIC_OUT " + easing.ELASTIC_OUT,
         "#endif",
         "#ifndef ELASTIC_IN_OUT",
-        "#define ELASTIC_IN_OUT 24",
+        "#define ELASTIC_IN_OUT " + easing.ELASTIC_IN_OUT,
         "#endif",
         "#ifndef BACK_IN",
-        "#define BACK_IN 25",
+        "#define BACK_IN " + easing.BACK_IN,
         "#endif",
         "#ifndef BACK_OUT",
-        "#define BACK_OUT 26",
+        "#define BACK_OUT " + easing.BACK_OUT,
         "#endif",
         "#ifndef BACK_IN_OUT",
-        "#define BACK_IN_OUT 27",
+        "#define BACK_IN_OUT " + easing.BACK_IN_OUT,
         "#endif",
         "#ifndef BOUNCE_OUT",
-        "#define BOUNCE_OUT 28",
+        "#define BOUNCE_OUT " + easing.BOUNCE_OUT,
         "#endif",
         "#ifndef BOUNCE_IN",
-        "#define BOUNCE_IN 29",
+        "#define BOUNCE_IN " + easing.BOUNCE_IN,
         "#endif",
         "#ifndef BOUNCE_IN_OUT",
-        "#define BOUNCE_IN_OUT 30",
+        "#define BOUNCE_IN_OUT " + easing.BOUNCE_IN_OUT,
         "#endif",
 
         "#ifndef PI",
@@ -130,55 +163,55 @@
         "    : 0.5 * pow(2.0 * t - 2.0, 3.0) + 1.0;",
         "}",
 
-        
+
         "float quarticIn(float t) {",
         "  return pow(t, 4.0);",
         "}",
-        
+
         "float quarticOut(float t) {",
         "  return pow(t - 1.0, 3.0) * (1.0 - t) + 1.0;",
         "}",
-        
+
         "float quarticInOut(float t) {",
         "  return t < 0.5",
         "    ? +8.0 * pow(t, 4.0)",
         "    : -8.0 * pow(t - 1.0, 4.0) + 1.0;",
         "}",
-        
+
         "float qinticIn(float t) {",
         "  return pow(t, 5.0);",
         "}",
-        
+
         "float qinticOut(float t) {",
         "  return 1.0 - (pow(t - 1.0, 5.0));",
         "}",
-        
+
         "float qinticInOut(float t) {",
         "  return t < 0.5",
         "    ? +16.0 * pow(t, 5.0)",
         "    : -0.5 * pow(2.0 * t - 2.0, 5.0) + 1.0;",
         "}",
-        
+
         "float sineIn(float t) {",
         "  return sin((t - 1.0) * HALF_PI) + 1.0;",
         "}",
-        
+
         "float sineOut(float t) {",
         "  return sin(t * HALF_PI);",
         "}",
-        
+
         "float sineInOut(float t) {",
         "  return -0.5 * (cos(PI * t) - 1.0);",
         "}",
-        
+
         "float exponentialIn(float t) {",
         "  return t == 0.0 ? t : pow(2.0, 10.0 * (t - 1.0));",
         "}",
-        
+
         "float exponentialOut(float t) {",
         "  return t == 1.0 ? t : 1.0 - pow(2.0, -10.0 * t);",
         "}",
-        
+
         "float exponentialInOut(float t) {",
         "  return t == 0.0 || t == 1.0",
         "    ? t",
@@ -186,44 +219,44 @@
         "      ? +0.5 * pow(2.0, (20.0 * t) - 10.0)",
         "      : -0.5 * pow(2.0, 10.0 - (t * 20.0)) + 1.0;",
         "}",
-        
+
         "float circularIn(float t) {",
         "  return 1.0 - sqrt(1.0 - t * t);",
         "}",
-        
+
         "float circularOut(float t) {",
         "  return sqrt((2.0 - t) * t);",
         "}",
-        
+
         "float circularInOut(float t) {",
         "  return t < 0.5",
         "    ? 0.5 * (1.0 - sqrt(1.0 - 4.0 * t * t))",
         "    : 0.5 * (sqrt((3.0 - 2.0 * t) * (2.0 * t - 1.0)) + 1.0);",
         "}",
-        
+
         "float elasticIn(float t) {",
         "  return sin(13.0 * t * HALF_PI) * pow(2.0, 10.0 * (t - 1.0));",
         "}",
-        
+
         "float elasticOut(float t) {",
         "  return sin(-13.0 * (t + 1.0) * HALF_PI) * pow(2.0, -10.0 * t) + 1.0;",
         "}",
-        
+
         "float elasticInOut(float t) {",
         "  return t < 0.5",
         "    ? 0.5 * sin(+13.0 * HALF_PI * 2.0 * t) * pow(2.0, 10.0 * (2.0 * t - 1.0))",
         "    : 0.5 * sin(-13.0 * HALF_PI * ((2.0 * t - 1.0) + 1.0)) * pow(2.0, -10.0 * (2.0 * t - 1.0)) + 1.0;",
         "}",
-        
+
         "float backIn(float t) {",
         "  return pow(t, 3.0) - t * sin(t * PI);",
         "}",
-        
+
         "float backOut(float t) {",
         "  float f = 1.0 - t;",
         "  return 1.0 - (pow(f, 3.0) - f * sin(f * PI));",
         "}",
-        
+
         "float backInOut(float t) {",
         "  float f = t < 0.5",
         "    ? 2.0 * t",
@@ -233,7 +266,7 @@
         "    ? 0.5 * g",
         "    : 0.5 * (1.0 - g) + 0.5;",
         "}",
-        
+
         "float bounceOut(float t) {",
         "  const float a = 4.0 / 11.0;",
         "  const float b = 8.0 / 11.0;",
@@ -250,17 +283,17 @@
         "        ? ca * t2 - cb * t + cc",
         "        : 10.8 * t * t - 20.52 * t + 10.72;",
         "}",
-        
+
         "float bounceIn(float t) {",
         "  return 1.0 - bounceOut(1.0 - t);",
         "}",
-        
+
         "float bounceInOut(float t) {",
         "  return t < 0.5",
         "    ? 0.5 * (1.0 - bounceOut(1.0 - t * 2.0))",
         "    : 0.5 * bounceOut(t * 2.0 - 1.0) + 0.5;",
         "}",
-        
+
         "float ease(int type, float t) {",
         "  if (t < 0.0) return 0.0;",
         "  else if (t >= 1.0) return 1.0;",
@@ -300,9 +333,15 @@
     ].join("\n");
 
     if (typeof module !== 'undefined' && module.exports) {
-        module.exports = EasingFunctions;
+        module.exports = {
+            easing: easing,
+            definition: EasingFunctions,
+        };
     } else {
-        window["EasingFunctions"] = EasingFunctions;
+        window["easing"] = {
+            easing: easing,
+            definition: EasingFunctions,
+        };
     }
 
 })();
