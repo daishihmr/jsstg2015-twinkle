@@ -114,6 +114,7 @@
             this.ambientLight.color = new THREE.Color(0x666666);
 
             var particleSystem = ParticleSystem({
+                count: 30,
                 life: 30,
                 distance: 30,
                 sizeFrom: 20.0,
