@@ -122,16 +122,16 @@
                 greenTo: 0.0,
                 blueTo: 0.0,
                 blueDuration: 0.5,
-                alphaFrom: 0.1,
+                alphaFrom: 0.5,
             }).addChildTo(this.gameBoard);
             this.on("enterframe", function(e) {
-                if (e.app.frame % 5 === 0) {
+                if (e.app.frame % 50 === 0) {
                     var pos = {
                         x: Math.rand(-100, 100),
                         y: Math.rand(-100, 100),
                         z: Math.rand(0, 200),
                     };
-                    (100).times(function() {
+                    (15).times(function() {
                         particleSystem._emit(pos);
                     }.bind(this));
                 }
