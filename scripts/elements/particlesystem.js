@@ -2,7 +2,6 @@
 
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
-    var FastSimplexNoise = require("../../node_modules/fast-simplex-noise/fast-simplex-noise");
     var easing = require("../shader/easing");
     require("../tm/hybrid/threeelement");
 

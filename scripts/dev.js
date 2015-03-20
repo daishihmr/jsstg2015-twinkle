@@ -114,8 +114,8 @@
             this.ambientLight.color = new THREE.Color(0x666666);
 
             var particleSystem = ParticleSystem({
-                // texture: tm.hybrid.Texture("exp"),
-                count: 692,
+                texture: tm.hybrid.Texture("exp"),
+                count: 500,
                 life: 25,
                 lifeRandom: 0.5,
                 emitRange: 7,
@@ -137,10 +137,10 @@
                 alphaFrom: 0.9,
                 alphaTo: 0.1,
                 alphaEasing: Easing.QUAD_OUT,
-                blending: THREE.NormalBlending,
+                // blending: THREE.NormalBlending,
             }).addChildTo(this.gameBoard);
             this.on("enterframe", function(e) {
-                if (e.app.frame % 50 === 0) {
+                if (e.app.frame % 20 === 0) {
                     var v = tm.geom.Vector2().setRandom();
                     particleSystem.createEmitter(4, 10)
                         .setPosition(this.fighter.x, this.fighter.y, this.fighter.z);
