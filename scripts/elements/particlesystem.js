@@ -379,7 +379,6 @@
         distanceRandom: 0,
         // 移動イージング
         easing: easing.LINEAR,
-
         // ブレンディング
         blending: THREE.AdditiveBlending,
 
