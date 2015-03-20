@@ -8,7 +8,7 @@
         CUBIC_OUT: 5,
         CUBIC_IN_OUT: 6,
         QUARTIC_IN: 7,
-        QUARTIC_OUT: 8,
+        QUARTIC_OUT: 8, // iPhoneで動かない！！！
         QUARTIC_IN_OUT: 9,
         QINTIC_IN: 10,
         QINTIC_OUT: 11,

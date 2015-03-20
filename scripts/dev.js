@@ -121,7 +121,7 @@
                 emitRange: 7,
                 distance: 20,
                 distanceRandom: 0.4,
-                easing: Easing.QUARTIC_OUT,
+                easing: Easing.QUAD_OUT,
                 sizeFrom: 10.0,
                 sizeTo: 60.0,
                 sizeEasing: Easing.QUAD_OUT,
@@ -137,13 +137,14 @@
                 alphaFrom: 0.9,
                 alphaTo: 0.1,
                 alphaEasing: Easing.QUAD_OUT,
-                // blending: THREE.NormalBlending,
+                blending: THREE.NormalBlending,
             }).addChildTo(this.gameBoard);
             this.on("enterframe", function(e) {
-                if (e.app.frame % 20 === 0) {
+                if (e.app.frame % 5 === 0) {
                     var v = tm.geom.Vector2().setRandom();
+                    v.mul(Math.randf(0, 100));
                     particleSystem.createEmitter(4, 10)
-                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z);
+                        .setPosition(v.x, v.y, 0);
                 }
             });
 
