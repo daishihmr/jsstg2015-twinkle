@@ -22,6 +22,8 @@
             type: "three",
             url: "images/stage1_ground.js",
         },
+
+        "test": "images/test.png",
     };
 
     module.exports = assets;

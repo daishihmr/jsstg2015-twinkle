@@ -181,7 +181,8 @@
                         value: param.alphaEasing
                     },
                 },
-                blending: THREE.AdditiveBlending,
+                blending: param.blending,
+                alphaTest: false,
                 depthTest: false,
                 transparent: true,
             });
@@ -379,6 +380,9 @@
         // 移動イージング
         easing: easing.LINEAR,
 
+        // ブレンディング
+        blending: THREE.AdditiveBlending,
+
         // サイズ初期値
         sizeFrom: 1.0,
         // サイズ最終値
@@ -519,6 +523,8 @@
         "    float time = (now - startTime) / (endTime - startTime);",
         "    if (time < 0.0 || 1.0 <= time) {",
         "        vVisible = 0.0;",
+        "        gl_PointSize = 0.0;",
+        "        gl_Position = vec4(0.0);",
         "        return;",
         "    } else {",
         "        vVisible = 1.0;",

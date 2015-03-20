@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+</head>
+<body style="background:black">
+
+<canvas id="c"></canvas>
+
+<script src="../../libs/tmlib.js"></script>
+<script>
+tm.main(function() {
+
+    var c = tm.graphics.Canvas("#c").resize(1024, 1024);
+    c.globalCompositeOperation = "lighter";
+    for (var i = 0; i < 30; i++) {
+        var p = tm.geom.Vector2(1024 * 0.5, 1024 * 0.5);
+        var rd = 20;
+        var v = tm.geom.Vector2().setRandom();
+        var rot = tm.geom.Matrix33().rotateZ(0.001);
+        for (var j = 0; j < 2000 || rd > 0.1; j++) {
+            var g = tm.graphics.RadialGradient(p.x, p.y, 0, p.x, p.y, rd)
+                .addColorStopList([
+                    { offset: 0.00, color: "rgba(255, 255, 255, 0.1)" },
+                    { offset: 1.00, color: "rgba(255, 255, 255, 0.0)" },
+                ])
+                .toStyle();
+            c.setFillStyle(g).fillCircle(p.x, p.y, rd);
+
+            p.add(v);
+            rd *= 0.995;
+            v = rot.multiplyVector2(v);
+
+            rot.rotateZ(Math.randf(-0.0008, 0.0008));
+        }
+    }
+
+});
+</script>
+
+</body>
+</html>
