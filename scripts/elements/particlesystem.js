@@ -2,6 +2,7 @@
 
     var tm = require("../../libs/tmlib");
     var THREE = require("../../libs/three");
+    var FastSimplexNoise = require("../../node_modules/fast-simplex-noise/fast-simplex-noise");
     var easing = require("../shader/easing");
     require("../tm/hybrid/threeelement");
 
@@ -341,17 +342,32 @@
     };
 
     var DEFAULT_TEXTURE = (function() {
-        var radius = 1024;
+        var size = 1024;
         var canvas = document.createElement("canvas");
-        canvas.width = radius;
-        canvas.height = radius;
+        canvas.width = size;
+        canvas.height = size;
         var ctx = canvas.getContext("2d");
-        var g = ctx.createRadialGradient(radius * 0.5, radius * 0.5, 0, radius * 0.5, radius * 0.5, radius * 0.5);
+        var g = ctx.createRadialGradient(size * 0.5, size * 0.5, 0, size * 0.5, size * 0.5, size * 0.5);
         g.addColorStop(0.00, "hsla(  0,  80%, 100%, 1.0)");
         g.addColorStop(0.20, "hsla(  0,  80%, 100%, 1.0)");
         g.addColorStop(1.00, "hsla(  0,  80%, 100%, 0.0)");
         ctx.fillStyle = g;
-        ctx.fillRect(0, 0, radius, radius);
+        ctx.fillRect(0, 0, size, size);
+
+        var noiseGen = new FastSimplexNoise({
+            frequency: 0.005,
+            octaves: 8,
+        });
+
+        var imageData = ctx.getImageData(0, 0, size, size);
+        for (var x = 0; x < size; x++) {
+            for (var y = 0; y < size; y++) {
+                var n = noiseGen.get2DNoise(x, y);
+                n = 0.25 + n * 0.75;
+                imageData.data[(y * size + x) * 4 + 3] *= n;
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
 
         var texture = new THREE.Texture(canvas);
         texture.needsUpdate = true;
