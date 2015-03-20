@@ -20,8 +20,9 @@
                 this.particles.push({
                     startTime: 0,
                     endTime: -1,
-                    positionFrom: [0, 0, 0],
-                    positionTo: [0, 0, 0],
+                    positionFrom: [0, 10000, 0],
+                    positionTo: [0, 10000, 0],
+                    index: i,
                 });
             }
 
@@ -106,39 +107,39 @@
                 fragmentShader: fragmentShader,
                 attributes: {
                     startTime: {
-                        type: 'f',
+                        type: "f",
                         value: null
                     },
                     endTime: {
-                        type: 'f',
+                        type: "f",
                         value: null
                     },
                     positionTo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                     sizeInfo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                     texRotInfo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                     redInfo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                     greenInfo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                     blueInfo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                     alphaInfo: {
-                        type: 'v3',
+                        type: "v3",
                         value: null
                     },
                 },
@@ -152,31 +153,31 @@
                         value: 0.0
                     },
                     positionEasing: {
-                        type: 'i',
-                        value: param.positionEasing
+                        type: "i",
+                        value: param.easing
                     },
                     sizeEasing: {
-                        type: 'i',
+                        type: "i",
                         value: param.sizeEasing
                     },
                     texRotEasing: {
-                        type: 'i',
+                        type: "i",
                         value: param.texRotEasing
                     },
                     redEasing: {
-                        type: 'i',
+                        type: "i",
                         value: param.redEasing
                     },
                     greenEasing: {
-                        type: 'i',
+                        type: "i",
                         value: param.greenEasing
                     },
                     blueEasing: {
-                        type: 'i',
+                        type: "i",
                         value: param.blueEasing
                     },
                     alphaEasing: {
-                        type: 'i',
+                        type: "i",
                         value: param.alphaEasing
                     },
                 },
@@ -191,7 +192,7 @@
         update: function(app) {
             this.now += 0.001;
 
-            this._checkEnd();
+            // this._checkEnd();
             if (this.needsUpdate) {
                 this._setAttributes();
                 this.needsUpdate = false;
@@ -201,12 +202,13 @@
 
         _checkEnd: function() {
             var particles = this.particles;
-            var i = 0;
-            var len = particles.length;
-            for (; i < len; i++) {
-                if (0 < particles[i].endTime && particles[i].endTime < this.now) {
-                    particles[i].startTime = 0;
-                    particles[i].endTime = -1;
+            for (var i = particles.length - 1; i >= 0; i--) {
+                var p = particles[i];
+                if (0 < p.endTime && p.endTime < this.now) {
+                    p.startTime = 0;
+                    p.endTime = -1;
+                    p.positionFrom = [0, 10000, 0];
+                    p.positionTo = [0, 10000, 0];
                     this.needsUpdate = true;
                 }
             }
@@ -229,18 +231,20 @@
             var i = 0;
             var len = particles.length;
             for (; i < len; i++) {
-                startTimeAttrs.array[i] = particles[i].startTime;
-                endTimeAttrs.array[i] = particles[i].endTime;
+                var p = particles[i];
+                var index = p.index;
+                startTimeAttrs.array[index] = p.startTime;
+                endTimeAttrs.array[index] = p.endTime;
 
-                var positionFrom = particles[i].positionFrom;
-                var positionTo = particles[i].positionTo;
+                var positionFrom = p.positionFrom;
+                var positionTo = p.positionTo;
 
-                positionFromAttrs.array[i * 3 + 0] = positionFrom[0];
-                positionFromAttrs.array[i * 3 + 1] = positionFrom[1];
-                positionFromAttrs.array[i * 3 + 2] = positionFrom[2];
-                positionToAttrs.array[i * 3 + 0] = positionTo[0];
-                positionToAttrs.array[i * 3 + 1] = positionTo[1];
-                positionToAttrs.array[i * 3 + 2] = positionTo[2];
+                positionFromAttrs.array[index * 3 + 0] = positionFrom[0];
+                positionFromAttrs.array[index * 3 + 1] = positionFrom[1];
+                positionFromAttrs.array[index * 3 + 2] = positionFrom[2];
+                positionToAttrs.array[index * 3 + 0] = positionTo[0];
+                positionToAttrs.array[index * 3 + 1] = positionTo[1];
+                positionToAttrs.array[index * 3 + 2] = positionTo[2];
             }
         },
 
@@ -257,44 +261,60 @@
         createEmitter: function(life, epf, damping) {
             life = life || 1;
             epf = epf || 1;
-            damping = damping || 0;
+            damping = damping || 1;
+            return ParticleEmitter(this, life, epf, damping).addChildTo(this.parent);
         },
 
+        _lastI: 0,
         _emit: function(position) {
+            var param = this.param;
+            var particles = this.particles;
+
             var i = 0;
             var len = this.particles.length;
             for (; i < len; i++) {
-                if (this.particles[i].endTime < 0) break;
+                if (particles[i].endTime < this.now) break;
             }
 
             if (i === len) return;
 
-            var p = this.particles[i];
-            p.startTime = this.now;
-            p.endTime = this.now + this.param.life * 0.001;
-            p.positionFrom = [
-                position.x,
-                position.y,
-                position.z,
-            ];
+            var p = particles[i];
 
-            if (this.param.direction) {
-                tempVector.set(this.param.direction);
+            p.startTime = this.now;
+            if (param.lifeRandom !== 0) {
+                p.endTime = this.now + param.life * Math.randf(1 - param.lifeRandom, 1 + param.lifeRandom) * 0.001;
             } else {
-                tempVector.set(1, 0, 0);
-                tempVector.applyAxisAngle({
-                    x: 0,
-                    y: 1,
-                    z: 0
-                }, Math.randf(0, Math.PI * 2));
-                tempVector.applyAxisAngle({
-                    x: 0,
-                    y: 0,
-                    z: 1
-                }, Math.randf(0, Math.PI * 2));
+                p.endTime = this.now + param.life;
             }
 
-            tempVector.setLength(this.param.distance);
+            if (param.emitRange !== 0) {
+                randomizeTempVector();
+                tempVector.setLength(Math.randf(0, param.emitRange));
+                p.positionFrom = [
+                    position.x + tempVector.x,
+                    position.y + tempVector.y,
+                    position.z + tempVector.z,
+                ];
+            } else {
+                p.positionFrom = [
+                    position.x,
+                    position.y,
+                    position.z,
+                ];
+            }
+
+            if (param.direction !== null) {
+                tempVector.set(param.direction);
+            } else {
+                randomizeTempVector();
+                tempVector.normalize();
+            }
+
+            if (param.distanceRandom !== 0) {
+                tempVector.setLength(param.distance * Math.randf(1 - param.distanceRandom, 1 + param.distanceRandom));
+            } else {
+                tempVector.setLength(param.distance);
+            }
 
             p.positionTo = [
                 position.x + tempVector.x,
@@ -307,6 +327,14 @@
     });
 
     var tempVector = new THREE.Vector3();
+    var randomizeTempVector = function() {
+        tempVector.set(Math.randf(-1, 1), Math.randf(-1, 1), Math.randf(-1, 1));
+        while (tempVector.lengthSq() > 1) {
+            tempVector.set(Math.randf(-1, 1), Math.randf(-1, 1), Math.randf(-1, 1));
+        }
+        tempVector.normalize();
+        return tempVector;
+    };
 
     var DEFAULT_TEXTURE = (function() {
         var radius = 1024;
@@ -346,7 +374,7 @@
         // 移動距離ランダム幅
         distanceRandom: 0,
         // 移動イージング
-        easing: easing.easing.LINEAR,
+        easing: easing.LINEAR,
 
         // サイズ初期値
         sizeFrom: 1.0,
@@ -355,7 +383,7 @@
         // サイズ変化時間(lifeを1とした場合)
         sizeDuration: 1.0,
         // サイズイージング
-        sizeEasing: easing.easing.LINEAR,
+        sizeEasing: easing.LINEAR,
 
         // 回転初期値
         texRotFrom: 0.0,
@@ -364,7 +392,7 @@
         // 回転変化時間(lifeを1とした場合)
         texRotDuration: 0.0,
         // 回転イージング
-        texRotEasing: easing.easing.LINEAR,
+        texRotEasing: easing.LINEAR,
 
         // 赤成分初期値
         redFrom: 1.0,
@@ -373,7 +401,7 @@
         // 赤成分変化時間(lifeを1とした場合)
         redDuration: 1.0,
         // 赤成分イージング
-        redEasing: easing.easing.LINEAR,
+        redEasing: easing.LINEAR,
 
         // 緑成分初期値
         greenFrom: 1.0,
@@ -382,7 +410,7 @@
         // 緑成分変化時間(lifeを1とした場合)
         greenDuration: 1.0,
         // 緑成分イージング
-        greenEasing: easing.easing.LINEAR,
+        greenEasing: easing.LINEAR,
 
         // 青成分初期値
         blueFrom: 1.0,
@@ -391,7 +419,7 @@
         // 青成分変化時間(lifeを1とした場合)
         blueDuration: 1.0,
         // 青成分イージング
-        blueEasing: easing.easing.LINEAR,
+        blueEasing: easing.LINEAR,
 
         // アルファ成分初期値
         alphaFrom: 1.0,
@@ -400,7 +428,7 @@
         // アルファ成分変化時間(lifeを1とした場合)
         alphaDuration: 1.0,
         // アルファ成分イージング
-        alphaEasing: easing.easing.LINEAR,
+        alphaEasing: easing.LINEAR,
     };
 
     var ParticleEmitter = tm.createClass({
@@ -415,13 +443,15 @@
         },
 
         update: function(app) {
+            console.log(this.y);
+
             for (var i = 0; i < this.epf; i++) {
                 this.particleSystem._emit(this.position);
             }
 
             this.life -= 1;
             this.epf *= this.damping;
-            if (thif.life <= 0) {
+            if (this.life <= 0) {
                 this.remove();
             }
         },

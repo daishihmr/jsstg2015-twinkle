@@ -334,14 +334,18 @@
 
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = {
-            easing: easing,
             definition: EasingFunctions,
         };
+        Object.keys(easing).forEach(function(key) {
+            module.exports[key] = easing[key];
+        })
     } else {
         window["easing"] = {
-            easing: easing,
             definition: EasingFunctions,
         };
+        Object.keys(easing).forEach(function(key) {
+            window["easing"][key] = easing[key];
+        })
     }
 
 })();
