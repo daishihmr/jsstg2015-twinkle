@@ -114,6 +114,7 @@
             this.ambientLight.color = new THREE.Color(0x666666);
 
             var particleSystem = ParticleSystem({
+                texture: tm.hybrid.Texture("exp"),
                 count: 692,
                 life: 25,
                 lifeRandom: 0.5,

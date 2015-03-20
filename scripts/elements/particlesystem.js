@@ -354,21 +354,6 @@
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, size, size);
 
-        var noiseGen = new FastSimplexNoise({
-            frequency: 0.02,
-            octaves: 8,
-        });
-
-        var imageData = ctx.getImageData(0, 0, size, size);
-        for (var x = 0; x < size; x++) {
-            for (var y = 0; y < size; y++) {
-                var n = noiseGen.get2DNoise(x, y);
-                n = 0.4 + n * 0.6;
-                imageData.data[(y * size + x) * 4 + 3] *= n;
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-
         var texture = new THREE.Texture(canvas);
         texture.needsUpdate = true;
         return texture;

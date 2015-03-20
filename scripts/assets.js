@@ -23,6 +23,7 @@
             url: "images/stage1_ground.js",
         },
 
+        "exp": "images/exp.png",
         "test": "images/test.png",
     };
 
