@@ -342,7 +342,7 @@
     };
 
     var DEFAULT_TEXTURE = (function() {
-        var size = 1024;
+        var size = 256;
         var canvas = document.createElement("canvas");
         canvas.width = size;
         canvas.height = size;
@@ -355,7 +355,7 @@
         ctx.fillRect(0, 0, size, size);
 
         var noiseGen = new FastSimplexNoise({
-            frequency: 0.005,
+            frequency: 0.02,
             octaves: 8,
         });
 
@@ -363,7 +363,7 @@
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
                 var n = noiseGen.get2DNoise(x, y);
-                n = 0.25 + n * 0.75;
+                n = 0.4 + n * 0.6;
                 imageData.data[(y * size + x) * 4 + 3] *= n;
             }
         }
