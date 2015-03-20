@@ -114,15 +114,15 @@
             this.ambientLight.color = new THREE.Color(0x666666);
 
             var particleSystem = ParticleSystem({
-                count: 692 * 100,
+                count: 692,
                 life: 25,
                 lifeRandom: 0.5,
-                emitRange: 10,
+                emitRange: 7,
                 distance: 20,
                 distanceRandom: 0.4,
                 easing: Easing.QUARTIC_OUT,
                 sizeFrom: 10.0,
-                sizeTo: 30.0,
+                sizeTo: 60.0,
                 sizeEasing: Easing.QUAD_OUT,
                 redFrom: 1.0,
                 redTo: 0.1,
@@ -133,22 +133,16 @@
                 blueFrom: 1.0,
                 blueTo: 0.0,
                 blueDuration: 0.2,
-                alphaFrom: 0.6,
+                alphaFrom: 0.9,
                 alphaTo: 0.1,
                 alphaEasing: Easing.QUAD_OUT,
                 blending: THREE.NormalBlending,
             }).addChildTo(this.gameBoard);
             this.on("enterframe", function(e) {
-                if (e.app.frame % 10 === 0) {
+                if (e.app.frame % 50 === 0) {
                     var v = tm.geom.Vector2().setRandom();
-                    particleSystem.createEmitter(100, 50)
-                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z)
-                        .on("enterframe", function() {
-                            this.x += v.x * 3;
-                            this.y += v.y * 3;
-
-                            v.y += 0.05;
-                        });
+                    particleSystem.createEmitter(4, 10)
+                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z);
                 }
             });
 
