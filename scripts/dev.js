@@ -114,6 +114,7 @@
             this.ambientLight.color = new THREE.Color(0x666666);
 
             var particleSystem = ParticleSystem({
+                texture: tm.hybrid.Texture("cloud"),
                 count: 750,
                 life: 20,
                 lifeRandom: 0.5,
@@ -124,30 +125,17 @@
                 sizeFrom: 10.0,
                 sizeTo: 40.0,
                 sizeEasing: 2,
-                greenTo: 0.0,
+                greenTo: 1.0,
                 blueTo: 0.0,
                 blueDuration: 0.5,
                 alphaFrom: 0.5,
+                alphaTo: 0.1,
+                blending: THREE.NormalBlending,
             }).addChildTo(this.gameBoard);
             this.on("enterframe", function(e) {
                 if (e.app.frame % 30 === 0) {
-                    particleSystem.createEmitter(60, 5)
-                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z)
-                        .on("enterframe", function() {
-                            this.y += 5;
-                        });
-                    particleSystem.createEmitter(60, 5)
-                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z)
-                        .on("enterframe", function() {
-                            this.x -= 2;
-                            this.y += 4.5;
-                        });
-                    particleSystem.createEmitter(60, 5)
-                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z)
-                        .on("enterframe", function() {
-                            this.x += 2;
-                            this.y += 4.5;
-                        });
+                    particleSystem.createEmitter(10, 20)
+                        .setPosition(this.fighter.x, this.fighter.y, this.fighter.z);
                 }
             });
 
