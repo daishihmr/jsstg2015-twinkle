@@ -276,7 +276,10 @@
                 if (particles[i].endTime < this.now) break;
             }
 
-            if (i === len) return;
+            if (i === len) {
+                console.warn("パーティクルが足りない");
+                return;
+            }
 
             var p = particles[i];
 
@@ -443,8 +446,6 @@
         },
 
         update: function(app) {
-            console.log(this.y);
-
             for (var i = 0; i < this.epf; i++) {
                 this.particleSystem._emit(this.position);
             }
