@@ -182,8 +182,8 @@
                     },
                 },
                 blending: param.blending,
-                alphaTest: false,
                 depthTest: false,
+                depthWrite: false,
                 transparent: true,
             });
 
