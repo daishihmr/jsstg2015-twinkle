@@ -10,7 +10,8 @@
     <script src="../three.js/build/three.js"></script>
     <script src="../three.js/examples/js/controls/OrbitControls.js"></script>
     <script>
-    var URL = "../images/test.json";
+    var URL = "../images/bone_test2.json";
+    var mesh = null;
 
     window.onload = function() {
 
@@ -30,11 +31,12 @@
 
         var jsonloader = new THREE.JSONLoader();
         jsonloader.load(URL, function(geometry, materials) {
+            console.log(arguments);
             materials.forEach(function(m) {
-                console.log(m);
+                m.morphTargets = true;
             });
 
-            var mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+            mesh = new THREE.MorphAnimMesh(geometry, new THREE.MeshFaceMaterial(materials));
             scene.add(mesh);
         });
 
