@@ -55569,7 +55569,7 @@ tm.google = tm.google || {};
     var consts = require("../consts");
     var Bullet = require("./bullet");
 
-    var countSq = 16;
+    var countSq = 32;
 
     var Bullets = tm.createClass({
         superClass: tm.hybrid.ThreeElement,
@@ -55795,6 +55795,14 @@ tm.google = tm.google || {};
         "varying float vVisible;",
 
         "void main() {",
+        "    vUv = uv;",
+        "    vBright = ubright;",
+        "    vVisible = uvisible;",
+
+        "    if (vVisible == 0.0) {",
+        "        gl_Position = vec4(0.0, 0.0, 0.0, 0.0);",
+        "        return;",
+        "    }",
 
         "    float idx = floor(position.y / 1.1) * " + countSq + ".0 + floor(position.x / 1.1);",
         "    vec3 leftBottom = vec3(floor(position.x / 1.1) * 1.1, floor(position.y / 1.1) * 1.1, 0.0);",
@@ -55817,10 +55825,6 @@ tm.google = tm.google || {};
         "    );",
         "    vec4 mvPosition = viewMatrix * m * vec4(pos, 1.0);",
         "    vec4 p = projectionMatrix * mvPosition;",
-
-        "    vUv = uv;",
-        "    vBright = ubright;",
-        "    vVisible = uvisible;",
 
         "    gl_Position = p;",
 
