@@ -55569,7 +55569,7 @@ tm.google = tm.google || {};
     var consts = require("../consts");
     var Bullet = require("./bullet");
 
-    var countSq = 32;
+    var countSq = 16;
 
     var Bullets = tm.createClass({
         superClass: tm.hybrid.ThreeElement,
