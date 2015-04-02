@@ -35,23 +35,26 @@ tm.define("MainScene", {
     },
 
     update: function(app) {
-        (512).times(function() {
-            var v = tm.geom.Vector2().setRandom().mul(Math.randf(0.05, 0.09));
+        (7).times(function(i) {
+            var v = tm.geom.Vector2().setAngle(app.frame * 3 + i * 360 / 7, 0.05);
             var b = this.bullets.get();
             if (b) {
+                b.addChildTo(this);
+                b.x = b.y = 0;
+                b.v = v;
                 b.type = Math.rand(0, 3);
                 b.frame = 0;
                 b.rotation = v.toAngle();
-                b.on("enterframe", function(e) {
-                    this.frame = 1 + ~~(e.app.frame / 4) % 3;
-                    this.x += v.x;
-                    this.y += v.y;
-                    if (this.x * this.x + this.y * this.y > 20*20) {
-                        this.remove();
-                        this.dispose();
-                    }
-                });
-                b.addChildTo(this);
+                if (!b.hasEventListener("enterframe")) {
+                    b.on("enterframe", function(e) {
+                        this.frame = 1 + ~~(e.app.frame / 4) % 3;
+                        this.x += this.v.x;
+                        this.y += this.v.y;
+                        if (this.x * this.x + this.y * this.y > 8 * 8) {
+                            this.remove();
+                        }
+                    });
+                }
             }
         }.bind(this));
     }

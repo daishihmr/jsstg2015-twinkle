@@ -55550,7 +55550,7 @@ tm.google = tm.google || {};
             this.frame = 0;
         },
 
-        dispose: function() {
+        onremoved: function() {
             this.bullets.dispose(this);
         },
 
@@ -55579,7 +55579,9 @@ tm.google = tm.google || {};
 
             this.superInit(new THREE.Mesh(geometry, material));
 
-            this.waitingIndex = Array.range(0, countSq * countSq);
+            this.waitingBullets = Array.range(0, countSq * countSq).map(function(index) {
+                return Bullet(this, index);
+            }.bind(this));
             this.activeBullets = [];
         },
 
@@ -55649,8 +55651,9 @@ tm.google = tm.google || {};
         },
 
         get: function() {
-            var index = this.waitingIndex.shift();
-            if (index !== undefined) {
+            var bullet = this.waitingBullets.shift();
+            if (bullet !== undefined) {
+                var index = bullet.index;
                 var uvisible = this.threeObject.geometry.getAttribute("uvisible");
                 uvisible.needsUpdate = true;
                 uvisible.array[index * 4 + 0] =
@@ -55658,7 +55661,6 @@ tm.google = tm.google || {};
                     uvisible.array[index * 4 + 2] =
                     uvisible.array[index * 4 + 3] = 1;
 
-                var bullet = Bullet(this, index);
                 this.activeBullets.push(bullet);
                 return bullet;
             }
@@ -55670,7 +55672,7 @@ tm.google = tm.google || {};
             var index = bullet.index;
 
             this.activeBullets.erase(bullet);
-            this.waitingIndex.push(index);
+            this.waitingBullets.push(bullet);
 
             var uvisible = this.threeObject.geometry.getAttribute("uvisible");
             uvisible.needsUpdate = true;
@@ -56660,23 +56662,26 @@ tm.define("MainScene", {
     },
 
     update: function(app) {
-        (512).times(function() {
-            var v = tm.geom.Vector2().setRandom().mul(Math.randf(0.05, 0.09));
+        (7).times(function(i) {
+            var v = tm.geom.Vector2().setAngle(app.frame * 3 + i * 360 / 7, 0.05);
             var b = this.bullets.get();
             if (b) {
+                b.addChildTo(this);
+                b.x = b.y = 0;
+                b.v = v;
                 b.type = Math.rand(0, 3);
                 b.frame = 0;
                 b.rotation = v.toAngle();
-                b.on("enterframe", function(e) {
-                    this.frame = 1 + ~~(e.app.frame / 4) % 3;
-                    this.x += v.x;
-                    this.y += v.y;
-                    if (this.x * this.x + this.y * this.y > 20*20) {
-                        this.remove();
-                        this.dispose();
-                    }
-                });
-                b.addChildTo(this);
+                if (!b.hasEventListener("enterframe")) {
+                    b.on("enterframe", function(e) {
+                        this.frame = 1 + ~~(e.app.frame / 4) % 3;
+                        this.x += this.v.x;
+                        this.y += this.v.y;
+                        if (this.x * this.x + this.y * this.y > 8 * 8) {
+                            this.remove();
+                        }
+                    });
+                }
             }
         }.bind(this));
     }

@@ -15,7 +15,9 @@
 
             this.superInit(new THREE.Mesh(geometry, material));
 
-            this.waitingIndex = Array.range(0, countSq * countSq);
+            this.waitingBullets = Array.range(0, countSq * countSq).map(function(index) {
+                return Bullet(this, index);
+            }.bind(this));
             this.activeBullets = [];
         },
 
@@ -85,8 +87,9 @@
         },
 
         get: function() {
-            var index = this.waitingIndex.shift();
-            if (index !== undefined) {
+            var bullet = this.waitingBullets.shift();
+            if (bullet !== undefined) {
+                var index = bullet.index;
                 var uvisible = this.threeObject.geometry.getAttribute("uvisible");
                 uvisible.needsUpdate = true;
                 uvisible.array[index * 4 + 0] =
@@ -94,7 +97,6 @@
                     uvisible.array[index * 4 + 2] =
                     uvisible.array[index * 4 + 3] = 1;
 
-                var bullet = Bullet(this, index);
                 this.activeBullets.push(bullet);
                 return bullet;
             }
@@ -106,7 +108,7 @@
             var index = bullet.index;
 
             this.activeBullets.erase(bullet);
-            this.waitingIndex.push(index);
+            this.waitingBullets.push(bullet);
 
             var uvisible = this.threeObject.geometry.getAttribute("uvisible");
             uvisible.needsUpdate = true;

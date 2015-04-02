@@ -22,7 +22,7 @@
             this.frame = 0;
         },
 
-        dispose: function() {
+        onremoved: function() {
             this.bullets.dispose(this);
         },
 
