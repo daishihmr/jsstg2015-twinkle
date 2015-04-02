@@ -37,8 +37,15 @@
                 ubright.needsUpdate = true;
             }
 
-            this.activeBullets.forEach(function(bullet) {
+            var uvArray = uv.array;
+            var upositionArray = uposition.array;
+            var urotationArray = urotation.array;
+            var ubrightArray = ubright.array;
+
+            for (var i = 0, len = this.activeBullets.length; i < len; i++) {
+                var bullet = this.activeBullets[i];
                 var index = bullet.index;
+                var index4 = index * 4;
 
                 var u = bullet.frame;
                 var v = bullet.type;
@@ -47,34 +54,34 @@
                 var vmin = v * 1 / 8;
                 var vmax = (v + 1) * 1 / 8;
 
-                uv.array[(index * 4 + 0) * 2 + 0] = umin;
-                uv.array[(index * 4 + 0) * 2 + 1] = 1 - vmin;
-                uv.array[(index * 4 + 1) * 2 + 0] = umax;
-                uv.array[(index * 4 + 1) * 2 + 1] = 1 - vmin;
-                uv.array[(index * 4 + 2) * 2 + 0] = umax;
-                uv.array[(index * 4 + 2) * 2 + 1] = 1 - vmax;
-                uv.array[(index * 4 + 3) * 2 + 0] = umin;
-                uv.array[(index * 4 + 3) * 2 + 1] = 1 - vmax;
+                uvArray[(index4 + 0) * 2 + 0] = umin;
+                uvArray[(index4 + 0) * 2 + 1] = 1 - vmin;
+                uvArray[(index4 + 1) * 2 + 0] = umax;
+                uvArray[(index4 + 1) * 2 + 1] = 1 - vmin;
+                uvArray[(index4 + 2) * 2 + 0] = umax;
+                uvArray[(index4 + 2) * 2 + 1] = 1 - vmax;
+                uvArray[(index4 + 3) * 2 + 0] = umin;
+                uvArray[(index4 + 3) * 2 + 1] = 1 - vmax;
 
-                uposition.array[(index * 4 + 0) * 3 + 0] =
-                    uposition.array[(index * 4 + 1) * 3 + 0] =
-                    uposition.array[(index * 4 + 2) * 3 + 0] =
-                    uposition.array[(index * 4 + 3) * 3 + 0] = bullet.x;
-                uposition.array[(index * 4 + 0) * 3 + 1] =
-                    uposition.array[(index * 4 + 1) * 3 + 1] =
-                    uposition.array[(index * 4 + 2) * 3 + 1] =
-                    uposition.array[(index * 4 + 3) * 3 + 1] = bullet.y;
+                upositionArray[(index4 + 0) * 3 + 0] =
+                    upositionArray[(index4 + 1) * 3 + 0] =
+                    upositionArray[(index4 + 2) * 3 + 0] =
+                    upositionArray[(index4 + 3) * 3 + 0] = bullet.x;
+                upositionArray[(index4 + 0) * 3 + 1] =
+                    upositionArray[(index4 + 1) * 3 + 1] =
+                    upositionArray[(index4 + 2) * 3 + 1] =
+                    upositionArray[(index4 + 3) * 3 + 1] = bullet.y;
 
-                urotation.array[index * 4 + 0] =
-                    urotation.array[index * 4 + 1] =
-                    urotation.array[index * 4 + 2] =
-                    urotation.array[index * 4 + 3] = bullet.rotation;
+                urotationArray[index4 + 0] =
+                    urotationArray[index4 + 1] =
+                    urotationArray[index4 + 2] =
+                    urotationArray[index4 + 3] = bullet.rotation;
 
-                ubright.array[index * 4 + 0] =
-                    ubright.array[index * 4 + 1] =
-                    ubright.array[index * 4 + 2] =
-                    ubright.array[index * 4 + 3] = bullet.bright;
-            });
+                ubrightArray[index4 + 0] =
+                    ubrightArray[index4 + 1] =
+                    ubrightArray[index4 + 2] =
+                    ubrightArray[index4 + 3] = bullet.bright;
+            };
         },
 
         get: function() {
@@ -131,17 +138,10 @@
                     indices.push([i * 4 + 0, i * 4 + 1, i * 4 + 2]);
                     indices.push([i * 4 + 0, i * 4 + 2, i * 4 + 3]);
 
-                    var u = 3;
-                    var v = 0;
-                    var umin = u * 1 / 8;
-                    var umax = (u + 1) * 1 / 8;
-                    var vmin = v * 1 / 8;
-                    var vmax = (v + 1) * 1 / 8;
-
-                    uvs.push([umin, 1 - vmin]);
-                    uvs.push([umax, 1 - vmin]);
-                    uvs.push([umax, 1 - vmax]);
-                    uvs.push([umin, 1 - vmax]);
+                    uvs.push([0, 0]);
+                    uvs.push([1, 0]);
+                    uvs.push([1, 1]);
+                    uvs.push([0, 1]);
 
                     upos.push([0, 0, 0]);
                     upos.push([0, 0, 0]);
@@ -232,7 +232,7 @@
 
         "void main() {",
 
-        "    float idx = floor(position.y / 1.1) * 80.0 + floor(position.x / 1.1);",
+        "    float idx = floor(position.y / 1.1) * " + countSq + ".0 + floor(position.x / 1.1);",
         "    vec3 leftBottom = vec3(floor(position.x / 1.1) * 1.1, floor(position.y / 1.1) * 1.1, 0.0);",
         "    vec3 mid = leftBottom + vec3(0.5, 0.5, 0.0);",
         "    vec3 pos = position - mid;",

@@ -31,22 +31,22 @@ tm.define("MainScene", {
         this.superInit();
         
         this.bullets = Bullets().addChildTo(this);
-        this.camera.z += 15;
+        this.camera.z += 7;
     },
 
     update: function(app) {
-        (1).times(function() {
-            var v = tm.geom.Vector2().setRandom().mul(0.1);
+        (512).times(function() {
+            var v = tm.geom.Vector2().setRandom().mul(Math.randf(0.05, 0.09));
             var b = this.bullets.get();
             if (b) {
                 b.type = Math.rand(0, 3);
                 b.frame = 0;
                 b.rotation = v.toAngle();
-                b.on("enterframe", function() {
-                    this.frame = (this.frame + 1) % 8;
+                b.on("enterframe", function(e) {
+                    this.frame = 1 + ~~(e.app.frame / 4) % 3;
                     this.x += v.x;
                     this.y += v.y;
-                    if (this.x < -10 || 10 < this.x || this.y < -10 || 10 < this.y) {
+                    if (this.x * this.x + this.y * this.y > 20*20) {
                         this.remove();
                         this.dispose();
                     }
