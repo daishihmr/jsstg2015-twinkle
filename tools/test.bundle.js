@@ -56660,8 +56660,11 @@ tm.define("MainScene", {
             var v = tm.geom.Vector2().setRandom().mul(0.1);
             var b = this.bullets.get();
             if (b) {
+                b.type = Math.rand(0, 3);
+                b.frame = 0;
                 b.rotation = v.toAngle();
                 b.on("enterframe", function() {
+                    this.frame = (this.frame + 1) % 8;
                     this.x += v.x;
                     this.y += v.y;
                     if (this.x < -10 || 10 < this.x || this.y < -10 || 10 < this.y) {
