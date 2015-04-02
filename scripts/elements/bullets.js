@@ -5,7 +5,7 @@
     var consts = require("../consts");
     var Bullet = require("./bullet");
 
-    var countSq = 64;
+    var countSq = 16;
 
     var Bullets = tm.createClass({
         superClass: tm.hybrid.ThreeElement,

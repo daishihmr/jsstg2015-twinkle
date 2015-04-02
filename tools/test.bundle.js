@@ -55569,7 +55569,7 @@ tm.google = tm.google || {};
     var consts = require("../consts");
     var Bullet = require("./bullet");
 
-    var countSq = 64;
+    var countSq = 16;
 
     var Bullets = tm.createClass({
         superClass: tm.hybrid.ThreeElement,
@@ -56656,7 +56656,7 @@ tm.define("MainScene", {
     },
 
     update: function(app) {
-        (20).times(function() {
+        (1).times(function() {
             var v = tm.geom.Vector2().setRandom().mul(0.1);
             var b = this.bullets.get();
             if (b) {
