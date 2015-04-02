@@ -4,40 +4,29 @@
     var utils = require("../utils");
 
     var Bullet = tm.createClass({
+        superClass: tm.app.Element,
 
-        init: function(vertex) {
-            this.position = vertex;
-            this.age = 0;
-            this.active = false;
-        },
+        init: function(bullets, index) {
+            this.superInit();
 
-        update: function() {
-            if (!this.active) return;
+            this.bullets = bullets;
+            this.index = index;
 
-            this.position.x += this.vx;
-            this.position.y += this.vy;
+            this.runner = null;
 
-            if (!utils.isOutScreen(this.position)) {
-                this.age += 1;
-            } else {
-                this.dispose();
-            }
-        },
-
-        activate: function(x, y, direction) {
-            this.position.set(x, y, 0);
-
-            this.vx = Math.cos(direction);
-            this.vy = Math.sin(direction);
-
-            this.active = true;
+            this.x = 0;
+            this.y = 0;
+            this.rotation = 0;
+            this.bright = 1;
+            this.type = 0;
+            this.frame = 0;
         },
 
         dispose: function() {
-            this.active = false;
-            this.age = 0;
-            this.position.set(0, consts.Y_MAX * 2, 0);
+            this.bullets.dispose(this);
         },
+
+        update: function(app) {},
 
     });
 

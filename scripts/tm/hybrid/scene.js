@@ -40,7 +40,7 @@
             if (child instanceof tm.hybrid.ThreeElement) {
                 this.three.addChild(child);
             } else {
-                this.two.addChild(child);
+                tm.app.Scene.prototype.addChild.call(this, child);
             }
         },
 
@@ -49,7 +49,7 @@
             if (child instanceof tm.hybrid.ThreeElement) {
                 this.three.removeChild(child);
             } else {
-                this.two.removeChild(child);
+                tm.app.Scene.prototype.removeChild.call(this, child);
             }
         },
     });

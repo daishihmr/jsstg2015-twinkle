@@ -158,6 +158,8 @@ module.exports = function(grunt) {
     grunt.registerTask("default", ["browserify:dev", "exorcise", "uglify"]);
     grunt.registerTask("watch", ["browserify:watch"]);
 
+    grunt.registerTask("updateDependency", ["clean", "copy", "concat:threejsaddins"]);
+
     grunt.registerTask("web", ["clean", "copy", "concat:threejsaddins", "browserify:main", "uglify", "koko:dev"]);
     grunt.registerTask("package", ["clean", "copy", "concat:threejsaddins", "browserify:main", "uglify", "nodewebkit:dev"]);
     grunt.registerTask("release", ["clean", "copy", "concat:threejsaddins", "browserify:main", "uglify", "nodewebkit:main"]);
