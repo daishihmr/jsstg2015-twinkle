@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body style="background:black">
+    <canvas id="c"></canvas>
+    <script src="../../libs/tmlib.js"></script>
+    <script>
+    tm.main(function() {
+        var cellW = 8;
+        var cellH = 8;
+
+        var c = tm.graphics.Canvas("#c").resize(cellW * 64, cellH * 64);
+
+        var drawFunc = null;
+        for (var type = 0; type < cellH; type++) {
+            if (drawFuncs[type]) {
+                drawFunc = drawFuncs[type];
+            } else {
+                continue;
+            }
+            for (var frame = 0; frame < cellW; frame++) {
+
+                var cell = drawFunc(frame);
+                c.drawImage(cell.element, frame * 64, type * 64);
+
+            }
+        }
+
+    });
+
+    var drawFuncs = [];
+    drawFuncs[0] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+        canvas.globalCompositeOperation = "lighter";
+
+        [
+            { angle: 180 - 6 * (frame+4) * 0.4, vel: 1.2, r: 1.0 * (frame+6) * 0.2, },
+            { angle: 180 - 3 * (frame+4) * 0.4, vel: 1.2, r: 1.0 * (frame+6) * 0.2, },
+            { angle: 180 + 0 * (frame+4) * 0.4, vel: 1.5, r: 1.2 * (frame+6) * 0.2, },
+            { angle: 180 + 3 * (frame+4) * 0.4, vel: 1.2, r: 1.0 * (frame+6) * 0.2, },
+            { angle: 180 + 6 * (frame+4) * 0.4, vel: 1.2, r: 1.0 * (frame+6) * 0.2, },
+        ].map(function(data) {
+            var pos = tm.geom.Vector2(60, 32);
+            var v = tm.geom.Vector2().setAngle(data.angle, data.vel);
+
+            for (var i = 0; i < 30; i++) {
+                var radius = 1 + Math.sin(i / 30 * Math.PI) * 2 * data.r;
+                var fillStyle = tm.graphics.RadialGradient(pos.x, pos.y, 0, pos.x, pos.y, radius)
+                    .addColorStopList([
+                        { offset: 0.00, color: "hsla(0, 90%, 68%, 0.5)" },
+                        { offset: 1.00, color: "hsla(0, 90%, 20%, 0.1)" },
+                    ]).toStyle();
+                canvas
+                    .setFillStyle(fillStyle)
+                    .fillCircle(pos.x, pos.y, radius);
+                pos.add(v);
+
+            }
+        });
+
+
+        return canvas;
+    };
+
+    drawFuncs[1] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+
+        return canvas;
+    };
+
+    drawFuncs[2] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+
+        return canvas;
+    };
+
+    drawFuncs[3] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+
+        return canvas;
+    };
+
+    drawFuncs[4] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+        
+        return canvas;
+    };
+
+    drawFuncs[5] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        return canvas;
+    };
+
+    drawFuncs[6] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        return canvas;
+    };
+
+    drawFuncs[7] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        return canvas;
+    };
+    </script>
+</body>
+
+</html>
