@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body style="background:black">
+    <canvas id="c"></canvas>
+    <script src="../../libs/tmlib.js"></script>
+    <script>
+    tm.main(function() {
+        var cellW = 8;
+        var cellH = 8;
+
+        var c = tm.graphics.Canvas("#c").resize(cellW * 64, cellH * 64);
+
+        var drawFunc = null;
+        for (var type = 0; type < cellH; type++) {
+            if (drawFuncs[type]) {
+                drawFunc = drawFuncs[type];
+            } else {
+                continue;
+            }
+            for (var frame = 0; frame < cellW; frame++) {
+
+                var cell = drawFunc(frame);
+                c.drawImage(cell.element, frame * 64, type * 64);
+
+            }
+        }
+
+    });
+
+    var drawFuncs = [];
+    drawFuncs[0] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+        canvas.globalCompositeOperation = "lighter";
+
+        var size = 6 - 6 * (frame / 8);
+        var radius = 10 + frame * 1.5;
+        for (var i = 0; i < 360; i += 4) {
+            var a = i * Math.DEG_TO_RAD;
+            var pos = tm.geom.Vector2(Math.cos(a) * radius, Math.sin(a) * radius);
+            pos.add({
+                x: 32,
+                y: 32
+            });
+            var fillStyle = tm.graphics.RadialGradient(pos.x, pos.y, 0, pos.x, pos.y, size)
+                .addColorStopList([{
+                    offset: 0.00,
+                    color: "hsla(0, 90%, 68%, 0.2)"
+                }, {
+                    offset: 1.00,
+                    color: "hsla(0, 90%, 20%, 0.1)"
+                }, ]).toStyle();
+            canvas
+                .setFillStyle(fillStyle)
+                .fillCircle(pos.x, pos.y, size * Math.randf(size / 12, 1.0));
+
+        }
+
+        size *= 0.5;
+        radius *= (frame + 5) / 8;
+        for (var i = 0; i < 360; i += 4) {
+            var a = i * Math.DEG_TO_RAD;
+            var pos = tm.geom.Vector2(Math.cos(a) * radius, Math.sin(a) * radius);
+            pos.add({
+                x: 32,
+                y: 32
+            });
+            var fillStyle = tm.graphics.RadialGradient(pos.x, pos.y, 0, pos.x, pos.y, size)
+                .addColorStopList([{
+                    offset: 0.00,
+                    color: "hsla(0, 90%, 68%, 0.2)"
+                }, {
+                    offset: 1.00,
+                    color: "hsla(0, 90%, 20%, 0.1)"
+                }, ]).toStyle();
+            canvas
+                .setFillStyle(fillStyle)
+                .fillCircle(pos.x, pos.y, size * Math.randf(size / 12, 1.0));
+
+        }
+
+        return canvas;
+    };
+
+    drawFuncs[1] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+        canvas.globalCompositeOperation = "lighter";
+
+        var size = 6 - 6 * (frame / 8);
+        var radius = 10 + frame * 1.5;
+        for (var i = 0; i < 360; i += 4) {
+            var a = i * Math.DEG_TO_RAD;
+            var pos = tm.geom.Vector2(Math.cos(a) * radius, Math.sin(a) * radius);
+            pos.add({
+                x: 32,
+                y: 32
+            });
+            var fillStyle = tm.graphics.RadialGradient(pos.x, pos.y, 0, pos.x, pos.y, size)
+                .addColorStopList([{
+                    offset: 0.00,
+                    color: "hsla(240, 90%, 68%, 0.2)"
+                }, {
+                    offset: 1.00,
+                    color: "hsla(240, 90%, 20%, 0.1)"
+                }, ]).toStyle();
+            canvas
+                .setFillStyle(fillStyle)
+                .fillCircle(pos.x, pos.y, size * Math.randf(size / 12, 1.0));
+
+        }
+
+        size *= 0.5;
+        radius *= (frame + 5) / 8;
+        for (var i = 0; i < 360; i += 4) {
+            var a = i * Math.DEG_TO_RAD;
+            var pos = tm.geom.Vector2(Math.cos(a) * radius, Math.sin(a) * radius);
+            pos.add({
+                x: 32,
+                y: 32
+            });
+            var fillStyle = tm.graphics.RadialGradient(pos.x, pos.y, 0, pos.x, pos.y, size)
+                .addColorStopList([{
+                    offset: 0.00,
+                    color: "hsla(240, 90%, 68%, 0.2)"
+                }, {
+                    offset: 1.00,
+                    color: "hsla(240, 90%, 20%, 0.1)"
+                }, ]).toStyle();
+            canvas
+                .setFillStyle(fillStyle)
+                .fillCircle(pos.x, pos.y, size * Math.randf(size / 12, 1.0));
+
+        }
+
+        return canvas;
+    };
+
+    drawFuncs[2] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+
+        return canvas;
+    };
+
+    drawFuncs[3] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+
+        return canvas;
+    };
+
+    drawFuncs[4] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        canvas.resize(64, 64);
+
+        return canvas;
+    };
+
+    drawFuncs[5] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        return canvas;
+    };
+
+    drawFuncs[6] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        return canvas;
+    };
+
+    drawFuncs[7] = function(frame) {
+        var canvas = tm.graphics.Canvas();
+        return canvas;
+    };
+    </script>
+</body>
+
+</html>
