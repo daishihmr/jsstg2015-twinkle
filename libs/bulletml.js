@@ -35,6 +35,10 @@ var bulletml = {};
 /** @const */
 bulletml.GLOBAL = this;
 
+if (typeof module === 'object') {
+    module.exports = bulletml;
+}
+
 (function() {
     /**
      * @constructor
@@ -886,7 +890,7 @@ bulletml.GLOBAL = this;
                     return this.next();
                 } else if (n instanceof bulletml.Repeat) {
                     this._localScope.loopCounter = 0;
-                    this._localScope.loopEnd = this._evalParam(n.times)|0;
+                    this._localScope.loopEnd = this._evalParam(n.times);
                     this._pushStack();
                     this._action = n.action.clone();
                     this._localScope = this._cloneScope();
@@ -2039,6 +2043,8 @@ bulletml.runner.DEFAULT_CONFIG = {
     target: null,
     /** @type {function(bulletml.runner.Runner,Object)} */
     createNewBullet: function(runner, spec) {},
+    /** @type {number} */
+    speedRate: 1.0,
 };
 
 /**
@@ -2122,8 +2128,8 @@ bulletml.runner.SimpleSubRunner.prototype.update = function() {
     if (this.deltaX === null) this.deltaX = Math.cos(this.direction) * this.speed;
     if (this.deltaY === null) this.deltaY = Math.sin(this.direction) * this.speed;
 
-    this.x += this.deltaX;
-    this.y += this.deltaY;
+    this.x += this.deltaX * this.config.speedRate;
+    this.y += this.deltaY * this.config.speedRate;
 };
 
 /**
@@ -2199,10 +2205,10 @@ bulletml.runner.SubRunner.prototype.update = function() {
     }
 
     // move
-    this.x += Math.cos(this.direction) * this.speed;
-    this.y += Math.sin(this.direction) * this.speed;
-    this.x += this.speedH;
-    this.y += this.speedV;
+    this.x += Math.cos(this.direction) * this.speed * conf.speedRate;
+    this.y += Math.sin(this.direction) * this.speed * conf.speedRate;
+    this.x += this.speedH * conf.speedRate;
+    this.y += this.speedV * conf.speedRate;
 
     // proccess walker
     if (this.age < this.waitTo || this.completed) {
