@@ -32,7 +32,7 @@
                 });
             }
 
-            app.pushScene(tm.ui.LoadingScene({
+            app.pushScene(tm.game.LoadingScene({
                 nextScene: TitleScene,
                 width: consts.W,
                 height: consts.H,
@@ -40,7 +40,7 @@
             }));
 
             // if (window.location.hostname === "localhost") {
-            tm.util.Script.loadStats().on("load", function() {
+            tm.asset.Script.loadStats().on("load", function() {
                 app.enableStats();
             });
             // }
