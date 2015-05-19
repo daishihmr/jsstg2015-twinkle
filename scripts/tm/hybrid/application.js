@@ -17,6 +17,8 @@
             this.superInit(canvas2d);
             this.setupThree(canvas3d);
             this.background = "transparent";
+
+            this.replaceScene(tm.hybrid.Scene())
         },
 
         setupThree: function(canvas3d) {

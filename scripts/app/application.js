@@ -40,9 +40,9 @@
             }));
 
             // if (window.location.hostname === "localhost") {
-            tm.asset.Script.loadStats().on("load", function() {
-                app.enableStats();
-            });
+            // tm.asset.Script.loadStats().on("load", function() {
+            //     app.enableStats();
+            // });
             // }
         },
     });
