@@ -30,7 +30,7 @@
                 });
             }
 
-            this.type.defineInstanceMethod(setterName(name), function(v) {
+            this.type.defineInstanceMethod(createSetterName(name), function(v) {
                 this[name] = v;
                 return this;
             });
@@ -58,7 +58,7 @@
         },
     });
 
-    function setterName(propertyName) {
+    function createSetterName(propertyName) {
         return "set" + propertyName[0].toUpperCase() + propertyName.substring(1);
     }
 })();

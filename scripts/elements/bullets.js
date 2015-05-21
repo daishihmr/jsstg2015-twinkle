@@ -3,7 +3,6 @@
     var THREE = require("../../libs/three");
     require("../tm/hybrid/texture");
     var consts = require("../consts");
-    var Bullet = require("./bullet");
 
     var countSq = 16;
 
@@ -15,9 +14,12 @@
 
             this.superInit(new THREE.Mesh(geometry, material));
 
-            this.waitingBullets = Array.range(0, countSq * countSq).map(function(index) {
+            this.pooledBullets = Array.range(0, countSq * countSq).map(function(index) {
                 return Bullet(this, index);
             }.bind(this));
+            this.waiting = Array.range(0, countSq * countSq);
+            this.maxActiveIndex = 0;
+
             this.activeBullets = [];
         },
 
@@ -32,62 +34,68 @@
             var urotation = geometry.getAttribute("urotation");
             var ubright = geometry.getAttribute("ubright");
 
-            if (this.activeBullets.length) {
-                uv.needsUpdate = true;
-                uposition.needsUpdate = true;
-                urotation.needsUpdate = true;
-                ubright.needsUpdate = true;
+            if (this.maxActiveIndex > 0) {
+                uv.needsUpdate = 
+                    uposition.needsUpdate = 
+                    urotation.needsUpdate = 
+                    ubright.needsUpdate = true;
+
+                // uv.updateRange.count = 
+                //     uposition.updateRange.count = 
+                //     urotation.updateRange.count = 
+                //     ubright.updateRange.count = this.maxActiveIndex;
+
+                var uvArray = uv.array;
+                var upositionArray = uposition.array;
+                var urotationArray = urotation.array;
+                var ubrightArray = ubright.array;
+
+                for (var i = 0, len = this.activeBullets.length; i < len; i++) {
+                    var bullet = this.activeBullets[i];
+                    var index = bullet.index;
+                    var index4 = index * 4;
+
+                    var u = bullet.frame;
+                    var v = bullet.type;
+                    var umin = u * 1 / 8;
+                    var umax = (u + 1) * 1 / 8;
+                    var vmin = v * 1 / 8;
+                    var vmax = (v + 1) * 1 / 8;
+
+                    uvArray[(index4 + 0) * 2 + 0] = umin;
+                    uvArray[(index4 + 0) * 2 + 1] = 1 - vmin;
+                    uvArray[(index4 + 1) * 2 + 0] = umax;
+                    uvArray[(index4 + 1) * 2 + 1] = 1 - vmin;
+                    uvArray[(index4 + 2) * 2 + 0] = umax;
+                    uvArray[(index4 + 2) * 2 + 1] = 1 - vmax;
+                    uvArray[(index4 + 3) * 2 + 0] = umin;
+                    uvArray[(index4 + 3) * 2 + 1] = 1 - vmax;
+
+                    upositionArray[(index4 + 0) * 3 + 0] =
+                        upositionArray[(index4 + 1) * 3 + 0] =
+                        upositionArray[(index4 + 2) * 3 + 0] =
+                        upositionArray[(index4 + 3) * 3 + 0] = bullet.x;
+                    upositionArray[(index4 + 0) * 3 + 1] =
+                        upositionArray[(index4 + 1) * 3 + 1] =
+                        upositionArray[(index4 + 2) * 3 + 1] =
+                        upositionArray[(index4 + 3) * 3 + 1] = bullet.y;
+
+                    urotationArray[index4 + 0] =
+                        urotationArray[index4 + 1] =
+                        urotationArray[index4 + 2] =
+                        urotationArray[index4 + 3] = bullet.rotation;
+
+                    ubrightArray[index4 + 0] =
+                        ubrightArray[index4 + 1] =
+                        ubrightArray[index4 + 2] =
+                        ubrightArray[index4 + 3] = bullet.bright;
+                };
             }
-
-            var uvArray = uv.array;
-            var upositionArray = uposition.array;
-            var urotationArray = urotation.array;
-            var ubrightArray = ubright.array;
-
-            for (var i = 0, len = this.activeBullets.length; i < len; i++) {
-                var bullet = this.activeBullets[i];
-                var index = bullet.index;
-                var index4 = index * 4;
-
-                var u = bullet.frame;
-                var v = bullet.type;
-                var umin = u * 1 / 8;
-                var umax = (u + 1) * 1 / 8;
-                var vmin = v * 1 / 8;
-                var vmax = (v + 1) * 1 / 8;
-
-                uvArray[(index4 + 0) * 2 + 0] = umin;
-                uvArray[(index4 + 0) * 2 + 1] = 1 - vmin;
-                uvArray[(index4 + 1) * 2 + 0] = umax;
-                uvArray[(index4 + 1) * 2 + 1] = 1 - vmin;
-                uvArray[(index4 + 2) * 2 + 0] = umax;
-                uvArray[(index4 + 2) * 2 + 1] = 1 - vmax;
-                uvArray[(index4 + 3) * 2 + 0] = umin;
-                uvArray[(index4 + 3) * 2 + 1] = 1 - vmax;
-
-                upositionArray[(index4 + 0) * 3 + 0] =
-                    upositionArray[(index4 + 1) * 3 + 0] =
-                    upositionArray[(index4 + 2) * 3 + 0] =
-                    upositionArray[(index4 + 3) * 3 + 0] = bullet.x;
-                upositionArray[(index4 + 0) * 3 + 1] =
-                    upositionArray[(index4 + 1) * 3 + 1] =
-                    upositionArray[(index4 + 2) * 3 + 1] =
-                    upositionArray[(index4 + 3) * 3 + 1] = bullet.y;
-
-                urotationArray[index4 + 0] =
-                    urotationArray[index4 + 1] =
-                    urotationArray[index4 + 2] =
-                    urotationArray[index4 + 3] = bullet.rotation;
-
-                ubrightArray[index4 + 0] =
-                    ubrightArray[index4 + 1] =
-                    ubrightArray[index4 + 2] =
-                    ubrightArray[index4 + 3] = bullet.bright;
-            };
         },
 
         get: function() {
-            var bullet = this.waitingBullets.shift();
+            var pool = this.pooledBullets;
+            var bullet = pool[this.waiting.shift()];
             if (bullet !== undefined) {
                 var index = bullet.index;
                 var uvisible = this.threeObject.geometry.getAttribute("uvisible");
@@ -98,6 +106,9 @@
                     uvisible.array[index * 4 + 3] = 1;
 
                 this.activeBullets.push(bullet);
+
+                this.maxActiveIndex = Math.max(index, this.maxActiveIndex);
+
                 return bullet;
             }
 
@@ -106,9 +117,9 @@
 
         dispose: function(bullet) {
             var index = bullet.index;
+            this.waiting.unshift(index);
 
             this.activeBullets.erase(bullet);
-            this.waitingBullets.push(bullet);
 
             var uvisible = this.threeObject.geometry.getAttribute("uvisible");
             uvisible.needsUpdate = true;
@@ -116,6 +127,12 @@
                 uvisible.array[index * 4 + 1] =
                 uvisible.array[index * 4 + 2] =
                 uvisible.array[index * 4 + 3] = 0;
+
+            if (this.waiting.length === countSq * countSq) {
+                this.waiting.sort();
+                this.maxActiveIndex = 0;
+            }
+            this.waiting.sort();
         },
 
         _createGeometry: function() {
@@ -167,12 +184,12 @@
                 }
             }
 
-            geometry.addAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices.flatten()), 3));
-            geometry.addAttribute("index", new THREE.BufferAttribute(new Uint32Array(indices.flatten()), 3));
-            geometry.addAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs.flatten()), 2));
-            geometry.addAttribute("uposition", new THREE.BufferAttribute(new Float32Array(upos.flatten()), 3));
-            geometry.addAttribute("urotation", new THREE.BufferAttribute(new Float32Array(urot), 1));
-            geometry.addAttribute("ubright", new THREE.BufferAttribute(new Float32Array(ubright), 1));
+            geometry.addAttribute("position", new THREE.DynamicBufferAttribute(new Float32Array(vertices.flatten()), 3));
+            geometry.addAttribute("index", new THREE.DynamicBufferAttribute(new Uint32Array(indices.flatten()), 3));
+            geometry.addAttribute("uv", new THREE.DynamicBufferAttribute(new Float32Array(uvs.flatten()), 2));
+            geometry.addAttribute("uposition", new THREE.DynamicBufferAttribute(new Float32Array(upos.flatten()), 3));
+            geometry.addAttribute("urotation", new THREE.DynamicBufferAttribute(new Float32Array(urot), 1));
+            geometry.addAttribute("ubright", new THREE.DynamicBufferAttribute(new Float32Array(ubright), 1));
             geometry.addAttribute("uvisible", new THREE.BufferAttribute(new Float32Array(uvisible), 1));
 
             return geometry;
@@ -288,6 +305,39 @@
         "}",
 
     ].join("\n");
+
+    var Bullet = tm.createClass({
+        superClass: tm.app.Element,
+
+        init: function(bullets, index) {
+            this.superInit();
+
+            this.bullets = bullets;
+            this.index = index;
+
+            this.runner = null;
+
+            this.x = 0;
+            this.y = 0;
+            this.rotation = 0;
+
+            // 明るさ
+            this.bright = 1;
+
+            // 弾種
+            this.type = 0;
+
+            // アニメーションフレーム
+            this.frame = 0;
+        },
+
+        onremoved: function() {
+            this.bullets.dispose(this);
+        },
+
+        update: function(app) {},
+
+    });
 
     module.exports = Bullets;
 })();

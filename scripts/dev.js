@@ -7,7 +7,9 @@
     var Easing = require("./shader/easing.js");
     var SoundManager = require("./soundmanager");
     var ParticleSystem = require("./elements/particlesystem");
-    var Cloud = require("./elements/cloud");
+    // var Cloud = require("./elements/cloud");
+
+    var Bullets = require("./elements/bullets");
 
     var Dev = tm.createClass({
         superClass: GameScene,
@@ -53,21 +55,21 @@
             //         if (this.z < -400) this.z += 800;
             //     });
 
-            var cloud = Cloud("clouddark")
-                .setY(-160)
-                .addChildTo(this.first)
-                .on("enterframe", function() {
-                    this.z -= 0.6;
-                });
+            // var cloud = Cloud("clouddark")
+            //     .setY(-160)
+            //     .addChildTo(this.first)
+            //     .on("enterframe", function() {
+            //         this.z -= 0.6;
+            //     });
 
-            this.fogColor = new THREE.Color(0x000000);
-            this.fogNear = 100;
-            this.fogFar = 500;
-            this.tweener.clear()
-                .to({
-                    fogNear: 1000,
-                    fogFar: 1500
-                }, 60 * 1000);
+            // this.fogColor = new THREE.Color(0x000000);
+            // this.fogNear = 100;
+            // this.fogFar = 500;
+            // this.tweener.clear()
+            //     .to({
+            //         fogNear: 1000,
+            //         fogFar: 1500
+            //     }, 60 * 1000);
 
             var groundScale = 800;
 
@@ -95,7 +97,6 @@
             });
 
             ground.geometry.computeBoundingBox();
-            console.log(ground.geometry.boundingBox);
 
             var l = ground.geometry.boundingBox.max.z * 2 * groundScale;
             ground2.z = l;
@@ -146,6 +147,24 @@
                     v.mul(Math.randf(0, 100));
                     particleSystem.createEmitter(4, 10)
                         .setPosition(v.x, v.y, 0);
+                }
+            });
+
+            var bullets = Bullets().addChildTo(this);
+            this.on("enterframe", function(e) {
+                if (e.app.frame % 30 === 0) {
+                    var b = bullets.get();
+                    if (b) {
+                        console.log("shot!");
+                        b.addChildTo(this);
+                        b.x = 0;
+                        b.y = 0;
+                        b.type = 0;
+                        b.frame = 0;
+                        b.update = function() {
+                            this.x += 0.1;
+                        };
+                    }
                 }
             });
 

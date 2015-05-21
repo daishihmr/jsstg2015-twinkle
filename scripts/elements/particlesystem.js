@@ -266,7 +266,6 @@
             return ParticleEmitter(this, life, epf, damping).addChildTo(this.parent);
         },
 
-        _lastI: 0,
         _emit: function(position) {
             var param = this.param;
             var particles = this.particles;
@@ -278,7 +277,7 @@
             }
 
             if (i === len) {
-                console.warn("パーティクルが足りない");
+                // console.warn("パーティクルが足りない");
                 return;
             }
 
@@ -342,18 +341,21 @@
 
     var DEFAULT_TEXTURE = (function() {
         var size = 256;
-        var canvas = document.createElement("canvas");
-        canvas.width = size;
-        canvas.height = size;
-        var ctx = canvas.getContext("2d");
-        var g = ctx.createRadialGradient(size * 0.5, size * 0.5, 0, size * 0.5, size * 0.5, size * 0.5);
-        g.addColorStop(0.00, "hsla(  0,  80%, 100%, 1.0)");
-        g.addColorStop(0.20, "hsla(  0,  80%, 100%, 1.0)");
-        g.addColorStop(1.00, "hsla(  0,  80%, 100%, 0.0)");
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, size, size);
 
-        var texture = new THREE.Texture(canvas);
+        var canvas = tm.graphics.Canvas()
+            .resize(size, size)
+            .setFillStyle(
+                tm.graphics.RadialGradient(size * 0.5, size * 0.5, 0, size * 0.5, size * 0.5, size * 0.5)
+                    .addColorStopList([
+                        { offset: 0.00, color: "hsla(  0,  80%, 100%, 1.0)" },
+                        { offset: 0.20, color: "hsla(  0,  80%, 100%, 1.0)" },
+                        { offset: 1.00, color: "hsla(  0,  80%, 100%, 0.0)" },
+                    ])
+                    .toStyle()
+            )
+            .fillRect(0, 0, size, size);
+
+        var texture = new THREE.Texture(canvas.element);
         texture.needsUpdate = true;
         return texture;
     })();
