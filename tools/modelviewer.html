@@ -10,7 +10,7 @@
     <script src="../three.js/build/three.js"></script>
     <script src="../three.js/examples/js/controls/OrbitControls.js"></script>
     <script>
-    var URL = "../images/bone_test3.json";
+    var URL = "../images/fighter_lined.json";
     var mesh = null;
 
     window.onload = function() {
@@ -34,12 +34,13 @@
             console.log(arguments);
             materials.forEach(function(m) {
                 // m.morphTargets = true;
-                m.skinning = true;
-                m.shading = THREE.FlatShading;
+                // m.skinning = true;
+                // m.shading = THREE.FlatShading;
             });
 
+            mesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
             // mesh = new THREE.MorphAnimMesh(geometry, new THREE.MeshFaceMaterial(materials));
-            mesh = new THREE.SkinnedMesh(geometry, new THREE.MeshFaceMaterial(materials));
+            // mesh = new THREE.SkinnedMesh(geometry, new THREE.MeshFaceMaterial(materials));
             scene.add(mesh);
         });
 

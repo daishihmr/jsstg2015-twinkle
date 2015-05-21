@@ -89,7 +89,7 @@
     var cache = {};
 
     /**
-     * MeshBasicMaterial以外を真っ黒に描画するためにマテリアルを差し替える
+     * nameの先頭が"Bright"のマテリアル以外を真っ黒に描画するためにマテリアルを差し替える
      */
     var changeMaterial = function(mesh) {
         if (!mesh.material) return;
@@ -97,7 +97,7 @@
         var orig = mesh.material;
         var uuid = orig.uuid;
 
-        // MeshBasicMaterial以外を真っ黒に描画するためのマテリアル
+        // nameの先頭が"Bright"のマテリアル以外を真っ黒に描画するためのマテリアル
         var materialForBright;
 
         if (uuid) {
@@ -107,13 +107,13 @@
         }
 
         if (!materialForBright) {
-            if (orig instanceof THREE.MeshBasicMaterial) {
+            if (orig.name && orig.name.match(/^Bright/)) {
                 orig.fog = false;
                 return;
             } else if (orig instanceof THREE.MeshFaceMaterial) {
                 materialForBright = new THREE.MeshFaceMaterial(
                     orig.materials.map(function(m) {
-                        if (m instanceof THREE.MeshBasicMaterial) {
+                        if (m.name && m.name.match(/^Bright/)) {
                             var clone = m.clone();
                             clone.fog = false;
                             return clone;

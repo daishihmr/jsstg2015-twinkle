@@ -2,7 +2,9 @@
     var tm = require("../libs/tmlib");
     var THREE = require("../libs/three");
     require("./tm/hybrid/threeelement");
+    require("./tm/hybrid/scene");
 
+    var consts = require("./consts");
     var GameScene = require("./scenes/gamescene");
     var Easing = require("./shader/easing.js");
     var SoundManager = require("./soundmanager");
@@ -13,6 +15,7 @@
 
     var Dev = tm.createClass({
         superClass: GameScene,
+        // superClass: tm.hybrid.Scene,
 
         init: function() {
             var scene = this;
@@ -77,7 +80,7 @@
                 .setScale(groundScale)
                 .setY(-500)
                 .on("enterframe", function() {
-                    this.z -= 0.2;
+                    this.z += 0.2;
                 })
                 .addChildTo(this);
             ground.material.materials.forEach(function(m) {
@@ -88,7 +91,7 @@
                 .setScale(groundScale, groundScale, -groundScale)
                 .setY(-500)
                 .on("enterframe", function() {
-                    this.z -= 0.2;
+                    this.z += 0.2;
                 })
                 .addChildTo(this);
             ground2.material.materials.forEach(function(m) {
@@ -96,73 +99,61 @@
                 m.side = THREE.DoubleSide;
             });
 
-            ground.geometry.computeBoundingBox();
+            // this.ambientLight.color = new THREE.Color(0x666666);
 
-            var l = ground.geometry.boundingBox.max.z * 2 * groundScale;
-            ground2.z = l;
+            // var particleSystem = ParticleSystem({
+            //     texture: tm.hybrid.Texture("exp"),
+            //     count: 500,
+            //     life: 25,
+            //     lifeRandom: 0.5,
+            //     emitRange: 7,
+            //     distance: 10,
+            //     distanceRandom: 0.4,
+            //     easing: Easing.QUAD_OUT,
+            //     sizeFrom: 10.0,
+            //     sizeTo: 30.0,
+            //     sizeEasing: Easing.QUAD_OUT,
+            //     redFrom: 1.0,
+            //     redTo: 0.1,
+            //     redDuration: 0.8,
+            //     greenFrom: 1.0,
+            //     greenTo: 0.0,
+            //     greenDuration: 0.5,
+            //     blueFrom: 1.0,
+            //     blueTo: 0.0,
+            //     blueDuration: 0.2,
+            //     alphaFrom: 0.9,
+            //     alphaTo: 0.1,
+            //     alphaDuration: 1.0,
+            //     alphaEasing: Easing.QUAD_OUT,
+            //     blending: THREE.NormalBlending,
+            // }).addChildTo(this.gameBoard);
+            // this.on("enterframe", function(e) {
+            //     if (e.app.frame % 5 === 0) {
+            //         var v = tm.geom.Vector2().setRandom();
+            //         v.mul(Math.randf(0, 100));
+            //         particleSystem.createEmitter(4, 10)
+            //             .setPosition(v.x, v.y, 0);
+            //     }
+            // });
 
-            ground.on("enterframe", function() {
-                if (this.z < -l) {
-                    this.z += l * 2;
-                }
-            });
-            ground2.on("enterframe", function() {
-                if (this.z < -l) {
-                    this.z += l * 2;
-                }
-            });
-
-            this.ambientLight.color = new THREE.Color(0x666666);
-
-            var particleSystem = ParticleSystem({
-                texture: tm.hybrid.Texture("exp"),
-                count: 500,
-                life: 25,
-                lifeRandom: 0.5,
-                emitRange: 7,
-                distance: 10,
-                distanceRandom: 0.4,
-                easing: Easing.QUAD_OUT,
-                sizeFrom: 10.0,
-                sizeTo: 30.0,
-                sizeEasing: Easing.QUAD_OUT,
-                redFrom: 1.0,
-                redTo: 0.1,
-                redDuration: 0.8,
-                greenFrom: 1.0,
-                greenTo: 0.0,
-                greenDuration: 0.5,
-                blueFrom: 1.0,
-                blueTo: 0.0,
-                blueDuration: 0.2,
-                alphaFrom: 0.9,
-                alphaTo: 0.1,
-                alphaDuration: 1.0,
-                alphaEasing: Easing.QUAD_OUT,
-                blending: THREE.NormalBlending,
-            }).addChildTo(this.gameBoard);
+            var camera = this.camera;
+            var bullets = Bullets().addChildTo(this.gameBoard);
             this.on("enterframe", function(e) {
-                if (e.app.frame % 5 === 0) {
-                    var v = tm.geom.Vector2().setRandom();
-                    v.mul(Math.randf(0, 100));
-                    particleSystem.createEmitter(4, 10)
-                        .setPosition(v.x, v.y, 0);
-                }
-            });
-
-            var bullets = Bullets().addChildTo(this);
-            this.on("enterframe", function(e) {
-                if (e.app.frame % 30 === 0) {
+                if (e.app.frame % 10 === 0) {
                     var b = bullets.get();
                     if (b) {
-                        console.log("shot!");
-                        b.addChildTo(this);
-                        b.x = 0;
-                        b.y = 0;
-                        b.type = 0;
+                        b.addChildTo(bullets);
+                        b.x = scene.fighter.x;
+                        b.y = scene.fighter.y;
+                        b.z = scene.fighter.z;
+                        b.type = 1;
                         b.frame = 0;
+                        b.rotation = Math.PI * 0.5;
                         b.update = function() {
-                            this.x += 0.1;
+                            this.y += 6.0;
+                            this.frame = 0 + (this.frame + 1) % 3;
+                            if (this.y > 200) this.remove();
                         };
                     }
                 }

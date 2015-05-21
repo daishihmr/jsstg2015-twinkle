@@ -10,8 +10,6 @@
         init: function() {
             this.superInit();
 
-            this.rotationX = 90;
-
             this.plane = tm.hybrid.Mesh()
                 .setGeometry(new THREE.PlaneGeometry(1000, 1000, 20, 20))
                 .setVisible(false)

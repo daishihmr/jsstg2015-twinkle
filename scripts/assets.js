@@ -12,7 +12,7 @@
 
         "fighter": {
             type: "three",
-            url: "images/fighter_lined.js",
+            url: "images/fighter_lined.json",
         },
 
         "bluesky": "images/bluesky.png",

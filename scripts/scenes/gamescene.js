@@ -6,7 +6,7 @@
 
     var consts = require("../consts");
     var Background = require("../elements/background");
-    var Bullets = require("../elements/bullets");
+    // var Bullets = require("../elements/bullets");
     var Fighter = require("../elements/fighter");
     var GameBoard = require("../elements/gameboard");
     var BackgroundSphere = require("../elements/backgroundsphere");
@@ -33,13 +33,14 @@
                 .setPosition(1, 0.2, 0)
                 .setIntensity(0.6);
 
-            var camera = scene.camera;
+            gameBoard.rotationX = -90;
 
-            scene.camera.target = new THREE.Vector3(0, 0, 0);
-            scene.camera.moveRate = new THREE.Vector3(0.25, 0, 0);
-            scene.camera
-                .setUp(new THREE.Vector3(0, 1, -1))
+            var camera = scene.camera;
+            camera.target = new THREE.Vector3(0, 0, 0);
+            camera.moveRate = new THREE.Vector3(0.25, 0, 0);
+            camera
                 .setPosition(consts.CAMERA_DEFAULT_POSITION_X, consts.CAMERA_DEFAULT_POSITION_Y, consts.CAMERA_DEFAULT_POSITION_Z)
+                .setUp(new THREE.Vector3(0, 1, 0))
                 .on("enterframe", function() {
                     this.target
                         .copy(fighter.position)
@@ -47,7 +48,7 @@
                     this.lookAt(this.target);
                 })
                 .addChildTo(gameBoard);
-            scene.camera.lookAt(fighter.position);
+            camera.lookAt(fighter.position);
 
             this.backgroundSphere = BackgroundSphere("darksky")
                 .addChildTo(this)
@@ -55,16 +56,6 @@
                     this.position.set(0, 0, 0);
                     camera.localToGlobal(this.position);
                 });
-
-            /**
-             * 弾プール
-             */
-            scene.bullets = {
-                // redSmall: Bullets(0).addChildTo(gameBoard),
-                // blueSmall: Bullets(240).addChildTo(gameBoard),
-                // redLarge: Bullets(0, 35).addChildTo(gameBoard),
-                // blueLarge: Bullets(240, 35).addChildTo(gameBoard),
-            };
 
             var sceneRenderPass = this.sceneRenderPass = new THREE.RenderPass(scene.three.scene, scene.three.camera.threeObject);
             var brightEffectPass = this.brightEffectPass = BrightEffectPass(scene.three.scene, scene.three.camera.threeObject);

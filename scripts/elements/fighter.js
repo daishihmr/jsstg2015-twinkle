@@ -14,7 +14,6 @@
             GameSceneManager.fighter = this;
 
             this.setScale(5);
-            this.rotationX = -90;
 
             this.roll = 0;
             this.entered = false;
@@ -36,7 +35,7 @@
                 }
                 // this.delta.copy(app.keyboard.getKeyDirection().mul(3.0));
 
-                this.x = Math.clamp(this.x + this.delta.x, consts.X_MIN, consts.X_MAX);
+                this.x = Math.clamp(this.x - this.delta.x, consts.X_MIN, consts.X_MAX);
                 this.y = Math.clamp(this.y + this.delta.y, consts.Y_MIN, consts.Y_MAX);
 
                 var cam = gameScene.camera;
@@ -62,7 +61,7 @@
                 var lastRoll = this.roll;
                 var dx = this.x - lastX;
                 if (dx != 0) {
-                    this.roll -= (dx / Math.abs(dx)) * 6;
+                    this.roll += (dx / Math.abs(dx)) * 6;
                 } else if (this.roll != 0) {
                     var absRoll = Math.abs(this.roll);
                     if (absRoll <= 6) {
@@ -74,7 +73,7 @@
                 this.roll = Math.clamp(this.roll, -90, 90);
 
                 if (this.roll != lastRoll) {
-                    this.rotateRoll(this.roll - lastRoll);
+                    this.rotateYaw(this.roll - lastRoll);
                 }
 
             }

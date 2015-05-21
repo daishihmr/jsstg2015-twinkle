@@ -8,6 +8,7 @@
 
     var Bullets = tm.createClass({
         superClass: tm.hybrid.ThreeElement,
+
         init: function() {
             var geometry = this._createGeometry();
             var material = this._createMaterial();
@@ -18,7 +19,7 @@
                 return Bullet(this, index);
             }.bind(this));
             this.waiting = Array.range(0, countSq * countSq);
-            this.maxActiveIndex = 0;
+            this.maxActiveIndex = -1;
 
             this.activeBullets = [];
         },
@@ -34,16 +35,16 @@
             var urotation = geometry.getAttribute("urotation");
             var ubright = geometry.getAttribute("ubright");
 
-            if (this.maxActiveIndex > 0) {
+            if (this.maxActiveIndex >= 0) {
                 uv.needsUpdate = 
                     uposition.needsUpdate = 
                     urotation.needsUpdate = 
                     ubright.needsUpdate = true;
 
-                // uv.updateRange.count = 
-                //     uposition.updateRange.count = 
-                //     urotation.updateRange.count = 
-                //     ubright.updateRange.count = this.maxActiveIndex;
+                uv.updateRange.count = (this.maxActiveIndex + 1) * 4 * 2;
+                uposition.updateRange.count = (this.maxActiveIndex + 1) * 4 * 3;
+                urotation.updateRange.count = (this.maxActiveIndex + 1) * 4 * 1;
+                ubright.updateRange.count = (this.maxActiveIndex + 1) * 4 * 1;
 
                 var uvArray = uv.array;
                 var upositionArray = uposition.array;
@@ -130,7 +131,7 @@
 
             if (this.waiting.length === countSq * countSq) {
                 this.waiting.sort();
-                this.maxActiveIndex = 0;
+                this.maxActiveIndex = -1;
             }
             this.waiting.sort();
         },
@@ -202,6 +203,7 @@
                 side: THREE.DoubleSide,
                 transparent: true,
                 depthTest: false,
+                blending: THREE.AdditiveBlending,
                 attributes: {
                     "uposition": {
                         type: "v3",
@@ -261,7 +263,7 @@
 
         "    float idx = floor(position.y / 1.1) * " + countSq + ".0 + floor(position.x / 1.1);",
         "    vec3 leftBottom = vec3(floor(position.x / 1.1) * 1.1, floor(position.y / 1.1) * 1.1, 0.0);",
-        "    vec3 mid = leftBottom + vec3(0.5, 0.5, 0.0);",
+        "    vec3 mid = leftBottom + vec3(0.55, 0.55, 0.0);",
         "    vec3 pos = position - mid;",
 
         "    mat4 m = ",
@@ -277,11 +279,17 @@
         "       -sin(urotation), cos(urotation), 0.0, 0.0,",
         "        0.0, 0.0, 1.0, 0.0,",
         "        0.0, 0.0, 0.0, 1.0",
+        "    )",
+        "    *",
+        "    mat4(",
+        "       30.0, 0.0, 0.0, 0.0,",
+        "        0.0,30.0, 0.0, 0.0,",
+        "        0.0, 0.0,30.0, 0.0,",
+        "        0.0, 0.0, 0.0, 1.0",
         "    );",
-        "    vec4 mvPosition = viewMatrix * m * vec4(pos, 1.0);",
-        "    vec4 p = projectionMatrix * mvPosition;",
 
-        "    gl_Position = p;",
+        "    vec4 p = m * vec4(pos, 1.0);",
+        "    gl_Position = projectionMatrix * modelViewMatrix * p;",
 
         "}",
 
