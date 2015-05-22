@@ -101,61 +101,83 @@
 
             // this.ambientLight.color = new THREE.Color(0x666666);
 
-            // var particleSystem = ParticleSystem({
-            //     texture: tm.hybrid.Texture("exp"),
-            //     count: 500,
-            //     life: 25,
-            //     lifeRandom: 0.5,
-            //     emitRange: 7,
-            //     distance: 10,
-            //     distanceRandom: 0.4,
-            //     easing: Easing.QUAD_OUT,
-            //     sizeFrom: 10.0,
-            //     sizeTo: 30.0,
-            //     sizeEasing: Easing.QUAD_OUT,
-            //     redFrom: 1.0,
-            //     redTo: 0.1,
-            //     redDuration: 0.8,
-            //     greenFrom: 1.0,
-            //     greenTo: 0.0,
-            //     greenDuration: 0.5,
-            //     blueFrom: 1.0,
-            //     blueTo: 0.0,
-            //     blueDuration: 0.2,
-            //     alphaFrom: 0.9,
-            //     alphaTo: 0.1,
-            //     alphaDuration: 1.0,
-            //     alphaEasing: Easing.QUAD_OUT,
-            //     blending: THREE.NormalBlending,
-            // }).addChildTo(this.gameBoard);
-            // this.on("enterframe", function(e) {
-            //     if (e.app.frame % 5 === 0) {
-            //         var v = tm.geom.Vector2().setRandom();
-            //         v.mul(Math.randf(0, 100));
-            //         particleSystem.createEmitter(4, 10)
-            //             .setPosition(v.x, v.y, 0);
-            //     }
-            // });
+            var particleSystem = ParticleSystem({
+                texture: tm.hybrid.Texture("exp"),
+                count: 500,
+                life: 25,
+                lifeRandom: 0.5,
+                emitRange: 7,
+                distance: 10,
+                distanceRandom: 0.4,
+                easing: Easing.QUAD_OUT,
+                sizeFrom: 10.0,
+                sizeTo: 30.0,
+                sizeEasing: Easing.QUAD_OUT,
+                redFrom: 1.0,
+                redTo: 0.1,
+                redDuration: 0.8,
+                greenFrom: 1.0,
+                greenTo: 0.0,
+                greenDuration: 0.5,
+                blueFrom: 1.0,
+                blueTo: 0.0,
+                blueDuration: 0.2,
+                alphaFrom: 0.9,
+                alphaTo: 0.1,
+                alphaDuration: 1.0,
+                alphaEasing: Easing.QUAD_OUT,
+                blending: THREE.NormalBlending,
+            }).addChildTo(this.gameBoard);
+            this.on("enterframe", function(e) {
+                if (e.app.frame % 5 === 0) {
+                    var v = tm.geom.Vector2().setRandom();
+                    v.mul(Math.randf(0, 100));
+                    particleSystem.createEmitter(4, 10)
+                        .setPosition(v.x, v.y, 0);
+                }
+            });
+
+            var fighter = this.fighter;
 
             var camera = this.camera;
             var bullets = Bullets().addChildTo(this.gameBoard);
+
+            var fire = function(x, y, dir, speed, type) {
+                var b = bullets.get();
+                if (b) {
+                    b.addChildTo(bullets);
+                    b.x = x;
+                    b.y = y;
+                    b.z = fighter.z;
+                    b.type = type;
+                    b.frame = 0;
+                    b.rotation = dir * Math.DEG_TO_RAD;
+                    var cos = Math.cos(dir * Math.DEG_TO_RAD);
+                    var sin = Math.sin(dir * Math.DEG_TO_RAD);
+                    var f = 0;
+                    b.update = function() {
+                        this.x += cos * speed;
+                        this.y += sin * speed;
+                        f += 0.4;
+                        this.frame = ~~f % 4;
+                        if (this.x < -150 || 150 < this.x || this.y < -150 || 150 < this.y) {
+                            this.remove();
+                        }
+                    };
+                }
+            };
+
+            var j = 0;
             this.on("enterframe", function(e) {
                 if (e.app.frame % 10 === 0) {
-                    var b = bullets.get();
-                    if (b) {
-                        b.addChildTo(bullets);
-                        b.x = scene.fighter.x;
-                        b.y = scene.fighter.y;
-                        b.z = scene.fighter.z;
-                        b.type = 1;
-                        b.frame = 0;
-                        b.rotation = Math.PI * 0.5;
-                        b.update = function() {
-                            this.y += 6.0;
-                            this.frame = 0 + (this.frame + 1) % 3;
-                            if (this.y > 200) this.remove();
-                        };
-                    }
+                    fire(fighter.x, fighter.y, 90, 6, 1);
+                }
+
+                if (e.app.frame % 5 === 0) {
+                    (90 / 8).times(function(i) {
+                        fire(0, 100, j + i * 8, 3, Math.rand(0, 4));
+                    });
+                    j += 30;
                 }
             });
 
