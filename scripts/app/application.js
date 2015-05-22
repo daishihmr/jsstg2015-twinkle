@@ -39,11 +39,11 @@
                 assets: assets,
             }));
 
-            if (window.location.hostname === "localhost") {
+            // if (window.location.hostname === "localhost") {
                 tm.asset.Script.loadStats().on("load", function() {
                     app.enableStats();
                 });
-            }
+            // }
         },
     });
 
